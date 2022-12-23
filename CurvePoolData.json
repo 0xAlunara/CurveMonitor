@@ -36,7 +36,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 782410
     },
     "0xDeBF20617708857ebe4F679508E7b7863a8A8EeE": {
         "name": "aave",
@@ -75,7 +76,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 1129874
     },
     "0xA96A65c051bF88B4095Ee1f2451C2A9d43F53Ae2": {
         "name": "aeth",
@@ -106,7 +108,8 @@
         ],
         "coins_underlying_names": [
             "ETH"
-        ]
+        ],
+        "volume": 10347
     },
     "0x79a8C46DeA5aDa233ABaFFD40F3A0A2B1e5A4F27": {
         "name": "busd",
@@ -151,7 +154,8 @@
             "USDC",
             "USDT",
             "BUSD"
-        ]
+        ],
+        "volume": 25490
     },
     "0xA2B47E3D5c44877cca798226B7B8118F9BFb7A56": {
         "name": "compound",
@@ -184,7 +188,8 @@
         "coins_underlying_names": [
             "DAI",
             "USDC"
-        ]
+        ],
+        "volume": 9168
     },
     "0x0Ce6a5fF5217e38315f87032CF90686C96627CAA": {
         "name": "eurs",
@@ -217,7 +222,8 @@
         "coins_underlying_names": [
             "EURS",
             "sEUR"
-        ]
+        ],
+        "volume": 0
     },
     "0x4CA9b3063Ec5866A4B82E437059D2C43d1be596F": {
         "name": "hbtc",
@@ -250,7 +256,8 @@
         "coins_underlying_names": [
             "HBTC",
             "WBTC"
-        ]
+        ],
+        "volume": 4862
     },
     "0x2dded6Da1BF5DBdF597C45fcFaa3194e53EcfeAF": {
         "name": "ib",
@@ -289,7 +296,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 100203
     },
     "0xF178C0b5Bb7e7aBF4e12A4838C7b7c5bA2C623c0": {
         "name": "link",
@@ -322,7 +330,8 @@
         "coins_underlying_names": [
             "LINK",
             "sLINK"
-        ]
+        ],
+        "volume": 19706
     },
     "0x06364f10B501e868329afBc005b3492902d6C763": {
         "name": "pax",
@@ -367,7 +376,8 @@
             "USDC",
             "USDT",
             "USDP"
-        ]
+        ],
+        "volume": 5550
     },
     "0x93054188d876f558f4a66B2EF1d97d16eDf0895B": {
         "name": "ren",
@@ -398,7 +408,8 @@
         ],
         "coins_underlying_names": [
             "WBTC"
-        ]
+        ],
+        "volume": 525
     },
     "0xEB16Ae0052ed37f479f7fe63849198Df1765a733": {
         "name": "saave",
@@ -431,7 +442,8 @@
         "coins_underlying_names": [
             "DAI",
             "sUSD"
-        ]
+        ],
+        "volume": 90571
     },
     "0x7fC77b5c7614E1533320Ea6DDc2Eb61fa00A9714": {
         "name": "sbtc",
@@ -468,7 +480,8 @@
         "coins_underlying_names": [
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 6752
     },
     "0xc5424B857f758E906013F3555Dad202e4bdB4567": {
         "name": "seth",
@@ -501,7 +514,8 @@
         "coins_underlying_names": [
             "ETH",
             "sETH"
-        ]
+        ],
+        "volume": 243179
     },
     "0xDC24316b9AE028F1497c275EB9192a3Ea0f67022": {
         "name": "steth",
@@ -534,7 +548,8 @@
         "coins_underlying_names": [
             "ETH",
             "stETH"
-        ]
+        ],
+        "volume": 20659
     },
     "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD": {
         "name": "susd",
@@ -579,7 +594,8 @@
             "USDC",
             "USDT",
             "sUSD"
-        ]
+        ],
+        "volume": 2343
     },
     "0x52EA46506B9CC5Ef470C5bf89f17Dc28bB35D85C": {
         "name": "usdt",
@@ -618,7 +634,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 5055
     },
     "0x45F783CCE6B7FF23B2ab2D70e416cdb7D6055f51": {
         "name": "y",
@@ -663,7 +680,8 @@
             "USDC",
             "USDT",
             "TUSD"
-        ]
+        ],
+        "volume": 498
     },
     "0x8038C01A0390a8c547446a0b2c18fc9aEFEcc10c": {
         "name": "dusd",
@@ -702,7 +720,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 19652
     },
     "0x4f062658EaAF2C1ccf8C8e36D6824CDf41167956": {
         "name": "gusd",
@@ -741,7 +760,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 24700
     },
     "0x3eF6A01A0f81D6046290f3e2A8c5b843e738E604": {
         "name": "husd",
@@ -780,7 +800,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 58
     },
     "0xE7a24EF0C5e95Ffb0f6684b813A78F2a3AD7D171": {
         "name": "linkusd",
@@ -819,7 +840,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 966
     },
     "0x8474DdbE98F5aA3179B3B3F5942D724aFcdec9f6": {
         "name": "musd",
@@ -858,7 +880,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 82274
     },
     "0xC18cC39da8b11dA8c3541C598eE022258F9744da": {
         "name": "rsv",
@@ -897,7 +920,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 2803
     },
     "0x3E01dD8a5E1fb3481F0F589056b428Fc308AF0Fb": {
         "name": "usdk",
@@ -936,7 +960,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 165
     },
     "0x0f9cb53Ebe405d49A0bbdBD291A65Ff571bC83e1": {
         "name": "usdn",
@@ -975,7 +1000,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 505
     },
     "0x42d7025938bEc20B69cBae5A77421082407f053A": {
         "name": "usdp",
@@ -1014,7 +1040,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 66569
     },
     "0x890f4e345B1dAED0367A877a1612f86A1f86985f": {
         "name": "ust",
@@ -1053,7 +1080,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 45
     },
     "0x071c661B4DeefB59E2a3DdB20Db036821eeE8F4b": {
         "name": "bbtc",
@@ -1092,7 +1120,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 896
     },
     "0xd81dA8D904b52208541Bade1bD6595D8a251F8dd": {
         "name": "obtc",
@@ -1131,7 +1160,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 67958
     },
     "0x7F55DDe206dbAD629C080068923b36fe9D6bDBeF": {
         "name": "pbtc",
@@ -1170,7 +1200,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 821
     },
     "0xC25099792E9349C7DD09759744ea681C7de2cb66": {
         "name": "tbtc",
@@ -1209,7 +1240,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 1665
     },
     "0xEcd5e75AFb02eFa118AF914515D6521aaBd189F1": {
         "name": "tusd",
@@ -1248,7 +1280,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 21730
     },
     "0xEd279fDD11cA84bEef15AF5D39BB4d4bEE23F0cA": {
         "name": "lusd",
@@ -1287,7 +1320,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 5139
     },
     "0xd632f22692FaC7611d2AA1C0D552930D43CAEd3B": {
         "name": "frax",
@@ -1326,7 +1360,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 29637
     },
     "0x4807862AA8b2bF68830e4C8dc86D0e9A998e085a": {
         "name": "busdv2",
@@ -1365,7 +1400,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 158175
     },
     "0xF9440930043eb3997fc70e1339dBb11F341de7A8": {
         "name": "reth",
@@ -1396,7 +1432,8 @@
         ],
         "coins_underlying_names": [
             "ETH"
-        ]
+        ],
+        "volume": 2555
     },
     "0x43b4FdFD4Ff969587185cDB6f0BD875c5Fc83f8c": {
         "name": "alusd",
@@ -1435,7 +1472,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 5112
     },
     "0x80466c64868E1ab14a1Ddf27A676C3fcBE638Fe5": {
         "name": "tricrypto",
@@ -1475,7 +1513,8 @@
             "USDT",
             "WBTC",
             "WETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x618788357D0EBd8A37e763ADab3bc575D54c2C7d": {
         "name": "rai",
@@ -1514,7 +1553,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 51737
     },
     "0x5a6A4D54456819380173272A5E8E9B9904BdF41B": {
         "name": "mim",
@@ -1553,7 +1593,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 34948
     },
     "0xFD5dB7463a3aB53fD211b4af195c5BCCC1A03890": {
         "name": "eurt",
@@ -1586,7 +1627,8 @@
         "coins_underlying_names": [
             "EURT",
             "sEUR"
-        ]
+        ],
+        "volume": 119
     },
     "0x4e0915C88bC70750D68C481540F081fEFaF22273": {
         "name": "4pool",
@@ -1631,7 +1673,8 @@
             "USDT",
             "UST",
             "FRAX"
-        ]
+        ],
+        "volume": 4
     },
     "0x1005F7406f32a61BD760CfA14aCCd2737913d546": {
         "name": "2pool",
@@ -1664,7 +1707,8 @@
         "coins_underlying_names": [
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 20
     },
     "0xDcEF968d416a41Cdac0ED8702fAC8128A64241A2": {
         "name": "Curve.fi FRAX/USDC",
@@ -1697,7 +1741,8 @@
         "coins_underlying_names": [
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 22848
     },
     "0xa1F8A6807c402E4A15ef4EBa36528A3FED24E577": {
         "name": "Curve.fi ETH/frxETH",
@@ -1730,7 +1775,8 @@
         "coins_underlying_names": [
             "ETH",
             "frxETH"
-        ]
+        ],
+        "volume": 6079
     },
     "0xf253f83AcA21aAbD2A20553AE0BF7F65C755A07F": {
         "name": "Curve.fi WBTC/SBTC",
@@ -1763,7 +1809,8 @@
         "coins_underlying_names": [
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 4863
     },
     "0x1F71f05CF491595652378Fe94B7820344A551B8E": {
         "name": "Curve.fi Factory Plain Pool: ibEUR/sEUR",
@@ -1796,7 +1843,8 @@
         "coins_underlying_names": [
             "ibEUR",
             "sUSD"
-        ]
+        ],
+        "volume": 1220
     },
     "0x8461A004b50d321CB22B7d034969cE6803911899": {
         "name": "Curve.fi Factory Plain Pool: ibKRW/sKRW",
@@ -1829,7 +1877,8 @@
         "coins_underlying_names": [
             "ibKRW",
             "sKRW"
-        ]
+        ],
+        "volume": 5174
     },
     "0x19b080FE1ffA0553469D20Ca36219F17Fcf03859": {
         "name": "Curve.fi Factory Plain Pool: ibEUR/sEUR",
@@ -1862,7 +1911,8 @@
         "coins_underlying_names": [
             "ibEUR",
             "sEUR"
-        ]
+        ],
+        "volume": 19385
     },
     "0x621F13Bf667207335C601F8C89eA5eC260bAdA9A": {
         "name": "Curve.fi Factory Plain Pool: Curve.fi sCRV/CRV",
@@ -1895,7 +1945,8 @@
         "coins_underlying_names": [
             "sCRV",
             "CRV"
-        ]
+        ],
+        "volume": 0
     },
     "0xED24FE718EFFC6B2Fc59eeaA5C5f51dD079AB6ED": {
         "name": "Curve.fi Factory Plain Pool: jGBP/TGBP",
@@ -1928,7 +1979,8 @@
         "coins_underlying_names": [
             "jGBP",
             "TGBP"
-        ]
+        ],
+        "volume": 0
     },
     "0x6c7Fc04FEE277eABDd387C5B498A8D0f4CB9C6A6": {
         "name": "Curve.fi Factory Plain Pool: cvxCRV",
@@ -1961,7 +2013,8 @@
         "coins_underlying_names": [
             "CRV",
             "cvxCRV"
-        ]
+        ],
+        "volume": 0
     },
     "0xDa5B670CcD418a187a3066674A8002Adc9356Ad1": {
         "name": "Curve.fi Factory Plain Pool: Ahead of the Curve",
@@ -2006,7 +2059,8 @@
             "yvBOOST",
             "cvxCRV",
             "sCRV"
-        ]
+        ],
+        "volume": 845
     },
     "0x99AE07e7Ab61DCCE4383A86d14F61C68CdCCbf27": {
         "name": "Curve.fi Factory BTC Metapool: Interest Bearing Bitcoin",
@@ -2045,7 +2099,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 0
     },
     "0x87650D7bbfC3A9F10587d7778206671719d9910D": {
         "name": "Curve.fi Factory USD Metapool: Origin Dollar",
@@ -2084,7 +2139,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 500
     },
     "0x6A274dE3e2462c7614702474D64d376729831dCa": {
         "name": "Curve.fi Factory Plain Pool: AAVE Untethered",
@@ -2117,7 +2173,8 @@
         "coins_underlying_names": [
             "aUSDC",
             "aDAI"
-        ]
+        ],
+        "volume": 0
     },
     "0x06cb22615BA53E60D67Bf6C341a0fD5E718E1655": {
         "name": "Curve.fi Factory USD Metapool: FEI Metapool",
@@ -2156,7 +2213,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 19954
     },
     "0xf5A95ccDe486B5fE98852bB02d8eC80a4b9422BD": {
         "name": "Curve.fi Factory USD Metapool: GrapefruitUSD",
@@ -2195,7 +2253,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 1
     },
     "0x2009f19A8B46642E92Ea19adCdFB23ab05fC20A6": {
         "name": "Curve.fi Factory USD Metapool: RC_WETH_1650_DAI_2021_4_30-real",
@@ -2234,7 +2293,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 14978
     },
     "0x883F7d4B6B24F8BF1dB980951Ad08930D9AEC6Bc": {
         "name": "Curve.fi Factory USD Metapool: RC_INV_350_DAI_2021_5_31",
@@ -2273,7 +2333,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 23323
     },
     "0x46f5ab27914A670CFE260A2DEDb87f84c264835f": {
         "name": "Curve.fi Factory USD Metapool: RC_xRULER_15_DAI_2021_6_30",
@@ -2312,7 +2373,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 11937
     },
     "0x2206cF41E7Db9393a3BcbB6Ad35d344811523b46": {
         "name": "Curve.fi Factory USD Metapool: RC_xCOVER_100_DAI_2021_6_30",
@@ -2351,7 +2413,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 15339
     },
     "0x67d9eAe741944D4402eB0D1cB3bC3a168EC1764c": {
         "name": "Curve.fi Factory USD Metapool: NAOS USD",
@@ -2390,7 +2453,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 91022
     },
     "0x9D0464996170c6B9e75eED71c68B99dDEDf279e8": {
         "name": "Curve.fi Factory Plain Pool: cvxCRV",
@@ -2423,7 +2487,8 @@
         "coins_underlying_names": [
             "CRV",
             "cvxCRV"
-        ]
+        ],
+        "volume": 153
     },
     "0x5B3b5DF2BF2B6543f78e053bD91C4Bdd820929f1": {
         "name": "Curve.fi Factory USD Metapool: USDM",
@@ -2462,7 +2527,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 2215
     },
     "0x3CFAa1596777CAD9f5004F9a0c443d912E262243": {
         "name": "Curve.fi Factory Plain Pool: Meta EUR",
@@ -2507,7 +2573,8 @@
             "EURT",
             "EURS",
             "sEUR"
-        ]
+        ],
+        "volume": 58
     },
     "0x9f6664205988C3bf4B12B851c075102714869535": {
         "name": "Curve.fi Factory USD Metapool: Wasabi USD",
@@ -2546,7 +2613,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 62
     },
     "0x6d0Bd8365e2fCd0c2acf7d218f629A319B6c9d47": {
         "name": "Curve.fi Factory BTC Metapool: Wasabi BTC",
@@ -2585,7 +2653,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 0
     },
     "0xAA5A67c256e27A5d80712c51971408db3370927D": {
         "name": "Curve.fi Factory USD Metapool: DOLA-3pool Curve LP",
@@ -2624,7 +2693,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 1692
     },
     "0x8818a9bb44Fbf33502bE7c15c500d0C783B73067": {
         "name": "Curve.fi Factory Plain Pool: ibJPY/sJPY",
@@ -2657,7 +2727,8 @@
         "coins_underlying_names": [
             "ibJPY",
             "sJPY"
-        ]
+        ],
+        "volume": 5
     },
     "0x3F1B0278A9ee595635B61817630cC19DE792f506": {
         "name": "Curve.fi Factory Plain Pool: ibAUD/sAUD",
@@ -2690,7 +2761,8 @@
         "coins_underlying_names": [
             "ibAUD",
             "sAUD"
-        ]
+        ],
+        "volume": 14194
     },
     "0xD6Ac1CB9019137a896343Da59dDE6d097F710538": {
         "name": "Curve.fi Factory Plain Pool: ibGBP/sGBP",
@@ -2723,7 +2795,8 @@
         "coins_underlying_names": [
             "ibGBP",
             "sGBP"
-        ]
+        ],
+        "volume": 387
     },
     "0x9c2C8910F113181783c249d8F6Aa41b51Cde0f0c": {
         "name": "Curve.fi Factory Plain Pool: ibCHF/sCHF",
@@ -2756,7 +2829,8 @@
         "coins_underlying_names": [
             "ibCHF",
             "sCHF"
-        ]
+        ],
+        "volume": 21157
     },
     "0xc8a7C1c4B748970F57cA59326BcD49F5c9dc43E3": {
         "name": "Curve.fi Factory Plain Pool: OPEN MATIC",
@@ -2789,7 +2863,8 @@
         "coins_underlying_names": [
             "OPEN",
             "MATIC"
-        ]
+        ],
+        "volume": 20
     },
     "0x3Fb78e61784C9c637D560eDE23Ad57CA1294c14a": {
         "name": "Curve.fi Factory Plain Pool: Neutrino EUR",
@@ -2822,7 +2897,8 @@
         "coins_underlying_names": [
             "EURN",
             "EURT"
-        ]
+        ],
+        "volume": 448
     },
     "0x737bC004136f66aE3F8fd5a1199e81c18388097B": {
         "name": "Curve.fi Factory Plain Pool: sdCRV",
@@ -2855,7 +2931,8 @@
         "coins_underlying_names": [
             "sdveCRV-DAO",
             "CRV"
-        ]
+        ],
+        "volume": 5213
     },
     "0x4e52Cfc80679F402d10f7766fa3f85351A7C2530": {
         "name": "Curve.fi Factory BTC Metapool: BTCpx",
@@ -2894,7 +2971,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 303
     },
     "0x2De8c952871317fB9F22C73BB66BF86A1EeBe1a5": {
         "name": "Curve.fi Factory USD Metapool: PWRD Metapool",
@@ -2933,7 +3011,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x08Eaf78d40abFA6C341F05692eB48eDCA425Ce04": {
         "name": "Curve.fi Factory Plain Pool: Wanna Avoid Tether?",
@@ -2972,7 +3051,8 @@
             "sUSD",
             "UST",
             "MIM"
-        ]
+        ],
+        "volume": 0
     },
     "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e": {
         "name": "Curve.fi Factory Pool: alETH",
@@ -3005,7 +3085,8 @@
         "coins_underlying_names": [
             "ETH",
             "alETH"
-        ]
+        ],
+        "volume": 2786
     },
     "0x66b2e9B25F8ABa6B4A10350c785d63bAdE5A11E9": {
         "name": "Curve.fi Factory USD Metapool: 17PctCryptoDiversifiedDollar",
@@ -3044,7 +3125,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xE76ebD4f9FA58E5269D3cD032b055b443239e664": {
         "name": "Curve.fi Factory USD Metapool: 17PctCryptoDiversifiedDollar",
@@ -3083,7 +3165,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xfa65aa60a9D45623c57D383fb4cf8Fb8b854cC4D": {
         "name": "Curve.fi Factory BTC Metapool: tbtc2",
@@ -3122,7 +3205,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 8329
     },
     "0xeD09ca8275dFfb09c632B6EA58C035a851F73616": {
         "name": "Curve.fi Factory USD Metapool: kusd-3pool",
@@ -3161,7 +3245,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xAc5f019a302c4c8caAC0a7F28183ac62E6e80034": {
         "name": "Curve.fi Factory USD Metapool: tusd-3pool",
@@ -3200,7 +3285,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 20430
     },
     "0xbcb91E689114B9Cc865AD7871845C95241Df4105": {
         "name": "Curve.fi Factory USD Metapool: PWRD Metapool",
@@ -3239,7 +3325,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 33
     },
     "0xC2F5FeA5197a3d92736500Fd7733Fcc7a3bBDf3F": {
         "name": "Curve.fi Factory USD Metapool: fUSD-3pool",
@@ -3278,7 +3365,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 223
     },
     "0x705DA2596cf6aaA2FEA36f2a59985EC9e8aeC7E2": {
         "name": "Curve.fi Factory USD Metapool: Test Pool D",
@@ -3317,7 +3405,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x6870F9b4DD5d34C7FC53D0d85D9dBd1aAB339BF7": {
         "name": "Curve.fi Factory USD Metapool: DEI",
@@ -3356,7 +3445,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 332
     },
     "0x55A8a39bc9694714E2874c1ce77aa1E599461E18": {
         "name": "Curve.fi Factory Plain Pool: MIM-UST",
@@ -3389,7 +3479,8 @@
         "coins_underlying_names": [
             "MIM",
             "UST"
-        ]
+        ],
+        "volume": 2931
     },
     "0xf03bD3cfE85f00bF5819AC20f0870cE8a8d1F0D8": {
         "name": "Curve.fi Factory Plain Pool: Sharedstake ETH/vETH2",
@@ -3422,7 +3513,8 @@
         "coins_underlying_names": [
             "vETH2",
             "WETH"
-        ]
+        ],
+        "volume": 570
     },
     "0xC8781F2193e2CB861c9325677D98297F94a0dfd3": {
         "name": "Curve.fi Factory USD Metapool: QabbalahBit Wellsprings",
@@ -3461,7 +3553,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x9f4A88da14F2b6DBc785C1Db3511A53B8F342bde": {
         "name": "Curve.fi Factory USD Metapool: QBIT Well",
@@ -3500,7 +3593,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x04c90C198b2eFF55716079bc06d7CCc4aa4d7512": {
         "name": "Curve.fi Factory Plain Pool: Badger Locked CVX",
@@ -3533,7 +3627,8 @@
         "coins_underlying_names": [
             "CVX",
             "bveCVX"
-        ]
+        ],
+        "volume": 29922
     },
     "0xCEAF7747579696A2F0bb206a14210e3c9e6fB269": {
         "name": "Curve.fi Factory USD Metapool: wormhole v2 UST-3Pool",
@@ -3572,7 +3667,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 12699
     },
     "0x9fED7a930d86Dfe5980040E18C92B1B0d381eC19": {
         "name": "Curve.fi Factory USD Metapool: DSU",
@@ -3611,7 +3707,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xf0C081020B9d06EB1b33e357767c00Ccc138bE7c": {
         "name": "Curve.fi Factory USD Metapool: DSU",
@@ -3650,7 +3747,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 7325
     },
     "0xFB9a265b5a1f52d97838Ec7274A0b1442efAcC87": {
         "name": "Curve.fi Factory Pool: Ankr Reward-Earning Staked ETH",
@@ -3683,7 +3781,8 @@
         "coins_underlying_names": [
             "ETH",
             "aETHb"
-        ]
+        ],
+        "volume": 8
     },
     "0xBaaa1F5DbA42C3389bDbc2c9D2dE134F5cD0Dc89": {
         "name": "Curve.fi Factory Plain Pool: d3pool",
@@ -3722,7 +3821,8 @@
             "FRAX",
             "FEI",
             "alUSD"
-        ]
+        ],
+        "volume": 740
     },
     "0x1F6bb2a7a2A84d08bb821B89E38cA651175aeDd4": {
         "name": "Curve.fi Factory Plain Pool: Ankr Reward-Earning Staked MATIC",
@@ -3755,7 +3855,8 @@
         "coins_underlying_names": [
             "MATIC",
             "aMATICb"
-        ]
+        ],
+        "volume": 625
     },
     "0xc270b3B858c335B6BA5D5b10e2Da8a09976005ad": {
         "name": "Curve.fi Factory USD Metapool: Paxos Dollar (USDP)",
@@ -3794,7 +3895,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 2407
     },
     "0xFbdCA68601f835b27790D98bbb8eC7f05FDEaA9B": {
         "name": "Curve.fi Factory BTC Metapool: ibBTC",
@@ -3833,7 +3935,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 368
     },
     "0x8DF0713B2a047c45a0BEf21c3B309bcEF91afd34": {
         "name": "Curve.fi Factory Plain Pool: handleEUR",
@@ -3866,7 +3969,8 @@
         "coins_underlying_names": [
             "fxEUR",
             "EURS"
-        ]
+        ],
+        "volume": 0
     },
     "0x148a88719bA0B34F16e0f5A7537DA73Bdc9C2A2A": {
         "name": "Curve.fi Factory BTC Metapool: Orkan",
@@ -3905,7 +4009,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 0
     },
     "0x45a8CC73EC100306af64AB2CcB7B12E70EC549A8": {
         "name": "Curve.fi Factory Plain Pool: agEUR",
@@ -3938,7 +4043,8 @@
         "coins_underlying_names": [
             "agEUR",
             "sEUR"
-        ]
+        ],
+        "volume": 0
     },
     "0xcbD5cC53C5b846671C6434Ab301AD4d210c21184": {
         "name": "Curve.fi Factory Plain Pool: ibZAR/ZARP",
@@ -3971,7 +4077,8 @@
         "coins_underlying_names": [
             "ZARP",
             "ibZAR"
-        ]
+        ],
+        "volume": 0
     },
     "0xE667c793513ecBD74Fb53Bb4b91fDae02BFC092D": {
         "name": "Curve.fi Factory USD Metapool: DYDX-3CRV",
@@ -4010,7 +4117,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xb9446c4Ef5EBE66268dA6700D26f96273DE3d571": {
         "name": "Curve.fi Factory Plain Pool: 3EURpool",
@@ -4049,7 +4157,8 @@
             "agEUR",
             "EURT",
             "EURS"
-        ]
+        ],
+        "volume": 3498
     },
     "0x06d39e95977349431E3d800d49C63B4D472e10FB": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tWETH/WETH",
@@ -4082,7 +4191,8 @@
         "coins_underlying_names": [
             "tWETH",
             "WETH"
-        ]
+        ],
+        "volume": 2356
     },
     "0x1033812EFeC8716BBaE0c19e5678698D25E26eDf": {
         "name": "Curve.fi Factory USD Metapool: SORA XSTUSD",
@@ -4121,7 +4231,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 14978
     },
     "0x679CE2A8B3180f5a00e0DCCA26783016799e9A58": {
         "name": "Curve.fi Factory USD Metapool: xDollar Interverse Money",
@@ -4160,7 +4271,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x6d8fF88973b15dF3e2dc6ABb9aF29Cad8C2B5Ef5": {
         "name": "Curve.fi Factory USD Metapool: xim",
@@ -4199,7 +4311,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 1213
     },
     "0x8083b047E962CA45B210E28aC755fbdA3D773c5B": {
         "name": "Curve.fi Factory USD Metapool: RAMP rUSD",
@@ -4238,7 +4351,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x3b22B869ba3c0a495Cead0B8A009b70886d37fAC": {
         "name": "Curve.fi Factory USD Metapool: Bhome",
@@ -4277,7 +4391,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 112
     },
     "0xbB2dC673E1091abCA3eaDB622b18f6D4634b2CD9": {
         "name": "Curve.fi Factory Plain Pool: JPYC/ibJPY",
@@ -4310,7 +4425,8 @@
         "coins_underlying_names": [
             "JPYC",
             "ibJPY"
-        ]
+        ],
+        "volume": 89
     },
     "0x1c65bA665ce39cfe85639227eccf17Be2B167058": {
         "name": "Curve.fi Factory Plain Pool: UST-FRAX",
@@ -4343,7 +4459,8 @@
         "coins_underlying_names": [
             "UST",
             "FRAX"
-        ]
+        ],
+        "volume": 10685
     },
     "0xa0D35fAead5299Bf18eFbB5dEfd1Ec6D4AB4Ef3B": {
         "name": "Curve.fi Factory Plain Pool: Fei PCV 1",
@@ -4382,7 +4499,8 @@
             "aFEI",
             "aDAI",
             "LUSD"
-        ]
+        ],
+        "volume": 0
     },
     "0xf083FBa98dED0f9C970e5a418500bad08D8b9732": {
         "name": "Curve.fi Factory Plain Pool: bentCVX",
@@ -4415,7 +4533,8 @@
         "coins_underlying_names": [
             "CVX",
             "bentCVX"
-        ]
+        ],
+        "volume": 135
     },
     "0x76264772707c8Bc24261516b560cBF3Cbe6F7819": {
         "name": "Curve.fi Factory USD Metapool: dForce",
@@ -4454,7 +4573,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 172
     },
     "0xB37D6c07482Bc11cd28a1f11f1a6ad7b66Dec933": {
         "name": "Curve.fi Factory Plain Pool: agEUR/ibEUR",
@@ -4487,7 +4607,8 @@
         "coins_underlying_names": [
             "ibEUR",
             "agEUR"
-        ]
+        ],
+        "volume": 941
     },
     "0x694650a0B2866472c2EEA27827CE6253C1D13074": {
         "name": "Curve.fi Factory Plain Pool: tFRAX/FRAX Test",
@@ -4520,7 +4641,8 @@
         "coins_underlying_names": [
             "tFRAX",
             "FRAX"
-        ]
+        ],
+        "volume": 0
     },
     "0x8ed10E4e307822b969BCDaffD49095235f6F892b": {
         "name": "Curve.fi Factory USD Metapool: ELONX POOL",
@@ -4557,7 +4679,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 25
     },
     "0x3a70DfA7d2262988064A2D051dd47521E43c9BdD": {
         "name": "Curve.fi Factory USD Metapool: Bean",
@@ -4596,7 +4719,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 1595
     },
     "0x7abD51BbA7f9F6Ae87aC77e1eA1C5783adA56e5c": {
         "name": "Curve.fi Factory USD Metapool: USDV",
@@ -4635,7 +4759,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 603
     },
     "0x5b78b93Fa851c357586915c7bA7258b762eB1ba0": {
         "name": "Curve.fi Factory USD Metapool: PAR/USDC",
@@ -4674,7 +4799,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 231
     },
     "0x0FaFaFD3C393ead5F5129cFC7e0E12367088c473": {
         "name": "Curve.fi Factory USD Metapool: baoUSD",
@@ -4713,7 +4839,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 204
     },
     "0xd05ce4AB1f4fb0C0e1b65ebE3Ed7F2dcFc6ccf20": {
         "name": "Curve.fi Factory USD Metapool: sUSD Metapool",
@@ -4752,7 +4879,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x97aEB34ac6561146DD9cE191EFD5634F6465DeF4": {
         "name": "Curve.fi Factory USD Metapool: AETHV1",
@@ -4791,7 +4919,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x9462F2b3C9bEeA8afc334Cdb1D1382B072e494eA": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tGAMMA/GAMMA",
@@ -4824,7 +4953,8 @@
         "coins_underlying_names": [
             "tGAMMA",
             "GAMMA"
-        ]
+        ],
+        "volume": 31831
     },
     "0x50B0D9171160d6EB8Aa39E090Da51E7e078E81c4": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tSNX/SNX",
@@ -4857,7 +4987,8 @@
         "coins_underlying_names": [
             "tSNX",
             "SNX"
-        ]
+        ],
+        "volume": 0
     },
     "0x447Ddd4960d9fdBF6af9a790560d0AF76795CB08": {
         "name": "Curve.fi Factory Plain Pool: rETH/wstETH",
@@ -4890,7 +5021,8 @@
         "coins_underlying_names": [
             "rETH",
             "wstETH"
-        ]
+        ],
+        "volume": 16817
     },
     "0xCaf8703f8664731cEd11f63bB0570E53Ab4600A9": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tAPW/APW",
@@ -4923,7 +5055,8 @@
         "coins_underlying_names": [
             "tAPW",
             "APW"
-        ]
+        ],
+        "volume": 499
     },
     "0x01FE650EF2f8e2982295489AE6aDc1413bF6011F": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tTCR/TCR",
@@ -4956,7 +5089,8 @@
         "coins_underlying_names": [
             "tTCR",
             "TCR"
-        ]
+        ],
+        "volume": 43403
     },
     "0xC250B22d15e43d95fBE27B12d98B6098f8493eaC": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tFOX/FOX",
@@ -4989,7 +5123,8 @@
         "coins_underlying_names": [
             "tFOX",
             "FOX"
-        ]
+        ],
+        "volume": 430753
     },
     "0x0437ac6109e8A366A1F4816edF312A36952DB856": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tSUSHI/SUSHI",
@@ -5022,7 +5157,8 @@
         "coins_underlying_names": [
             "tSUSHI",
             "SUSHI"
-        ]
+        ],
+        "volume": 80
     },
     "0x9001a452d39A8710D27ED5c2E10431C13F5Fba74": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tALCX/ALCX",
@@ -5055,7 +5191,8 @@
         "coins_underlying_names": [
             "tALCX",
             "ALCX"
-        ]
+        ],
+        "volume": 18275
     },
     "0x961226B64AD373275130234145b96D100Dc0b655": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tFXS/FXS",
@@ -5088,7 +5225,8 @@
         "coins_underlying_names": [
             "tFXS",
             "FXS"
-        ]
+        ],
+        "volume": 21467
     },
     "0xe7E4366f6ED6aFd23e88154C00B532BDc0352333": {
         "name": "Curve.fi Factory Plain Pool: Test Only",
@@ -5121,7 +5259,8 @@
         "coins_underlying_names": [
             "tFXS",
             "FXS"
-        ]
+        ],
+        "volume": 0
     },
     "0x9809f2B973bDB056D24bC2b6571EA1f23dB4e861": {
         "name": "Curve.fi Factory USD Metapool: GOLD/BSD",
@@ -5160,7 +5299,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x04EcD49246bf5143E43e2305136c46AeB6fAd400": {
         "name": "Curve.fi Factory Plain Pool: DYDX/stkDYDX",
@@ -5193,7 +5333,8 @@
         "coins_underlying_names": [
             "DYDX",
             "stkDYDX"
-        ]
+        ],
+        "volume": 0
     },
     "0xC9467E453620f16b57a34a770C6bceBECe002587": {
         "name": "Curve.fi Factory BTC Metapool: pbtc",
@@ -5232,7 +5373,8 @@
             "renBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 2705
     },
     "0x8c524635d52bd7b1Bd55E062303177a7d916C046": {
         "name": "Curve.fi Factory Plain Pool: sdFXS",
@@ -5265,7 +5407,8 @@
         "coins_underlying_names": [
             "FXS",
             "sdFXS"
-        ]
+        ],
+        "volume": 10005
     },
     "0x48fF31bBbD8Ab553Ebe7cBD84e1eA3dBa8f54957": {
         "name": "Curve.fi Factory Plain Pool: sdANGLE",
@@ -5298,7 +5441,8 @@
         "coins_underlying_names": [
             "ANGLE",
             "sdANGLE"
-        ]
+        ],
+        "volume": 17
     },
     "0x9CA41a2DaB3CEE15308998868ca644e2e3be5C59": {
         "name": "Curve.fi Factory Plain Pool: dfxCAD/CADC",
@@ -5331,7 +5475,8 @@
         "coins_underlying_names": [
             "dfxCAD",
             "CADC"
-        ]
+        ],
+        "volume": 0
     },
     "0xD652c40fBb3f06d6B58Cb9aa9CFF063eE63d465D": {
         "name": "Curve.fi Factory Plain Pool: Bean-LUSD",
@@ -5364,7 +5509,8 @@
         "coins_underlying_names": [
             "BEAN",
             "LUSD"
-        ]
+        ],
+        "volume": 17493860
     },
     "0xd1011B637F979a5d9093Df1B32e7736c289024F5": {
         "name": "Curve.fi Factory Plain Pool: Curve sETH2-stETH",
@@ -5397,7 +5543,8 @@
         "coins_underlying_names": [
             "sETH2",
             "stETH"
-        ]
+        ],
+        "volume": 0
     },
     "0xE95E4c2dAC312F31Dc605533D5A4d0aF42579308": {
         "name": "Curve.fi Factory Plain Pool: sETH2/stETH",
@@ -5430,7 +5577,8 @@
         "coins_underlying_names": [
             "sETH2",
             "stETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x6577b46a566aDe492ad551a315c04DE3Fbe3DbFa": {
         "name": "Curve.fi Factory Plain Pool: TriCRV",
@@ -5469,7 +5617,8 @@
             "cCRV",
             "cvxCRV",
             "CRV"
-        ]
+        ],
+        "volume": 115
     },
     "0xDB8Cc7eCeD700A4bfFdE98013760Ff31FF9408D8": {
         "name": "Curve.fi Factory USD Metapool: fiat",
@@ -5508,7 +5657,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 25
     },
     "0x323b3a6e7a71c1b8C257606Ef0364D61df8AA525": {
         "name": "Curve.fi Factory Plain Pool: sdCRV",
@@ -5541,7 +5691,8 @@
         "coins_underlying_names": [
             "CRV",
             "sdCRV"
-        ]
+        ],
+        "volume": 0
     },
     "0xf7b55C3732aD8b2c2dA7c24f30A69f55c54FB717": {
         "name": "Curve.fi Factory Plain Pool: sdCRV",
@@ -5574,7 +5725,8 @@
         "coins_underlying_names": [
             "CRV",
             "sdCRV"
-        ]
+        ],
+        "volume": 0
     },
     "0xF74bEc4bcf432A17470e9C4F71542f2677B9AF6a": {
         "name": "Curve.fi Factory Plain Pool: mCRV-CRV",
@@ -5607,7 +5759,8 @@
         "coins_underlying_names": [
             "mCRV",
             "CRV"
-        ]
+        ],
+        "volume": 0
     },
     "0x5a59Fd6018186471727FAAeAE4e57890aBC49B08": {
         "name": "Curve.fi Factory Plain Pool: FRAX/ARTH.usd",
@@ -5640,7 +5793,8 @@
         "coins_underlying_names": [
             "ARTH.usd",
             "FRAX"
-        ]
+        ],
+        "volume": 689
     },
     "0xeb07FcD7A8627281845ba3aCbed24435802d4B52": {
         "name": "Curve.fi Factory USD Metapool: PUSd",
@@ -5679,7 +5833,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x8EE017541375F6Bcd802ba119bdDC94dad6911A1": {
         "name": "Curve.fi Factory USD Metapool: PUSd",
@@ -5718,7 +5873,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 2606
     },
     "0xaa6a4f8DDcca7d3B9E7ad38C8338a2FCfdB1E713": {
         "name": "Curve.fi Factory Plain Pool: CLever CVX",
@@ -5751,7 +5907,8 @@
         "coins_underlying_names": [
             "CVX",
             "clevCVX"
-        ]
+        ],
+        "volume": 0
     },
     "0x8c1de7a8F8852197B109Daf75A6fbB685C013315": {
         "name": "Curve.fi Factory Plain Pool: CLever CVX",
@@ -5784,7 +5941,8 @@
         "coins_underlying_names": [
             "CVX",
             "clevCVX"
-        ]
+        ],
+        "volume": 0
     },
     "0xe6b5CC1B4b47305c58392CE3D359B10282FC36Ea": {
         "name": "Curve.fi Factory USD Metapool: USDD/3CRV",
@@ -5823,7 +5981,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 1071
     },
     "0x828b154032950C8ff7CF8085D841723Db2696056": {
         "name": "Curve.fi Factory Plain Pool: stETH concentrated",
@@ -5856,7 +6015,8 @@
         "coins_underlying_names": [
             "WETH",
             "stETH"
-        ]
+        ],
+        "volume": 12
     },
     "0x6F80b9543Dd5A0408F162Fe2A1675dB70A2cb77D": {
         "name": "Curve.fi Factory USD Metapool: $Pc/ETH",
@@ -5895,7 +6055,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xbf5D9DeCCCC762fA7B5eb9faC668c803D42D97b6": {
         "name": "Curve.fi Factory USD Metapool: 3CRVUST",
@@ -5934,7 +6095,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x1977870a4c18a728C19Dd4eB6542451DF06e0A4b": {
         "name": "Curve.fi Factory Plain Pool: ApeUSD-FRAX",
@@ -5967,7 +6129,8 @@
         "coins_underlying_names": [
             "ApeUSD",
             "FRAX"
-        ]
+        ],
+        "volume": 421
     },
     "0x07350D8c30D463179DE6A58764C21558DB66Dd9c": {
         "name": "Curve.fi Factory Plain Pool: CPI2Pool",
@@ -6000,7 +6163,8 @@
         "coins_underlying_names": [
             "FRAX",
             "VOLT"
-        ]
+        ],
+        "volume": 0
     },
     "0xC38cA214c7a82b1EE977232F045aFb6d425cfFf0": {
         "name": "Curve.fi Factory Plain Pool: CPI2Pool",
@@ -6033,7 +6197,8 @@
         "coins_underlying_names": [
             "FPI",
             "VOLT"
-        ]
+        ],
+        "volume": 0
     },
     "0x5c6A6Cf9Ae657A73b98454D17986AF41fC7b44ee": {
         "name": "Curve.fi Factory USD Metapool: home",
@@ -6072,7 +6237,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 2405
     },
     "0x9558b18f021FC3cBa1c9B777603829A42244818b": {
         "name": "Curve.fi Factory USD Metapool: Ubiquity 3Pool",
@@ -6111,7 +6277,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xee60f4A3487c07b4570cCfFEF315401C4c5744c8": {
         "name": "Curve.fi Factory USD Metapool: MBSC DeFi (USD)",
@@ -6150,7 +6317,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xF38a67dA7a3A12aA12A9981ae6a79C0fdDdd71aB": {
         "name": "Curve.fi Factory Plain Pool: pxCVX/CVX",
@@ -6183,7 +6351,8 @@
         "coins_underlying_names": [
             "pxCVX",
             "CVX"
-        ]
+        ],
+        "volume": 12272
     },
     "0xdaDfD00A2bBEb1abc4936b1644a3033e1B653228": {
         "name": "Curve.fi Factory Plain Pool: Stax Frax/Temple xLP + LP",
@@ -6216,7 +6385,8 @@
         "coins_underlying_names": [
             "xFraxTempleLP",
             "UNI-V2"
-        ]
+        ],
+        "volume": 4
     },
     "0xeE98d56f60A5905CbB52348c8719B247DaFe60ec": {
         "name": "Curve.fi Factory Plain Pool: WOMI/OMI",
@@ -6249,7 +6419,8 @@
         "coins_underlying_names": [
             "wOMI",
             "OMI"
-        ]
+        ],
+        "volume": 145
     },
     "0x8116E7c29f60FdacF3954891A038f845565EF5A0": {
         "name": "Curve.fi Factory USD Metapool: OMI/USD",
@@ -6288,7 +6459,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xdE495223F7cD7EE0cDe1AddbD6836046bBdf3ad3": {
         "name": "Curve.fi Factory USD Metapool: USDS/3CRV",
@@ -6327,7 +6499,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 24
     },
     "0x943b7e761f34866DA12c9b84C99888Fe2Ef607c5": {
         "name": "Curve.fi Factory Plain Pool: dfxSGD/XSGD",
@@ -6360,7 +6533,8 @@
         "coins_underlying_names": [
             "dfxSGD",
             "XSGD"
-        ]
+        ],
+        "volume": 0
     },
     "0x7E46fd8a30869aa9ed55af031067Df666EfE87da": {
         "name": "Curve.fi Factory Plain Pool: yveCRV",
@@ -6393,7 +6567,8 @@
         "coins_underlying_names": [
             "CRV",
             "yveCRV-DAO"
-        ]
+        ],
+        "volume": 78
     },
     "0x63594B2011a0F2616586Bf3EeF8096d42272F916": {
         "name": "Curve.fi Factory USD Metapool: USDi",
@@ -6432,7 +6607,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 759
     },
     "0x67C7f0a63BA70a2dAc69477B716551FC921aed00": {
         "name": "Curve.fi Factory USD Metapool: 3CRV/lvUSD",
@@ -6471,7 +6647,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x4606326b4Db89373F5377C316d3b0F6e55Bc6A20": {
         "name": "Curve.fi Factory USD Metapool: USDDFRAXBP",
@@ -6507,7 +6684,8 @@
             "USDD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 4732
     },
     "0xe3c190c57b5959Ae62EfE3B6797058B76bA2f5eF": {
         "name": "Curve.fi Factory USD Metapool: sUSDFRAXBP",
@@ -6543,7 +6721,8 @@
             "sUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 15306
     },
     "0x497CE58F34605B9944E6b15EcafE6b001206fd25": {
         "name": "Curve.fi Factory USD Metapool: LUSDFRAXBP",
@@ -6579,7 +6758,8 @@
             "LUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 12293
     },
     "0x04b727C7e246CA70d496ecF52E6b6280f3c8077D": {
         "name": "Curve.fi Factory USD Metapool: apeUSDFRAXBP",
@@ -6615,7 +6795,8 @@
             "ApeUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 252840
     },
     "0x2Ed1D3E7771D64feeD7AE8F25b4032c8dd2D0B99": {
         "name": "Curve.fi Factory USD Metapool: alUSDFRAXBP",
@@ -6651,7 +6832,8 @@
             "alUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x4e43151b78b5fbb16298C1161fcbF7531d5F8D93": {
         "name": "Curve.fi Factory USD Metapool: GUSDFRAXBP",
@@ -6687,7 +6869,8 @@
             "GUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 14749
     },
     "0x8fdb0bB9365a46B145Db80D0B1C5C5e979C84190": {
         "name": "Curve.fi Factory USD Metapool: BUSDFRAXBP",
@@ -6723,7 +6906,8 @@
             "BUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 1001
     },
     "0x50C8F34CEA0E65535fC2525B637ccd8a07c90896": {
         "name": "Curve.fi Factory USD Metapool: MXNT",
@@ -6762,7 +6946,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x642562115cf5A5e72Ab517E6448EC8b61843dac9": {
         "name": "Curve.fi Factory USD Metapool: EUROC",
@@ -6801,7 +6986,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x33baeDa08b8afACc4d3d07cf31d49FC1F1f3E893": {
         "name": "Curve.fi Factory USD Metapool: TUSDFRAXBP",
@@ -6837,7 +7023,8 @@
             "TUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 55
     },
     "0xe7A3b38c39F97E977723bd1239C3470702568e7B": {
         "name": "Curve.fi Factory Plain Pool: Euro Pool",
@@ -6876,7 +7063,8 @@
             "cEUR",
             "agEUR",
             "EUROC"
-        ]
+        ],
+        "volume": 950
     },
     "0xD7C10449A6D134A9ed37e2922F8474EAc6E5c100": {
         "name": "Curve.fi Factory Plain Pool: MATIC/FLEET",
@@ -6909,7 +7097,8 @@
         "coins_underlying_names": [
             "FLEET",
             "MATIC"
-        ]
+        ],
+        "volume": 660
     },
     "0xB30dA2376F63De30b42dC055C93fa474F31330A5": {
         "name": "Curve.fi Factory USD Metapool: alUSDFRAXBP",
@@ -6945,7 +7134,8 @@
             "alUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 2823
     },
     "0xF70c5c65CF6A28E7a4483F52511e5a29678e4fFD": {
         "name": "Curve.fi Factory Plain Pool: Euro Pool",
@@ -6984,7 +7174,8 @@
             "cEUR",
             "agEUR",
             "EUROC"
-        ]
+        ],
+        "volume": 0
     },
     "0x649c1B0e70A80210bcFB3C4eb5DDAd175B90BE4d": {
         "name": "Curve.fi Factory Plain Pool: GCD / USDP",
@@ -7017,7 +7208,8 @@
         "coins_underlying_names": [
             "GCD",
             "USDP"
-        ]
+        ],
+        "volume": 10
     },
     "0x875DF0bA24ccD867f8217593ee27253280772A97": {
         "name": "Curve.fi Factory Plain Pool: stETH/aETHb",
@@ -7050,7 +7242,8 @@
         "coins_underlying_names": [
             "stETH",
             "aETHb"
-        ]
+        ],
+        "volume": 8
     },
     "0xC69b00366F07840fF939cc9fdF866C3dCCB10804": {
         "name": "Curve.fi Factory Plain Pool: sdLFT",
@@ -7083,7 +7276,8 @@
         "coins_underlying_names": [
             "LFT",
             "sdLFT"
-        ]
+        ],
+        "volume": 2
     },
     "0xc9C32cd16Bf7eFB85Ff14e0c8603cc90F6F2eE49": {
         "name": "Curve.fi Factory USD Metapool: Bean",
@@ -7122,7 +7316,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 14653
     },
     "0x48fcFFa86fb24bDEB45B5739F7Ced24095A7c8e8": {
         "name": "Curve.fi Factory USD Metapool: MAI+3pool",
@@ -7161,7 +7356,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xb3bC1833aC51aAcEA92acd551FBe1Ab7eDc59EdF": {
         "name": "Curve.fi Factory USD Metapool: MIMFRAXBP",
@@ -7197,7 +7393,8 @@
             "MIM",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 866
     },
     "0x7c0316C925E12eBfC55e0f325794B43eaD425157": {
         "name": "Curve.fi Factory Pool: frxETH",
@@ -7230,7 +7427,8 @@
         "coins_underlying_names": [
             "ETH",
             "frxETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x83D78bf3f861e898cCA47BD076b3839Ab5469d70": {
         "name": "Curve.fi Factory Plain Pool: Tokemak tMYC/MYC",
@@ -7263,7 +7461,8 @@
         "coins_underlying_names": [
             "tMYC",
             "MYC"
-        ]
+        ],
+        "volume": 27813
     },
     "0x0AaCe9b6c491d5cD9F80665A2fCc1af09e9CCf00": {
         "name": "Curve.fi Factory USD Metapool: handleUSD",
@@ -7299,7 +7498,8 @@
             "fxUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x92Da88e2e6f96cC7c667Cd1367BD090ADF3c6053": {
         "name": "Curve.fi Factory USD Metapool: xUSD1",
@@ -7338,7 +7538,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x85F102bE3a76165Be9668bE0bF36E906a488FD33": {
         "name": "Curve.fi Factory USD Metapool: xUSD1",
@@ -7377,7 +7578,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x87872BE0c56Ef97156f2617b3083D22423Fc62E9": {
         "name": "Curve.fi Factory USD Metapool: xUSD1",
@@ -7416,7 +7618,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xc5481720517e1B170CF1d19cEaaBE07c37896Eb2": {
         "name": "Curve.fi Factory USD Metapool: xUSD1",
@@ -7455,7 +7658,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x8b3138DF9aA1F60648C65C67D6Ff646BE305788B": {
         "name": "Curve.fi Factory USD Metapool: xUSD1",
@@ -7494,7 +7698,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xBA866791F98098df41C3187D4D5433be29215c79": {
         "name": "Curve.fi Factory Plain Pool: agEUR/EUROC",
@@ -7527,7 +7732,8 @@
         "coins_underlying_names": [
             "agEUR",
             "EUROC"
-        ]
+        ],
+        "volume": 0
     },
     "0xBa3436Fd341F2C8A928452Db3C5A3670d1d5Cc73": {
         "name": "Curve.fi Factory Plain Pool: agEUR/EUROC",
@@ -7560,7 +7766,8 @@
         "coins_underlying_names": [
             "agEUR",
             "EUROC"
-        ]
+        ],
+        "volume": 58098
     },
     "0x6e8d2b6Fb24117c675C2fABC524f28CC5D81f18a": {
         "name": "Curve.fi Factory Pool: cbETH",
@@ -7593,7 +7800,8 @@
         "coins_underlying_names": [
             "ETH",
             "cbETH"
-        ]
+        ],
+        "volume": 1021
     },
     "0xc22936D5ECE78C048D6E7fe5d9F77fb6cAA16Dbb": {
         "name": "Curve.fi Factory Pool: aETH",
@@ -7626,7 +7834,8 @@
         "coins_underlying_names": [
             "ETH",
             "aWETH"
-        ]
+        ],
+        "volume": 0
     },
     "0xb548E49Bb6f33A77885836723b73EF9C8dBC047B": {
         "name": "Curve.fi Factory USD Metapool: USDT/DAI",
@@ -7665,7 +7874,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x3DcC3AC50cB42F7e443d7F548DD2c48EDaa8f59a": {
         "name": "Curve.fi Factory USD Metapool: USDT/DAI",
@@ -7704,7 +7914,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x172A54Ba45783049216F90F85FE5E5f6BC1c08fe": {
         "name": "Curve.fi Factory USD Metapool: CRV/GNO",
@@ -7743,7 +7954,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xF08dBD81Fcc712004e6943454c83C52DE963cdEC": {
         "name": "Curve.fi Factory USD Metapool: CRV/GNO",
@@ -7782,7 +7994,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x6788f608CfE5CfCD02e6152eC79505341E0774be": {
         "name": "Curve.fi Factory Plain Pool: sdAPW",
@@ -7815,7 +8028,8 @@
         "coins_underlying_names": [
             "APW",
             "sdAPW"
-        ]
+        ],
+        "volume": 3070
     },
     "0x9fE520E629A7F0deC773A3199BFE87620E5aeA74": {
         "name": "Curve.fi Factory USD Metapool: DOLA/FRAXBP",
@@ -7851,7 +8065,8 @@
             "DOLA",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xb2111b55Edd1Cb5D2C18a6817e21D473FE0E5Ba1": {
         "name": "Curve.fi Factory USD Metapool: pUSDFRAXBP",
@@ -7890,7 +8105,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xC47EBd6c0f68fD5963005D28D0ba533750E5C11B": {
         "name": "Curve.fi Factory USD Metapool: pUSDFRAXBP",
@@ -7926,7 +8142,8 @@
             "PUSd",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 2067
     },
     "0x66E335622ad7a6C9c72c98dbfCCE684996a20Ef9": {
         "name": "Curve.fi Factory USD Metapool: MAI+FRAXBP",
@@ -7962,7 +8179,8 @@
             "MAI",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 7965
     },
     "0xE57180685E3348589E9521aa53Af0BCD497E884d": {
         "name": "Curve.fi Factory USD Metapool: DOLA/FRAXBP",
@@ -7998,7 +8216,8 @@
             "DOLA",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 957
     },
     "0x9d259cA698746586107C234e9E9461d385ca1041": {
         "name": "Curve.fi Factory Plain Pool: sdBPT",
@@ -8031,7 +8250,8 @@
         "coins_underlying_names": [
             "BPT",
             "sdBPT"
-        ]
+        ],
+        "volume": 122
     },
     "0xa23d59fA2505638861525f8cB3005fec7bd37b5B": {
         "name": "Curve.fi Factory USD Metapool: CRV/ZARP",
@@ -8070,7 +8290,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xCF95Ac3dAecDBf60152A16BDa8D8f8dB7d175B88": {
         "name": "Curve.fi Factory Pool: Frax Ether",
@@ -8103,7 +8324,8 @@
         "coins_underlying_names": [
             "ETH",
             "frxETH"
-        ]
+        ],
+        "volume": 0
     },
     "0xB90A850A0802B9F281bAbEA836292AAdd1011972": {
         "name": "Curve.fi Factory USD Metapool: GYEN/USDC",
@@ -8142,7 +8364,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x9d0De74dE698D1BA7273D09193EC20a1F6cb7d6a": {
         "name": "Curve.fi Factory USD Metapool: GYEN/USDC",
@@ -8181,7 +8404,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xEc4ACC9322FC4dc853e8f72631d2C95556C68Ec0": {
         "name": "Curve.fi Factory USD Metapool: GYEN/USDC",
@@ -8220,7 +8444,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x3d675A52F5B572EB5c61FC5088203Ac9B16BFC70": {
         "name": "Curve.fi Factory USD Metapool: Pull",
@@ -8259,7 +8484,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x0309A528bBa0394dC4A2Ce59123C52E317A54604": {
         "name": "Curve.fi Factory Plain Pool: yCRV",
@@ -8292,7 +8518,8 @@
         "coins_underlying_names": [
             "CRV",
             "yCRV"
-        ]
+        ],
+        "volume": 0
     },
     "0xF8048E871dF466BD187078cb38CB914476319d33": {
         "name": "Curve.fi Factory Plain Pool: MAI/LUSD",
@@ -8325,7 +8552,8 @@
         "coins_underlying_names": [
             "MAI",
             "LUSD"
-        ]
+        ],
+        "volume": 0
     },
     "0x04f0Fae3dD0A9904F797DeB15C3e523342112811": {
         "name": "Curve.fi Factory USD Metapool: CRV/REN",
@@ -8364,7 +8592,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x0B049eB31878176b278ef84A66810d311353dc94": {
         "name": "Curve.fi Factory USD Metapool: CRV/YFI",
@@ -8403,7 +8632,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x5239063A86e1E251eE6FB3AB4fb67DEA3A8E1fd2": {
         "name": "Curve.fi Factory USD Metapool: CRV/YFI",
@@ -8442,7 +8672,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x930792bd0fb4593063Ad2ee12E86d768bD8DF7a1": {
         "name": "Curve.fi Factory USD Metapool: TPAY/ETH",
@@ -8481,7 +8712,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xb5FC990637F15bE6420341845a64101b6bbE365D": {
         "name": "Curve.fi Factory USD Metapool: TPAY/ETH",
@@ -8520,7 +8752,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xabE43B60F8337818c21101AB78b5B216789e19DD": {
         "name": "Curve.fi Factory USD Metapool: TPAY/ETH",
@@ -8559,7 +8792,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x453D92C7d4263201C69aACfaf589Ed14202d83a4": {
         "name": "Curve.fi Factory Plain Pool: yCRV",
@@ -8592,7 +8826,8 @@
         "coins_underlying_names": [
             "CRV",
             "yCRV"
-        ]
+        ],
+        "volume": 33089
     },
     "0x904bE3cE7249447167051f239c832400CA28De71": {
         "name": "Curve.fi Factory Pool: pETH",
@@ -8625,7 +8860,8 @@
         "coins_underlying_names": [
             "ETH",
             "pETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x9848482da3Ee3076165ce6497eDA906E66bB85C5": {
         "name": "Curve.fi Factory Pool: pETH",
@@ -8658,7 +8894,8 @@
         "coins_underlying_names": [
             "ETH",
             "pETH"
-        ]
+        ],
+        "volume": 7719
     },
     "0xDAB9EeEE607F7952680E9433787e4EdE244a8515": {
         "name": "Curve.fi Factory USD Metapool: matic/ETH",
@@ -8697,7 +8934,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x62CEc7899A9910E48F0dEeaB755429887b6e1979": {
         "name": "Curve.fi Factory USD Metapool: CRV/ETH",
@@ -8736,7 +8974,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x00f93fBf00F97170B6cf295DC58888073CB5c2b8": {
         "name": "Curve.fi Factory USD Metapool: CRV/ETH",
@@ -8775,7 +9014,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x982Da76F0ccF868B558BD46D7a3B58bC2662D7cc": {
         "name": "Curve.fi Factory USD Metapool: CRV/ETH",
@@ -8814,7 +9054,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x578B27E257050B6011DfDCD69F67696eF24279FC": {
         "name": "Curve.fi Factory USD Metapool: CRV/ETH",
@@ -8853,7 +9094,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xB4698193bCBC49Be01Fcfc67C144eA4927166355": {
         "name": "Curve.fi Factory USD Metapool: CRV/ETH",
@@ -8892,7 +9134,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x26c5A2f9b97f4B5FC74B05944B3Bb1679d803709": {
         "name": "Curve.fi Factory USD Metapool: test",
@@ -8931,7 +9174,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x188aBea43270791F96dC9209e239f7B79E61203B": {
         "name": "Curve.fi Factory USD Metapool: US/3CRV",
@@ -8970,7 +9214,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x28B0Cf1baFB707F2c6826d10caf6DD901a6540C5": {
         "name": "Curve.fi Factory USD Metapool: Zunami UZD/3CRV",
@@ -9009,7 +9254,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 5133
     },
     "0x8E27f0821873B6f5421b6ca75A4C5e1e83d3E77a": {
         "name": "Curve.fi Factory USD Metapool: GCD",
@@ -9048,7 +9294,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x6A0861625937cB3629066CC6Db88808a590B9C68": {
         "name": "Curve.fi Factory USD Metapool: GCD",
@@ -9087,7 +9334,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x63a1eC86cD45425f1409faBe4c1cF8C5FD32A3B1": {
         "name": "Curve.fi Factory Plain Pool: CLever clevCVX-CVX",
@@ -9120,7 +9368,8 @@
         "coins_underlying_names": [
             "CVX",
             "clevCVX"
-        ]
+        ],
+        "volume": 0
     },
     "0x8e883b9628a0d995ad758597989624Ec19F3b971": {
         "name": "Curve.fi Factory Plain Pool: AAVE/SHIB/ETH",
@@ -9153,7 +9402,8 @@
         "coins_underlying_names": [
             "AAVE",
             "SHIB"
-        ]
+        ],
+        "volume": 0
     },
     "0xd0E24cB3e766581952dBf258b78e89c63A37f5fb": {
         "name": "Curve.fi Factory Plain Pool: TCLever test",
@@ -9186,7 +9436,8 @@
         "coins_underlying_names": [
             "tCVX",
             "tclevCVX"
-        ]
+        ],
+        "volume": 0
     },
     "0xF9078Fb962A7D13F55d40d49C8AA6472aBD1A5a6": {
         "name": "Curve.fi Factory Plain Pool: Clever clevCVX/CVX",
@@ -9219,7 +9470,8 @@
         "coins_underlying_names": [
             "CVX",
             "clevCVX"
-        ]
+        ],
+        "volume": 384
     },
     "0x498AD3352cCFAEd237A91f6933A92a7A43917B72": {
         "name": "Curve.fi Factory USD Metapool: 1INCH/ETH",
@@ -9258,7 +9510,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 1
     },
     "0xA4C231fA5a02992b740e6169F1fbfCD35d5719e1": {
         "name": "Curve.fi Factory USD Metapool: 1INCH/ETH(TEST)",
@@ -9297,7 +9550,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xd6B03059C882f63268dD3e1a98d8E3cDEe26919C": {
         "name": "Curve.fi Factory USD Metapool: US/3CRV",
@@ -9336,7 +9590,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xC0Ec468c1B6B94a107B0A83c7a0f6529B388f43A": {
         "name": "Curve.fi Factory USD Metapool: US/3CRV",
@@ -9375,7 +9630,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xa15e8f7E1e031e4F6f11053c6d320B2A8dc6742c": {
         "name": "Curve.fi Factory USD Metapool: CRV/SHIB",
@@ -9414,7 +9670,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x6A52e339A4b8ABD15707f882D6ADC05875Ec5223": {
         "name": "Curve.fi Factory USD Metapool: CRV/SHIB",
@@ -9453,7 +9710,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xa98794Accdb3996c7Ef015A354B6e1aDd2D2ce3e": {
         "name": "Curve.fi Factory USD Metapool: CRV/SHIBOK",
@@ -9492,7 +9750,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xe82805a9b880E6DC520b6F017537F7781D55217F": {
         "name": "Curve.fi Factory USD Metapool: US/3CRV",
@@ -9531,7 +9790,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xbeDca4252b27cc12ed7DaF393F331886F86cd3CE": {
         "name": "Curve.fi Factory USD Metapool: Zunami UZD/3CRV",
@@ -9570,7 +9830,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 186
     },
     "0xD511B5c309B2F7256FF7b3D41B029aFb96C7a331": {
         "name": "Curve.fi Factory USD Metapool: US/3CRV",
@@ -9609,7 +9870,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x8D35ECe39566d65d06c9207C571934DD3C3a3916": {
         "name": "Curve.fi Factory USD Metapool: 3CRV/cealv",
@@ -9648,7 +9910,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 16
     },
     "0xA77B5d170F3AEC2F72ca06490a7B9383A70ae5EB": {
         "name": "Curve.fi Factory USD Metapool: BLARG",
@@ -9687,7 +9950,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x1400E08f1d9f5Bc90ae19ACd4bf81BEaBC9e79de": {
         "name": "Curve.fi Factory USD Metapool: XAI + crvFRAX",
@@ -9723,7 +9987,8 @@
             "XAI",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x326290A1B0004eeE78fa6ED4F1d8f4b2523ab669": {
         "name": "Curve.fi Factory USD Metapool: XAI/FRAXBP",
@@ -9759,7 +10024,8 @@
             "XAI",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 4219
     },
     "0x9FD7e5B614FA071fF3543b44B68ef7699CEc4AF5": {
         "name": "Curve.fi Factory USD Metapool: cUSD / 3CRV",
@@ -9798,7 +10064,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x166BDDEA59c13179796653B8afF13eeA1bd81a97": {
         "name": "Curve.fi Factory USD Metapool: EastGate Pharmaceuticals",
@@ -9837,7 +10104,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x613398AEcdAf6bCB6eDB8e61e5956794D23f7412": {
         "name": "Curve.fi Factory USD Metapool: EastGate Pharmaceuticals",
@@ -9876,7 +10144,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xc8FBb1CCdF2f94Ba01c8B75E0A4FA4c5E1eD6791": {
         "name": "Curve.fi Factory USD Metapool: Test",
@@ -9915,7 +10184,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xA500Cd4E520682e1B1113e1055D55bAceAD61122": {
         "name": "Curve.fi Factory USD Metapool: cUSD/FRAXBP",
@@ -9951,7 +10221,8 @@
             "cUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 6679
     },
     "0xA77d09743F77052950C4eb4e6547E9665299BecD": {
         "name": "Curve.fi Factory USD Metapool: Titanium Dollar",
@@ -9990,7 +10261,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 19984
     },
     "0xFd46B54FcFF753bA058A5E9BbB45dCedc9A71FAb": {
         "name": "Curve.fi Factory USD Metapool: FREE/USDC",
@@ -10029,7 +10301,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x413928a25D6ea1A26F2625d633207755f67Bf97c": {
         "name": "Curve.fi Factory Plain Pool: agEUR/EURe",
@@ -10062,7 +10335,8 @@
         "coins_underlying_names": [
             "agEUR",
             "EURe"
-        ]
+        ],
+        "volume": 3921
     },
     "0x3C565D9151073e8E5002B61dc570f43A139cafe7": {
         "name": "Curve.fi Factory USD Metapool: asfasfd",
@@ -10101,7 +10375,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x84997FAFC913f1613F51Bb0E2b5854222900514B": {
         "name": "Curve.fi Factory USD Metapool: Adamant Dollar",
@@ -10140,7 +10415,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x066B6e1E93FA7dcd3F0Eb7f8baC7D5A747CE0BF9": {
         "name": "Curve.fi Factory USD Metapool: REUSD/3Crv",
@@ -10179,7 +10455,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xAf25fFe6bA5A8a29665adCfA6D30C5Ae56CA0Cd3": {
         "name": "Curve.fi Factory Plain Pool: CRV booster",
@@ -10224,7 +10501,8 @@
             "cvxCRV",
             "yCRV",
             "sdCRV"
-        ]
+        ],
+        "volume": 1955
     },
     "0xF52E248CcFBf189df0C5A4b15e9f72Fa10c7Fe59": {
         "name": "Curve.fi Factory USD Metapool: LOL",
@@ -10260,7 +10538,8 @@
             "LUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x84C333e94AEA4a51a21F6cf0C7F528C50Dc7592C": {
         "name": "Curve.fi Factory USD Metapool: clevUSDFRAXBP",
@@ -10296,7 +10575,8 @@
             "clevUSD",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xf275CADbE0343541ce49A03E385f8B234544CDa8": {
         "name": "Curve.fi Factory USD Metapool: EUROC/USDC",
@@ -10335,7 +10615,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x79E281BC69A03DaBCcD66858c65EF6724e50aebe": {
         "name": "Curve.fi Factory Plain Pool: sdYFI",
@@ -10368,7 +10649,8 @@
         "coins_underlying_names": [
             "YFI",
             "sdYFI"
-        ]
+        ],
+        "volume": 0
     },
     "0x8D7b9C013F7f614cd870fad33E260E7a9a1D9b5b": {
         "name": "Curve.fi Factory Plain Pool: DOLA/CUSD",
@@ -10401,7 +10683,8 @@
         "coins_underlying_names": [
             "DOLA",
             "CUSD"
-        ]
+        ],
+        "volume": 0
     },
     "0x1c899dED01954d0959E034b62a728e7fEbE593b0": {
         "name": "Curve.fi Factory Plain Pool: stLINK/LINK",
@@ -10434,7 +10717,8 @@
         "coins_underlying_names": [
             "stLINK",
             "LINK"
-        ]
+        ],
+        "volume": 2935
     },
     "0x141acE5Fd4435Fd341E396d579C91Df99fED10d4": {
         "name": "Curve.fi Factory USD Metapool: pBTC+sBTC/wBTC",
@@ -10470,7 +10754,8 @@
             "pBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 0
     },
     "0xddA1B81690b530DE3C48B3593923DF0A6C5fe92E": {
         "name": "Curve.fi Factory Plain Pool: maDAI/maUSDC/maUSDT",
@@ -10509,7 +10794,8 @@
             "maDAI",
             "maUSDC",
             "maUSDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x0AD66FeC8dB84F8A3365ADA04aB23ce607ac6E24": {
         "name": "Curve.fi Factory Plain Pool: pitchFXS/FXS",
@@ -10542,7 +10828,8 @@
         "coins_underlying_names": [
             "pitchFXS",
             "FXS"
-        ]
+        ],
+        "volume": 0
     },
     "0x2863a328A0B7fC6040f11614FA0728587DB8e353": {
         "name": "Curve.fi Factory USD Metapool: multiBTC+WBTC/sBTC",
@@ -10578,7 +10865,8 @@
             "multiBTC",
             "WBTC",
             "sBTC"
-        ]
+        ],
+        "volume": 2
     },
     "0xD51a44d3FaE010294C616388b506AcdA1bfAAE46": {
         "name": "tricrypto2",
@@ -10624,7 +10912,8 @@
             "USDT",
             "WBTC",
             "WETH"
-        ]
+        ],
+        "volume": 26967
     },
     "0x9838eCcC42659FA8AA7daF2aD134b53984c9427b": {
         "name": "eurtusd",
@@ -10670,7 +10959,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 561
     },
     "0x98a7F18d4E56Cfe84E3D081B40001B3d5bD3eB8B": {
         "name": "eursusd",
@@ -10710,7 +11000,8 @@
         "coins_underlying_names": [
             "USDC",
             "EURS"
-        ]
+        ],
+        "volume": 1028
     },
     "0x8301AE4fc9c624d1D396cbDAa1ed877821D7C511": {
         "name": "crveth",
@@ -10750,7 +11041,8 @@
         "coins_underlying_names": [
             "WETH",
             "CRV"
-        ]
+        ],
+        "volume": 420
     },
     "0xB576491F1E6e5E62f1d8F26062Ee822B40B0E0d4": {
         "name": "cvxeth",
@@ -10790,7 +11082,8 @@
         "coins_underlying_names": [
             "WETH",
             "CVX"
-        ]
+        ],
+        "volume": 164
     },
     "0xAdCFcf9894335dC340f6Cd182aFA45999F45Fc44": {
         "name": "xaut3crv",
@@ -10836,7 +11129,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 11976
     },
     "0x98638FAcf9a3865cd033F36548713183f6996122": {
         "name": "spelleth",
@@ -10876,7 +11170,8 @@
         "coins_underlying_names": [
             "WETH",
             "SPELL"
-        ]
+        ],
+        "volume": 459
     },
     "0x752eBeb79963cf0732E9c0fec72a49FD1DEfAEAC": {
         "name": "teth",
@@ -10916,7 +11211,8 @@
         "coins_underlying_names": [
             "WETH",
             "T"
-        ]
+        ],
+        "volume": 13032
     },
     "0xE84f5b1582BA325fDf9cE6B0c1F087ccfC924e54": {
         "name": "eurocusd",
@@ -10962,7 +11258,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 465
     },
     "0x03470B57B05089EE40c651dAC9E0387F1f3cb46f": {
         "name": "Curve.fi Factory Crypto Pool: FXS/ETH",
@@ -11001,7 +11298,8 @@
         "coins_underlying_names": [
             "FXS",
             "WETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x6ec176b5449DD7C1a87CA8d97aceCC531C0Ca0d8": {
         "name": "Curve.fi Factory Crypto Pool: FXS/ETH",
@@ -11040,7 +11338,8 @@
         "coins_underlying_names": [
             "WETH",
             "FXS"
-        ]
+        ],
+        "volume": 0
     },
     "0x1667954F14F5b22c703116D8d806f988B1e09018": {
         "name": "Curve.fi Factory Crypto Pool: FXS/ETH",
@@ -11079,7 +11378,8 @@
         "coins_underlying_names": [
             "WETH",
             "FXS"
-        ]
+        ],
+        "volume": 0
     },
     "0x941Eb6F616114e4Ecaa85377945EA306002612FE": {
         "name": "Curve.fi Factory Crypto Pool: FXS/ETH",
@@ -11119,7 +11419,8 @@
         "coins_underlying_names": [
             "WETH",
             "FXS"
-        ]
+        ],
+        "volume": 899
     },
     "0x50f3752289e1456BfA505afd37B241bca23e685d": {
         "name": "Curve.fi Factory Crypto Pool: BADGER/WBTC",
@@ -11159,7 +11460,8 @@
         "coins_underlying_names": [
             "BADGER",
             "WBTC"
-        ]
+        ],
+        "volume": 2438
     },
     "0x99aF0326ab1c2A68c6712a5622c1Aa8e4b35Fd57": {
         "name": "Curve.fi Factory Crypto Pool: INV/DOLA",
@@ -11199,7 +11501,8 @@
         "coins_underlying_names": [
             "INV",
             "DOLA"
-        ]
+        ],
+        "volume": 0
     },
     "0xC68ffDdea3a77b456227B50EbFdCC3C33bc2a8a4": {
         "name": "Curve.fi Factory Crypto Pool: RAI/FRAX",
@@ -11238,7 +11541,8 @@
         "coins_underlying_names": [
             "RAI",
             "FRAX"
-        ]
+        ],
+        "volume": 0
     },
     "0x96fb2AB514CA569A1486C50339533ca4637B338B": {
         "name": "Curve.fi Factory Crypto Pool: RAI/ETH",
@@ -11277,7 +11581,8 @@
         "coins_underlying_names": [
             "RAI",
             "WETH"
-        ]
+        ],
+        "volume": 0
     },
     "0xC26b89A667578ec7b3f11b2F98d6Fd15C07C54ba": {
         "name": "Curve.fi Factory Crypto Pool: YFI/ETH",
@@ -11317,7 +11622,8 @@
         "coins_underlying_names": [
             "WETH",
             "YFI"
-        ]
+        ],
+        "volume": 36
     },
     "0x48536EC5233297C367fd0b6979B75d9270bB6B15": {
         "name": "Curve.fi Factory Crypto Pool: AAVE/palStkAAVE",
@@ -11357,7 +11663,8 @@
         "coins_underlying_names": [
             "AAVE",
             "palStkAAVE"
-        ]
+        ],
+        "volume": 173
     },
     "0x8b0aFa4b63a3581b731dA9D79774a3eaE63B5ABD": {
         "name": "Curve.fi Factory Crypto Pool: DYDX/ETH",
@@ -11397,7 +11704,8 @@
         "coins_underlying_names": [
             "DYDX",
             "WETH"
-        ]
+        ],
+        "volume": 65
     },
     "0xfB8814D005C5f32874391e888da6eB2fE7a27902": {
         "name": "Curve.fi Factory Crypto Pool: SDT/ETH",
@@ -11437,7 +11745,8 @@
         "coins_underlying_names": [
             "WETH",
             "SDT"
-        ]
+        ],
+        "volume": 760
     },
     "0xE07BDe9Eb53DEFfa979daE36882014B758111a78": {
         "name": "Curve.fi Factory Crypto Pool: CADC/USDC",
@@ -11477,7 +11786,8 @@
         "coins_underlying_names": [
             "CADC",
             "USDC"
-        ]
+        ],
+        "volume": 303
     },
     "0xB6d9b32407BfA562D9211acDba2631a46c850956": {
         "name": "Curve.fi Factory Crypto Pool: RAI/agEUR",
@@ -11517,7 +11827,8 @@
         "coins_underlying_names": [
             "RAI",
             "agEUR"
-        ]
+        ],
+        "volume": 76
     },
     "0x1dFF955CdDD55fba58Db3CD658F9E3E3C31851eb": {
         "name": "Curve.fi Factory Crypto Pool: RocketPool rETH",
@@ -11557,7 +11868,8 @@
         "coins_underlying_names": [
             "WETH",
             "rETH"
-        ]
+        ],
+        "volume": 11250
     },
     "0xDaD60C5B748306BA5a0c9a3c3482A8D1153DAd2a": {
         "name": "Curve.fi Factory Crypto Pool: PAR/USDC",
@@ -11597,7 +11909,8 @@
         "coins_underlying_names": [
             "PAR",
             "USDC"
-        ]
+        ],
+        "volume": 6129
     },
     "0xd8C49617e6A2C7584Ddbeab652368ee84954BF5c": {
         "name": "Curve.fi Factory Crypto Pool: DUCK/ETH",
@@ -11637,7 +11950,8 @@
         "coins_underlying_names": [
             "WETH",
             "DUCK"
-        ]
+        ],
+        "volume": 24
     },
     "0xF43b15Ab692fDe1F9c24a9FCE700AdCC809D5391": {
         "name": "Curve.fi Factory Crypto Pool: BTRFLY/ETH",
@@ -11677,7 +11991,8 @@
         "coins_underlying_names": [
             "WETH",
             "BTRFLY"
-        ]
+        ],
+        "volume": 97
     },
     "0xd658A338613198204DCa1143Ac3F01A722b5d94A": {
         "name": "Curve.fi Factory Crypto Pool: cvxFxs/Fxs",
@@ -11717,7 +12032,8 @@
         "coins_underlying_names": [
             "FXS",
             "cvxFXS"
-        ]
+        ],
+        "volume": 9991
     },
     "0xa498B08ca3C109e4EbC7Ff01422B6769EAEf16EF": {
         "name": "Curve.fi Factory Crypto Pool: ALCX/ETH",
@@ -11756,7 +12072,8 @@
         "coins_underlying_names": [
             "WETH",
             "ALCX"
-        ]
+        ],
+        "volume": 0
     },
     "0x365901dB5Adb4c789801f19D5F1F46c574783aD6": {
         "name": "Curve.fi Factory Crypto Pool: OHM/ETH",
@@ -11795,7 +12112,8 @@
         "coins_underlying_names": [
             "OHM",
             "WETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x6ec38b3228251a0C5D491Faf66858e2E23d7728B": {
         "name": "Curve.fi Factory Crypto Pool: OHM/ETH",
@@ -11835,7 +12153,8 @@
         "coins_underlying_names": [
             "OHM",
             "WETH"
-        ]
+        ],
+        "volume": 7689
     },
     "0x9a22CDB1CA1cdd2371cD5BB5199564C4E89465eb": {
         "name": "Curve.fi Factory Crypto Pool: SILO/FRAX",
@@ -11875,7 +12194,8 @@
         "coins_underlying_names": [
             "Silo",
             "FRAX"
-        ]
+        ],
+        "volume": 1414
     },
     "0x80aa1a80a30055DAA084E599836532F3e58c95E2": {
         "name": "Curve.fi Factory Crypto Pool: Goldfinch FIDU/USDC",
@@ -11915,7 +12235,8 @@
         "coins_underlying_names": [
             "FIDU",
             "USDC"
-        ]
+        ],
+        "volume": 4708
     },
     "0x90Ce3285a9cce2D36149F12df2C1e357Af304A1D": {
         "name": "Curve.fi Factory Crypto Pool: MKR/ETH",
@@ -11954,7 +12275,8 @@
         "coins_underlying_names": [
             "WETH",
             "MKR"
-        ]
+        ],
+        "volume": 0
     },
     "0xbF9702efefe1303A61b7c944b5741b773DD930a7": {
         "name": "Curve.fi Factory Crypto Pool: AAVE/ETH",
@@ -11993,7 +12315,8 @@
         "coins_underlying_names": [
             "WETH",
             "AAVE"
-        ]
+        ],
+        "volume": 0
     },
     "0x9C6751593A1424108F53E5ad6754940FEDAA5bC0": {
         "name": "Curve.fi Factory Crypto Pool: COMP/ETH",
@@ -12032,7 +12355,8 @@
         "coins_underlying_names": [
             "WETH",
             "COMP"
-        ]
+        ],
+        "volume": 0
     },
     "0x1570af3dF649Fc74872c5B8F280A162a3bdD4EB6": {
         "name": "Curve.fi Factory Crypto Pool: ibEUR/USDC",
@@ -12072,7 +12396,8 @@
         "coins_underlying_names": [
             "ibEUR",
             "USDC"
-        ]
+        ],
+        "volume": 5560
     },
     "0x5b692073F141C31384faE55856CfB6CBfFE91E60": {
         "name": "Curve.fi Factory Crypto Pool: ibAUD/USDC",
@@ -12112,7 +12437,8 @@
         "coins_underlying_names": [
             "ibAUD",
             "USDC"
-        ]
+        ],
+        "volume": 603
     },
     "0x6Df0D77F0496CE44e72D695943950D8641fcA5Cf": {
         "name": "Curve.fi Factory Crypto Pool: ibCHF/USDC",
@@ -12152,7 +12478,8 @@
         "coins_underlying_names": [
             "ibCHF",
             "USDC"
-        ]
+        ],
+        "volume": 35
     },
     "0xAcCe4Fe9Ce2A6FE9af83e7CF321a3fF7675e0AB6": {
         "name": "Curve.fi Factory Crypto Pool: ibGBP/USDC",
@@ -12192,7 +12519,8 @@
         "coins_underlying_names": [
             "ibGBP",
             "USDC"
-        ]
+        ],
+        "volume": 173
     },
     "0xEB0265938c1190Ab4E3E1f6583bC956dF47C0F93": {
         "name": "Curve.fi Factory Crypto Pool: ibJPY/USDC",
@@ -12232,7 +12560,8 @@
         "coins_underlying_names": [
             "ibJPY",
             "USDC"
-        ]
+        ],
+        "volume": 742
     },
     "0xef04f337fCB2ea220B6e8dB5eDbE2D774837581c": {
         "name": "Curve.fi Factory Crypto Pool: ibKRW/USDC",
@@ -12272,7 +12601,8 @@
         "coins_underlying_names": [
             "ibKRW",
             "USDC"
-        ]
+        ],
+        "volume": 163
     },
     "0x6b234F354edA8fAe082BE20DCf790Fd886B42340": {
         "name": "Curve.fi Factory Crypto Pool: ALUSD/BNT",
@@ -12311,7 +12641,8 @@
         "coins_underlying_names": [
             "alUSD",
             "BNT"
-        ]
+        ],
+        "volume": 0
     },
     "0xA6B28989B81B2Fe4eC03fde324DE1A99ae4366E4": {
         "name": "Curve.fi Factory Crypto Pool: Test",
@@ -12350,7 +12681,8 @@
         "coins_underlying_names": [
             "USDC",
             "LINK"
-        ]
+        ],
+        "volume": 0
     },
     "0x39567Db64F0b25Db2C35Fc7A4f60c3C5258e4654": {
         "name": "Curve.fi Factory Crypto Pool: USDC/STG",
@@ -12389,7 +12721,8 @@
         "coins_underlying_names": [
             "USDC",
             "STG"
-        ]
+        ],
+        "volume": 0
     },
     "0x751D3feFFed0890B76E9b86476CFEEAA1FcdA73D": {
         "name": "Curve.fi Factory Crypto Pool: USDC/STG",
@@ -12428,7 +12761,8 @@
         "coins_underlying_names": [
             "USDC",
             "STG"
-        ]
+        ],
+        "volume": 0
     },
     "0x3211C6cBeF1429da3D0d58494938299C92Ad5860": {
         "name": "Curve.fi Factory Crypto Pool: STG/USDC",
@@ -12468,7 +12802,8 @@
         "coins_underlying_names": [
             "STG",
             "USDC"
-        ]
+        ],
+        "volume": 116626
     },
     "0x75A6787C7EE60424358B449B539A8b774c9B4862": {
         "name": "Curve.fi Factory Crypto Pool: PAL/ETH",
@@ -12508,7 +12843,8 @@
         "coins_underlying_names": [
             "WETH",
             "PAL"
-        ]
+        ],
+        "volume": 228
     },
     "0x21410232B484136404911780bC32756D5d1a9Fa9": {
         "name": "Curve.fi Factory Crypto Pool: KP3R/ETH",
@@ -12548,7 +12884,8 @@
         "coins_underlying_names": [
             "WETH",
             "KP3R"
-        ]
+        ],
+        "volume": 2036
     },
     "0x86Cf48e9735F84d3311141e8941b2494Fb4B8142": {
         "name": "Curve.fi Factory Crypto Pool: JZC Miners",
@@ -12587,7 +12924,8 @@
         "coins_underlying_names": [
             "WETH",
             "JZC"
-        ]
+        ],
+        "volume": 0
     },
     "0xfE4A08f22FE65759Ba91dB2E2CADa09B4415B0d7": {
         "name": "Curve.fi Factory Crypto Pool: LFT/ETH",
@@ -12627,7 +12965,8 @@
         "coins_underlying_names": [
             "WETH",
             "LFT"
-        ]
+        ],
+        "volume": 61
     },
     "0x7472764C28f843bA246F294C44DE9456911A3454": {
         "name": "Curve.fi Factory Crypto Pool: eth/nfd",
@@ -12667,7 +13006,8 @@
         "coins_underlying_names": [
             "WETH",
             "NFD"
-        ]
+        ],
+        "volume": 0
     },
     "0x7E050cf658777cc1Da4a4508E79d71859044B60E": {
         "name": "Curve.fi Factory Crypto Pool: JPEG/ETH",
@@ -12707,7 +13047,8 @@
         "coins_underlying_names": [
             "WETH",
             "JPEG"
-        ]
+        ],
+        "volume": 121
     },
     "0x782115c863A05abF8795dF377D89AAd1AAdF4Dfa": {
         "name": "Curve.fi Factory Crypto Pool: CNC/ETH",
@@ -12747,7 +13088,8 @@
         "coins_underlying_names": [
             "WETH",
             "CNC"
-        ]
+        ],
+        "volume": 41
     },
     "0x838af967537350D2C44ABB8c010E49E32673ab94": {
         "name": "Curve.fi Factory Crypto Pool: CNC/ETH",
@@ -12787,7 +13129,8 @@
         "coins_underlying_names": [
             "WETH",
             "CNC"
-        ]
+        ],
+        "volume": 1429
     },
     "0x595146ED98c81Dde9bD23d0c2Ab5b807C7Fe2D9f": {
         "name": "Curve.fi Factory Crypto Pool: CADC/3CRV",
@@ -12832,7 +13175,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x62d1d9065b4C78964040b640ab404D86D8f68263": {
         "name": "Curve.fi Factory Crypto Pool: VNXAU/USDC",
@@ -12871,7 +13215,8 @@
         "coins_underlying_names": [
             "VNXAU",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xf861483fa7E511fbc37487D91B6FAa803aF5d37c": {
         "name": "Curve.fi Factory Crypto Pool: FPI2Pool",
@@ -12911,7 +13256,8 @@
         "coins_underlying_names": [
             "FRAX",
             "FPI"
-        ]
+        ],
+        "volume": 112
     },
     "0xB2E113a6B8edeA086A44B1509013C4Fc69eC4bf0": {
         "name": "Curve.fi Factory Crypto Pool: VIRTUE/ETH",
@@ -12951,7 +13297,8 @@
         "coins_underlying_names": [
             "WETH",
             "VIRTUE"
-        ]
+        ],
+        "volume": 0
     },
     "0xD0a1D2a9350824516ae8729b8311557BA7E55BFF": {
         "name": "Curve.fi Factory Crypto Pool: ETH/VIRTUE",
@@ -12991,7 +13338,8 @@
         "coins_underlying_names": [
             "WETH",
             "VIRTUE"
-        ]
+        ],
+        "volume": 25
     },
     "0x5D898FD41875b14c1781fb497AeCAb8E9B24dfC9": {
         "name": "Curve.fi Factory Crypto Pool: CXD/ETH",
@@ -13031,7 +13379,8 @@
         "coins_underlying_names": [
             "WETH",
             "CXD"
-        ]
+        ],
+        "volume": 196
     },
     "0x4535913573D299A6372ca43b90aA6Be1CF68f779": {
         "name": "Curve.fi Factory Crypto Pool: CXD/USDC",
@@ -13071,7 +13420,8 @@
         "coins_underlying_names": [
             "USDC",
             "CXD"
-        ]
+        ],
+        "volume": 197
     },
     "0x3c42B0f384D2912661C940d46cfFE1CD10F1c66F": {
         "name": "Curve.fi Factory Crypto Pool: [Test] Test CTDL/wBTC",
@@ -13111,7 +13461,8 @@
         "coins_underlying_names": [
             "Test CTDL",
             "WBTC"
-        ]
+        ],
+        "volume": 0
     },
     "0x7F787210c83012FCA364aE79aD8Fc26641c6fbE5": {
         "name": "Curve.fi Factory Crypto Pool: TRU/ETH",
@@ -13150,7 +13501,8 @@
         "coins_underlying_names": [
             "WETH",
             "TRU"
-        ]
+        ],
+        "volume": 0
     },
     "0xe0e970a99bc4F53804D8145beBBc7eBc9422Ba7F": {
         "name": "Curve.fi Factory Crypto Pool: TOKE/ETH",
@@ -13190,7 +13542,8 @@
         "coins_underlying_names": [
             "WETH",
             "TOKE"
-        ]
+        ],
+        "volume": 92
     },
     "0xd434eaf67bbA1903F61CdD3EDE6700caC74a5fF2": {
         "name": "Curve.fi Factory Crypto Pool: PSL/ETH",
@@ -13229,7 +13582,8 @@
         "coins_underlying_names": [
             "WETH",
             "WPSL"
-        ]
+        ],
+        "volume": 0
     },
     "0x6525e7E2E8450741Ab97BD3948BFa47878F83ec6": {
         "name": "Curve.fi Factory Crypto Pool: ARTH",
@@ -13274,7 +13628,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x7D99469fB3A530136ec0Ab6981D64bc9fF81aD04": {
         "name": "Curve.fi Factory Crypto Pool: ARTH",
@@ -13313,7 +13668,8 @@
         "coins_underlying_names": [
             "ARTH",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xbfCa1a72edd92FFf61a8c88f61D4e64E99232b4b": {
         "name": "Curve.fi Factory Crypto Pool: ARTH",
@@ -13353,7 +13709,8 @@
         "coins_underlying_names": [
             "ARTH",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x7F2aF2c7BFDAD063fF01DcEc077a216d95A0A944": {
         "name": "Curve.fi Factory Crypto Pool: ARTH/USDC",
@@ -13393,7 +13750,8 @@
         "coins_underlying_names": [
             "USDC",
             "ARTH"
-        ]
+        ],
+        "volume": 2
     },
     "0xA148BD19E26Ff9604f6A608E22BFb7B772D0d1A3": {
         "name": "Curve.fi Factory Crypto Pool: bSTBL/DAI",
@@ -13433,7 +13791,8 @@
         "coins_underlying_names": [
             "DAI",
             "bSTBL"
-        ]
+        ],
+        "volume": 113
     },
     "0xF3456E8061461e144b3f252E69DcD5b6070fdEE0": {
         "name": "Curve.fi Factory Crypto Pool: pxCVX/CVX",
@@ -13473,7 +13832,8 @@
         "coins_underlying_names": [
             "CVX",
             "pxCVX"
-        ]
+        ],
+        "volume": 44
     },
     "0xFD484A99d21CA118f22871134f467B1ca3F842Aa": {
         "name": "Curve.fi Factory Crypto Pool: ARTH/DAI",
@@ -13513,7 +13873,8 @@
         "coins_underlying_names": [
             "ARTH",
             "DAI"
-        ]
+        ],
+        "volume": 41
     },
     "0x5114f86027d4c9a509Cba072B8135A171402C6d5": {
         "name": "Curve.fi Factory Crypto Pool: UNBNK/ETH",
@@ -13553,7 +13914,8 @@
         "coins_underlying_names": [
             "WETH",
             "UNBNK"
-        ]
+        ],
+        "volume": 0
     },
     "0x6E77889Ff348A16547cABa3Ce011cB120Ed73bFc": {
         "name": "Curve.fi Factory Crypto Pool: frETH/WETH",
@@ -13593,7 +13955,8 @@
         "coins_underlying_names": [
             "frETH",
             "WETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x95f3672a418230c5664b7154Dfce0ACfa7EEd68D": {
         "name": "Curve.fi Factory Crypto Pool: aCRV/CRV",
@@ -13633,7 +13996,8 @@
         "coins_underlying_names": [
             "aCRV",
             "CRV"
-        ]
+        ],
+        "volume": 32
     },
     "0xEc1F6Df37B16432E520942Affe28149bAdc5bC5e": {
         "name": "Curve.fi Factory Crypto Pool: WETH/RAREPEPE",
@@ -13672,7 +14036,8 @@
         "coins_underlying_names": [
             "WETH",
             "RAREPEPE"
-        ]
+        ],
+        "volume": 0
     },
     "0xfCE1B5447a3DB7e18352e8ae4bCD780029012383": {
         "name": "Curve.fi Factory Crypto Pool: NAKAMOTOCARD",
@@ -13711,7 +14076,8 @@
         "coins_underlying_names": [
             "WETH",
             "RAREPEPE"
-        ]
+        ],
+        "volume": 0
     },
     "0xdDBDCEBb989B1ef804338d6c9a902f91c2738936": {
         "name": "Curve.fi Factory Crypto Pool: RAREPEPE",
@@ -13751,7 +14117,8 @@
         "coins_underlying_names": [
             "WETH",
             "RAREPEPE"
-        ]
+        ],
+        "volume": 161
     },
     "0x039FD59541b3989C7A1E9278431038B3B6BA5F43": {
         "name": "Curve.fi Factory Crypto Pool: mxnt",
@@ -13796,7 +14163,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xc12A73c46D49Fa0d7433C90291BC8D1A9EAe7B23": {
         "name": "Curve.fi Factory Crypto Pool: MXNT/USDC",
@@ -13836,7 +14204,8 @@
         "coins_underlying_names": [
             "MXNt",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x9bFb082f2dd5d63907aFa33Dbb8F9c0BCd5C2333": {
         "name": "Curve.fi Factory Crypto Pool: Phanes",
@@ -13875,7 +14244,8 @@
         "coins_underlying_names": [
             "WETH",
             "PHNS"
-        ]
+        ],
+        "volume": 0
     },
     "0x840cBF6861137624E60380d5e915619885c5AA95": {
         "name": "Curve.fi Factory Crypto Pool: FLOAT/USDC",
@@ -13914,7 +14284,8 @@
         "coins_underlying_names": [
             "FLOAT",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xd3301B7CAA76f932816a6Fc7Ef0b673238e217ad": {
         "name": "Curve.fi Factory Crypto Pool: BENT/FRAX",
@@ -13957,7 +14328,8 @@
             "BENT",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 3
     },
     "0xB2E2536821521174a168eda7Be78a6c70ea6E5fA": {
         "name": "Curve.fi Factory Crypto Pool: BENTCVX/FRAX",
@@ -13999,7 +14371,8 @@
             "bentCVX",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x316D2606cE036Ec0E69A11432A870a4ec66AdE96": {
         "name": "Curve.fi Factory Crypto Pool: APW/ETH",
@@ -14038,7 +14411,8 @@
         "coins_underlying_names": [
             "WETH",
             "APW"
-        ]
+        ],
+        "volume": 0
     },
     "0xC78d84Ee5D970227f988a2e2dC0A4a945163bCB9": {
         "name": "Curve.fi Factory Crypto Pool: APW/ETH",
@@ -14077,7 +14451,8 @@
         "coins_underlying_names": [
             "WETH",
             "APW"
-        ]
+        ],
+        "volume": 0
     },
     "0xb2c248C0B0DB7d28dfa0123438B40Bb31FB8AA05": {
         "name": "Curve.fi Factory Crypto Pool: MATIC/SHIB",
@@ -14117,7 +14492,8 @@
         "coins_underlying_names": [
             "MATIC",
             "SHIB"
-        ]
+        ],
+        "volume": 0
     },
     "0x799D141e83D88996C48B98A4f8EB3D96AB422DD3": {
         "name": "Curve.fi Factory Crypto Pool: MATIC/FLEET",
@@ -14157,7 +14533,8 @@
         "coins_underlying_names": [
             "MATIC",
             "FLEET"
-        ]
+        ],
+        "volume": 41
     },
     "0x383aD525211B8A1A9c13532CC021773052b2F4f8": {
         "name": "Curve.fi Factory Crypto Pool: CTR/ETH",
@@ -14197,7 +14574,8 @@
         "coins_underlying_names": [
             "WETH",
             "CTR"
-        ]
+        ],
+        "volume": 393
     },
     "0x79cB6a84FbEC1FE2d66B705a1e7f6482C2993049": {
         "name": "Curve.fi Factory Crypto Pool: RAI/DAI",
@@ -14237,7 +14615,8 @@
         "coins_underlying_names": [
             "RAI",
             "DAI"
-        ]
+        ],
+        "volume": 6
     },
     "0x91d9d17EFD378f38a48122AE6Ec01B2E83d1Ac98": {
         "name": "Curve.fi Factory Crypto Pool: RAI/DAI-2",
@@ -14277,7 +14656,8 @@
         "coins_underlying_names": [
             "RAI",
             "DAI"
-        ]
+        ],
+        "volume": 3311
     },
     "0x118629329731ce1FF01f9401212C53939F8A9EEB": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -14316,7 +14696,8 @@
         "coins_underlying_names": [
             "WETH",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xBD917239EC067A6aF82AABb6B45DAd3d09F4EFD8": {
         "name": "Curve.fi Factory Crypto Pool: test2",
@@ -14355,7 +14736,8 @@
         "coins_underlying_names": [
             "WETH",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x6e314039f4C56000F4ebb3a7854A84cC6225Fb92": {
         "name": "Curve.fi Factory Crypto Pool: BTRFLY/ETH",
@@ -14395,7 +14777,8 @@
         "coins_underlying_names": [
             "WETH",
             "BTRFLY"
-        ]
+        ],
+        "volume": 27551
     },
     "0x337ca39842C448030196693f3433332fF1CF3E41": {
         "name": "Curve.fi Factory Crypto Pool: RAI/DAI-3",
@@ -14435,7 +14818,8 @@
         "coins_underlying_names": [
             "RAI",
             "DAI"
-        ]
+        ],
+        "volume": 0
     },
     "0x0d1c65B28190cB88f328D2051c524A5c63d10EB5": {
         "name": "Curve.fi Factory Crypto Pool: RAI/LUSD",
@@ -14475,7 +14859,8 @@
         "coins_underlying_names": [
             "RAI",
             "LUSD"
-        ]
+        ],
+        "volume": 6780
     },
     "0x162B4Deefc73a5277b09Bd7A02D25Da73D66183D": {
         "name": "Curve.fi Factory Crypto Pool: RAI/LUSD-2",
@@ -14515,7 +14900,8 @@
         "coins_underlying_names": [
             "RAI",
             "LUSD"
-        ]
+        ],
+        "volume": 0
     },
     "0xc58fDB8A50AB921A73535656A7c69387Dd863ff6": {
         "name": "Curve.fi Factory Crypto Pool: RAI/LUSD-3",
@@ -14555,7 +14941,8 @@
         "coins_underlying_names": [
             "RAI",
             "LUSD"
-        ]
+        ],
+        "volume": 419
     },
     "0xD4e2fdC354c5DFfb865798Ca98c2b9d5382F687C": {
         "name": "Curve.fi Factory Crypto Pool: FXSFPIS",
@@ -14595,7 +14982,8 @@
         "coins_underlying_names": [
             "FXS",
             "FPIS"
-        ]
+        ],
+        "volume": 267
     },
     "0x5FAE7E604FC3e24fd43A72867ceBaC94c65b404A": {
         "name": "Curve.fi Factory Crypto Pool: cbETH/ETH",
@@ -14635,7 +15023,8 @@
         "coins_underlying_names": [
             "WETH",
             "cbETH"
-        ]
+        ],
+        "volume": 123806
     },
     "0x0CF8327b20a159f0CD99214c5305D49E9D8207F0": {
         "name": "Curve.fi Factory Crypto Pool: RAI/DAI-4",
@@ -14675,7 +15064,8 @@
         "coins_underlying_names": [
             "RAI",
             "DAI"
-        ]
+        ],
+        "volume": 24968
     },
     "0x58257e4291F95165184b4beA7793a1d6F8e7b627": {
         "name": "Curve.fi Factory Crypto Pool: agEUR/FRAXBP",
@@ -14718,7 +15108,8 @@
             "agEUR",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 9947
     },
     "0x21d158d95C2e150e144c36FC64E3653B8D6c6267": {
         "name": "Curve.fi Factory Crypto Pool: cvxFxs/FraxBP",
@@ -14761,7 +15152,8 @@
             "cvxFXS",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 122
     },
     "0xBEc570d92AFB7fFc553bdD9d4B4638121000b10D": {
         "name": "Curve.fi Factory Crypto Pool: CVX/FraxBP",
@@ -14804,7 +15196,8 @@
             "CVX",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 17412
     },
     "0x4149d1038575CE235E03E03B39487a80FD709D31": {
         "name": "Curve.fi Factory Crypto Pool: ALCX/FraxBP",
@@ -14847,7 +15240,8 @@
             "ALCX",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 2279
     },
     "0x31c325A01861c7dBd331a9270296a31296D797A0": {
         "name": "Curve.fi Factory Crypto Pool: cvxCrv/FraxBP",
@@ -14890,7 +15284,8 @@
             "cvxCRV",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 10434
     },
     "0xd9f907f7F84CbB0Af85C7829922fd692339147f9": {
         "name": "Curve.fi Factory Crypto Pool: RAI/FRAXBP",
@@ -14933,7 +15328,8 @@
             "RAI",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 828
     },
     "0x75A1FdA374Fdb4E47d703d0282E94c87119fa46e": {
         "name": "Curve.fi Factory Crypto Pool: Pull",
@@ -14975,7 +15371,8 @@
             "USDC",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x611a95bf3cc0EF593f22c4E4D8EB4d6C937E006C": {
         "name": "Curve.fi Factory Crypto Pool: jpyusd",
@@ -15015,7 +15412,8 @@
         "coins_underlying_names": [
             "GYEN",
             "USDC"
-        ]
+        ],
+        "volume": 345
     },
     "0x13B876C26Ad6d21cb87AE459EaF6d7A1b788A113": {
         "name": "Curve.fi Factory Crypto Pool: BADGER/FRAXBP",
@@ -15058,7 +15456,8 @@
             "BADGER",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 3554
     },
     "0x4D19E7fD118FD751fEa7c0324D7E7b0A3D05EbA4": {
         "name": "Curve.fi Factory Crypto Pool: ZARP/USDC",
@@ -15098,7 +15497,8 @@
         "coins_underlying_names": [
             "ZARP",
             "USDC"
-        ]
+        ],
+        "volume": 244
     },
     "0x825722AF244432319C1E32b6b18AdED2d4A014Df": {
         "name": "Curve.fi Factory Crypto Pool: BENT/FraxBP",
@@ -15141,7 +15541,8 @@
             "BENT",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 2006
     },
     "0x02dFA5C793A9CE4d767a86259245A162a57f2dB4": {
         "name": "Curve.fi Factory Crypto Pool: bentCVX/FraxBP",
@@ -15184,7 +15585,8 @@
             "bentCVX",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 15
     },
     "0x27A8697fBD2ed137d88E74132a5558FA43656175": {
         "name": "Curve.fi Factory Crypto Pool: ARTH/OHM",
@@ -15224,7 +15626,8 @@
         "coins_underlying_names": [
             "OHM",
             "ARTH"
-        ]
+        ],
+        "volume": 0
     },
     "0xC7a87b0f491C1A043eb5315281163556B7F36f7f": {
         "name": "Curve.fi Factory Crypto Pool: BBLC/ETH",
@@ -15266,7 +15669,8 @@
             "BBLC",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x167dE3887eDEbE5012544373C5871481bD95Cc4e": {
         "name": "Curve.fi Factory Crypto Pool: RAI/LUSD-4",
@@ -15306,7 +15710,8 @@
         "coins_underlying_names": [
             "RAI",
             "LUSD"
-        ]
+        ],
+        "volume": 8022
     },
     "0x1631D0E588D475CEe4be0f51b7410DaaAaBD7034": {
         "name": "Curve.fi Factory Crypto Pool: ETH/FRAX",
@@ -15346,7 +15751,8 @@
         "coins_underlying_names": [
             "WETH",
             "FRAX"
-        ]
+        ],
+        "volume": 47
     },
     "0x372463c1dFE3A9c269C2C5Eb76A86021C637D0f4": {
         "name": "Curve.fi Factory Crypto Pool: Bombala Shares",
@@ -15388,7 +15794,8 @@
             "BBLC",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x5538e48bfe47749D2540D3cBe83fD50465bcb6c3": {
         "name": "Curve.fi Factory Crypto Pool: RAI/DAI-5",
@@ -15428,7 +15835,8 @@
         "coins_underlying_names": [
             "RAI",
             "DAI"
-        ]
+        ],
+        "volume": 0
     },
     "0x5FBa071ad473265df860271998e45FDb3d3E5812": {
         "name": "Curve.fi Factory Crypto Pool: RAI/DAI-6",
@@ -15468,7 +15876,8 @@
         "coins_underlying_names": [
             "RAI",
             "DAI"
-        ]
+        ],
+        "volume": 5456
     },
     "0x96A3F551c99797998dC33E2D816D567db61EE1c2": {
         "name": "Curve.fi Factory Crypto Pool: RAI/USDC",
@@ -15508,7 +15917,8 @@
         "coins_underlying_names": [
             "RAI",
             "USDC"
-        ]
+        ],
+        "volume": 1236
     },
     "0xF039050dC36fD59Ff1117B14BFdFf92dFA9dE9Fc": {
         "name": "Curve.fi Factory Crypto Pool: DUCK/USDP",
@@ -15548,7 +15958,8 @@
         "coins_underlying_names": [
             "DUCK",
             "USDP"
-        ]
+        ],
+        "volume": 0
     },
     "0xb49B238aB6106216Dc26854ed3a009EAc1C419A9": {
         "name": "Curve.fi Factory Crypto Pool: DUCK/3CRV",
@@ -15593,7 +16004,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xFEB0784F5D0940686143b3A025Af731Ee6A81197": {
         "name": "Curve.fi Factory Crypto Pool: DUCK/USDT",
@@ -15633,7 +16045,8 @@
         "coins_underlying_names": [
             "DUCK",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xDcb11E81C8B8a1e06BF4b50d4F6f3bb31f7478C3": {
         "name": "Curve.fi Factory Crypto Pool: DCHF/3CRV",
@@ -15679,7 +16092,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 11025
     },
     "0xBCAA09F2873F87aB4bf3A6fE97991f4bCC959e7e": {
         "name": "Curve.fi Factory Crypto Pool: RAI/DAI-7",
@@ -15719,7 +16133,8 @@
         "coins_underlying_names": [
             "RAI",
             "DAI"
-        ]
+        ],
+        "volume": 1037
     },
     "0x6d91A9Cf0deA0cd5BCb676eb4B1F11b6DCb44188": {
         "name": "Curve.fi Factory Crypto Pool: DeFi Franc",
@@ -15764,7 +16179,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x7f87a8b46A662131b87D29B2316B2d9CBD7e3B02": {
         "name": "Curve.fi Factory Crypto Pool: DeFi Franc",
@@ -15809,7 +16225,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xec5ffef96c3EdEdE587DB2efA3ab4Deec414cE8F": {
         "name": "Curve.fi Factory Crypto Pool: bll",
@@ -15849,7 +16266,8 @@
         "coins_underlying_names": [
             "bl",
             "LUSD"
-        ]
+        ],
+        "volume": 0
     },
     "0x52F05C70d86662204C7222C35000747b177C393a": {
         "name": "Curve.fi Factory Crypto Pool: bllc",
@@ -15895,7 +16313,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x0be1596aA8000Ff283807F276CED12c21297cf8f": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -15937,7 +16356,8 @@
             "SHIB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x9685Aab3b578c55Ce206A312095Fc1fa73609E38": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -15979,7 +16399,8 @@
             "SHIB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xB91eBF5f6a79a43927f7FA0548409c7821542d0C": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -16021,7 +16442,8 @@
             "SHIB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x9D377ec646C10E99E08B5200F651f5a743E3EA78": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -16063,7 +16485,8 @@
             "SHIB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xA0c7caD1D6dDb3EB2949243a0F720F4A291367Dd": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -16105,7 +16528,8 @@
             "SHIB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xAE2029f60DBdf41D14c8c0290f2B68E164360419": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -16147,7 +16571,8 @@
             "SHIB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xBE084cf7dB8fDfD6f17C041F958AbCcaF8C76603": {
         "name": "Curve.fi Factory Crypto Pool: RAI/Meta3Crv",
@@ -16193,7 +16618,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 991
     },
     "0x4885aAa80e0Ed42c5c76ACf523Adaf5066FD011F": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -16235,7 +16661,8 @@
             "SHIB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x141Be5d90C27Dc5C9199a57cb828Ca3CBD2C2D94": {
         "name": "Curve.fi Factory Crypto Pool: bll3",
@@ -16274,7 +16701,8 @@
         "coins_underlying_names": [
             "bl",
             "LUSD3CRV-f"
-        ]
+        ],
+        "volume": 0
     },
     "0xF4A3cca34470b5Ba21E2bb1eD365ACf68B4d4598": {
         "name": "Curve.fi Factory Crypto Pool: bll3",
@@ -16314,7 +16742,8 @@
         "coins_underlying_names": [
             "bl",
             "LUSD3CRV-f"
-        ]
+        ],
+        "volume": 0
     },
     "0x9A7168Ea321121A8FaF52147fC596b73e07Ab8a3": {
         "name": "Curve.fi Factory Crypto Pool: bLUSD_LUSD3CRV",
@@ -16353,7 +16782,8 @@
         "coins_underlying_names": [
             "LUSD",
             "LUSD3CRV-f"
-        ]
+        ],
+        "volume": 0
     },
     "0x9735d6530b0609bA8340Ecf61FEaCD922468c1e1": {
         "name": "Curve.fi Factory Crypto Pool: bLUSD_LUSD3CRV",
@@ -16392,7 +16822,8 @@
         "coins_underlying_names": [
             "LUSD",
             "LUSD3CRV-f"
-        ]
+        ],
+        "volume": 0
     },
     "0x74ED5d42203806c8CDCf2F04Ca5F60DC777b901c": {
         "name": "Curve.fi Factory Crypto Pool: bLUSD_LUSD3CRV",
@@ -16432,7 +16863,8 @@
         "coins_underlying_names": [
             "bLUSD",
             "LUSD3CRV-f"
-        ]
+        ],
+        "volume": 0
     },
     "0x3e3C6c7db23cdDEF80B694679aaF1bCd9517D0Ae": {
         "name": "Curve.fi Factory Crypto Pool: SDT / FRAXBP",
@@ -16475,7 +16907,8 @@
             "SDT",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 1442
     },
     "0x6a6283aB6e31C2AeC3fA08697A8F806b740660b2": {
         "name": "Curve.fi Factory Crypto Pool: RSR+FRAX/USDC (FRAXBP)",
@@ -16518,7 +16951,8 @@
             "RSR",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 9573
     },
     "0x656111Ca1e66678E7d300d8C4ffa4E4D21cECC55": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -16560,7 +16994,8 @@
             "SHIB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x9E73249aA5C3dc4223549bDf154215b997e0cFec": {
         "name": "Curve.fi Factory Crypto Pool: test",
@@ -16602,7 +17037,8 @@
             "SHIB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xc170ECB895b28a7eff0109f8C072aE742B1Dcb69": {
         "name": "Curve.fi Factory Crypto Pool: CLEV/ETH",
@@ -16641,7 +17077,8 @@
         "coins_underlying_names": [
             "WETH",
             "CLEV"
-        ]
+        ],
+        "volume": 0
     },
     "0x342D1C4Aa76EA6F5E5871b7f11A019a0eB713A4f": {
         "name": "Curve.fi Factory Crypto Pool: CLEV/ETH",
@@ -16681,7 +17118,8 @@
         "coins_underlying_names": [
             "WETH",
             "CLEV"
-        ]
+        ],
+        "volume": 178
     },
     "0xaeB6f2ABE64EE5ed210e8AE33B1F0f5E4B3e28Fc": {
         "name": "Curve.fi Factory Crypto Pool: ARTH/3pool",
@@ -16727,7 +17165,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x96f34Bb82fcA57e475e6ad218b0dd0C5c78DF423": {
         "name": "Curve.fi Factory Crypto Pool: ARTH/3pool",
@@ -16773,7 +17212,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x17374bdbcb79aE20CB947640915316d379a7f222": {
         "name": "Curve.fi Factory Crypto Pool: ARTH/3pool",
@@ -16818,7 +17258,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0xE661672521C77ca87DBb2eac816d2ccF86197281": {
         "name": "Curve.fi Factory Crypto Pool: ARTH/ETH",
@@ -16858,7 +17299,8 @@
         "coins_underlying_names": [
             "ARTH",
             "WETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x19a0CA9a0dc2A5034F47DcC164169Cffd7ed2410": {
         "name": "Curve.fi Factory Crypto Pool: ARTH/ETH",
@@ -16898,7 +17340,8 @@
         "coins_underlying_names": [
             "ARTH",
             "WETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x1628E0A42682570c815da52480734a8c2A2Ca2DD": {
         "name": "Curve.fi Factory Crypto Pool: Schmeckle^2",
@@ -16932,7 +17375,8 @@
         "coins_underlying_names": [
             "SMKL",
             "SMKL"
-        ]
+        ],
+        "volume": 0
     },
     "0x4E6706889d519ba6e6CED330D76582f875DF3C9c": {
         "name": "Curve.fi Factory Crypto Pool: Schmeckles / ETH",
@@ -16970,7 +17414,8 @@
         "coins_underlying_names": [
             "SMKL",
             "WETH"
-        ]
+        ],
+        "volume": 42
     },
     "0x29b2178F5f9FB4f775A2f1a7fEA685FFbA0fAe32": {
         "name": "Curve.fi Factory Crypto Pool: EtherTulip.com",
@@ -17010,7 +17455,8 @@
         "coins_underlying_names": [
             "PETAL",
             "RAI"
-        ]
+        ],
+        "volume": 3
     },
     "0xD304918b2Ef48a1184918e575CED08d3d04c37ad": {
         "name": "Curve.fi Factory Crypto Pool: EtherTulip.com",
@@ -17049,7 +17495,8 @@
         "coins_underlying_names": [
             "PETAL",
             "RAI"
-        ]
+        ],
+        "volume": 0
     },
     "0x7193d845f8991E27FfDCE54E78137dE036A6f743": {
         "name": "Curve.fi Factory Crypto Pool: PETAL/RAI",
@@ -17088,7 +17535,8 @@
         "coins_underlying_names": [
             "PETAL",
             "RAI"
-        ]
+        ],
+        "volume": 0
     },
     "0xf2f12B364F614925aB8E2C8BFc606edB9282Ba09": {
         "name": "Curve.fi Factory Crypto Pool: Concentrator CTR/ETH",
@@ -17128,7 +17576,8 @@
         "coins_underlying_names": [
             "WETH",
             "CTR"
-        ]
+        ],
+        "volume": 200
     },
     "0xE6BbAf0B55ae430354B87a3f592dD5c8AD7A5E79": {
         "name": "Curve.fi Factory Crypto Pool: deth",
@@ -17167,7 +17616,8 @@
         "coins_underlying_names": [
             "DIANA",
             "WETH"
-        ]
+        ],
+        "volume": 0
     },
     "0xf4E7c1E5a21F68df8d6a331aFFBEEBc313eD24d1": {
         "name": "Curve.fi Factory Crypto Pool: STGFRAXBP",
@@ -17209,7 +17659,8 @@
             "STG",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0x3cc1b5DCe81A810080890FB8AdAd48F8eaa8c210": {
         "name": "Curve.fi Factory Crypto Pool: Goldfinch FIDU/FRAXBP",
@@ -17251,7 +17702,8 @@
             "FIDU",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xe01A9eCdb0AAabE2F12A25a0d289480DEBF09e89": {
         "name": "Curve.fi Factory Crypto Pool: ELONX/ETH Pool",
@@ -17294,7 +17746,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x81F08b6B325B7266190bbDe531311F31bB3D82De": {
         "name": "Curve.fi Factory Crypto Pool: ELONX/ETH Pool",
@@ -17337,7 +17790,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x808dB6E464279C6A77a1164E0b34d64Bd6fB526E": {
         "name": "Curve.fi Factory Crypto Pool: JPEG/pETH",
@@ -17377,7 +17831,8 @@
         "coins_underlying_names": [
             "JPEG",
             "pETH"
-        ]
+        ],
+        "volume": 60
     },
     "0xFc1e8bf3E81383Ef07Be24c3FD146745719DE48D": {
         "name": "Curve.fi Factory Crypto Pool: OHM/FRAXBP",
@@ -17420,7 +17875,8 @@
             "OHM",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 848
     },
     "0x6575Ad173801f2d58961B3d7F3628c72346eA84a": {
         "name": "Curve.fi Factory Crypto Pool: GBPT",
@@ -17466,7 +17922,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 723
     },
     "0xeE0dcAf26aA271Ff18bb9B9b282620A7Ce79F6BA": {
         "name": "Curve.fi Factory Crypto Pool: ETH/BTC",
@@ -17505,7 +17962,8 @@
         "coins_underlying_names": [
             "WETH",
             "WBTC"
-        ]
+        ],
+        "volume": 0
     },
     "0x867fe27FC2462cff8890B54DfD64E6d42a9D1aC8": {
         "name": "Curve.fi Factory Crypto Pool: STG/FRAX-USDC",
@@ -17548,7 +18006,8 @@
             "STG",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 12
     },
     "0x9488317BaD789eF9AE5b70D3Ef2fC12dF717Fba2": {
         "name": "Curve.fi Factory Crypto Pool: liq_BTC_UNISWAP",
@@ -17587,7 +18046,8 @@
         "coins_underlying_names": [
             "WBTC",
             "UNI"
-        ]
+        ],
+        "volume": 0
     },
     "0x9730e45Ca84076C0a9DF80A4f2058C8379eA3eCE": {
         "name": "Curve.fi Factory Crypto Pool: liq_CRV_UNISWAP",
@@ -17626,7 +18086,8 @@
         "coins_underlying_names": [
             "CRV",
             "UNI"
-        ]
+        ],
+        "volume": 0
     },
     "0x3767fF3d26B7f9FB1870AE7Ebfc7e05f585EecFe": {
         "name": "Curve.fi Factory Crypto Pool: liq_WBTC_UNISWAP",
@@ -17665,7 +18126,8 @@
         "coins_underlying_names": [
             "WBTC",
             "UNI"
-        ]
+        ],
+        "volume": 0
     },
     "0xD0A7a9c7F2C148DC5399d89220345B50D6d13Cc0": {
         "name": "Curve.fi Factory Crypto Pool: liq_ETH_UNISWAP",
@@ -17704,7 +18166,8 @@
         "coins_underlying_names": [
             "WETH",
             "UNI"
-        ]
+        ],
+        "volume": 0
     },
     "0x5A784386DBe8E9188b7262e85dCAF912bcDDa441": {
         "name": "Curve.fi Factory Crypto Pool: liq_ETH_MATIC",
@@ -17743,7 +18206,8 @@
         "coins_underlying_names": [
             "WETH",
             "MATIC"
-        ]
+        ],
+        "volume": 0
     },
     "0x7dCEaF64115ed0E3D5B3E18d0896004EAeb58B4B": {
         "name": "Curve.fi Factory Crypto Pool: liq_CRV_MATIC",
@@ -17782,7 +18246,8 @@
         "coins_underlying_names": [
             "CRV",
             "MATIC"
-        ]
+        ],
+        "volume": 0
     },
     "0xE94A145A797622FE38A35036729229fc6B3132Cb": {
         "name": "Curve.fi Factory Crypto Pool: liq_CRV_AAVE",
@@ -17822,7 +18287,8 @@
         "coins_underlying_names": [
             "CRV",
             "AAVE"
-        ]
+        ],
+        "volume": 0
     },
     "0xc77103e44914A9e5E30B9F58cD48e990b22Fb587": {
         "name": "Curve.fi Factory Crypto Pool: liq_ETH_AAVE",
@@ -17862,7 +18328,8 @@
         "coins_underlying_names": [
             "WETH",
             "AAVE"
-        ]
+        ],
+        "volume": 0
     },
     "0x450a0975DbF787Df053d20FA3B57e5b362960102": {
         "name": "Curve.fi Factory Crypto Pool: liq_ETH_LINK",
@@ -17901,7 +18368,8 @@
         "coins_underlying_names": [
             "WETH",
             "LINK"
-        ]
+        ],
+        "volume": 0
     },
     "0x7Dc87E4e57C0ca6060374E0cE2a1cffB69ebC45A": {
         "name": "Curve.fi Factory Crypto Pool: liq_CRV_LINK",
@@ -17940,7 +18408,8 @@
         "coins_underlying_names": [
             "CRV",
             "LINK"
-        ]
+        ],
+        "volume": 0
     },
     "0xfAf83F9D84FAF25ed4ecbc1857f6AAdC3C1977C3": {
         "name": "Curve.fi Factory Crypto Pool: liq_CRV_FANTOM",
@@ -17979,7 +18448,8 @@
         "coins_underlying_names": [
             "FTM",
             "LINK"
-        ]
+        ],
+        "volume": 0
     },
     "0x1A8E46721F754660dC8b2EF623e7408856A63caC": {
         "name": "Curve.fi Factory Crypto Pool: liq_ETH_FANTOM",
@@ -18018,7 +18488,8 @@
         "coins_underlying_names": [
             "WETH",
             "LINK"
-        ]
+        ],
+        "volume": 0
     },
     "0x740f335D454Ad0dB55F88c02Cccd74Ed84F72A3f": {
         "name": "Curve.fi Factory Crypto Pool: liq_ETH_FANTOM",
@@ -18057,7 +18528,8 @@
         "coins_underlying_names": [
             "WETH",
             "FTM"
-        ]
+        ],
+        "volume": 0
     },
     "0x3272C5D11644deBB2e9d04C302796EbE8DF35457": {
         "name": "Curve.fi Factory Crypto Pool: liq_CRV_FANTOM",
@@ -18096,7 +18568,8 @@
         "coins_underlying_names": [
             "CRV",
             "FTM"
-        ]
+        ],
+        "volume": 0
     },
     "0x970cf34837Aa1Ff611410533b69d708cba70739D": {
         "name": "Curve.fi Factory Crypto Pool: liq_CRV_BTT",
@@ -18135,7 +18608,8 @@
         "coins_underlying_names": [
             "CRV",
             "BTT"
-        ]
+        ],
+        "volume": 0
     },
     "0x183F03C8ce2A24F388A4059aDEdd05C902650174": {
         "name": "Curve.fi Factory Crypto Pool: liq_ETH_BTT",
@@ -18174,7 +18648,8 @@
         "coins_underlying_names": [
             "WETH",
             "BTT"
-        ]
+        ],
+        "volume": 0
     },
     "0x92971A40Fa0F6Dd573a0f996b62De497eCC4ef6c": {
         "name": "Curve.fi Factory Crypto Pool: liq_ETH_UNISWAP",
@@ -18213,7 +18688,8 @@
         "coins_underlying_names": [
             "WETH",
             "UNI"
-        ]
+        ],
+        "volume": 0
     },
     "0x2F0e2d1023Fd3757aA58be7020b0FC58C6A45187": {
         "name": "Curve.fi Factory Crypto Pool: PAIR_ETH_AAVE",
@@ -18253,7 +18729,8 @@
         "coins_underlying_names": [
             "WETH",
             "AAVE"
-        ]
+        ],
+        "volume": 14
     },
     "0x49EAF5E4aC618c968dDCF588C000302F9bC3312D": {
         "name": "Curve.fi Factory Crypto Pool: PAIR_CRV_AAVE",
@@ -18293,7 +18770,8 @@
         "coins_underlying_names": [
             "CRV",
             "AAVE"
-        ]
+        ],
+        "volume": 14
     },
     "0x3991d59428A8f9F5C13526D92d58B23DA14230A0": {
         "name": "Curve.fi Factory Crypto Pool: PAIR_ETH_SNX",
@@ -18333,7 +18811,8 @@
         "coins_underlying_names": [
             "WETH",
             "SNX"
-        ]
+        ],
+        "volume": 78
     },
     "0x72D6658e562739267994BB16b952E543f0F92281": {
         "name": "Curve.fi Factory Crypto Pool: PAIR_CRV_SNX",
@@ -18373,7 +18852,8 @@
         "coins_underlying_names": [
             "CRV",
             "SNX"
-        ]
+        ],
+        "volume": 0
     },
     "0x54888c0859A93E6ff679e4F9705E75BBB9557057": {
         "name": "Curve.fi Factory Crypto Pool: PAIR_CRV_MATIC",
@@ -18413,7 +18893,8 @@
         "coins_underlying_names": [
             "CRV",
             "MATIC"
-        ]
+        ],
+        "volume": 60
     },
     "0x6bfE880Ed1d639bF80167b93cc9c56a39C1Ba2dC": {
         "name": "Curve.fi Factory Crypto Pool: PAIR_ETH_MATIC",
@@ -18453,7 +18934,8 @@
         "coins_underlying_names": [
             "WETH",
             "MATIC"
-        ]
+        ],
+        "volume": 23
     },
     "0xB4018CB02E264C3FCfe0f21A1F5cfbCAAba9F61F": {
         "name": "Curve.fi Factory Crypto Pool: ARTH/USDC",
@@ -18493,7 +18975,8 @@
         "coins_underlying_names": [
             "ARTH",
             "USDC"
-        ]
+        ],
+        "volume": 99
     },
     "0x7878A141103d93cAc0D1010C48f999975B347138": {
         "name": "Curve.fi Factory Crypto Pool: DARTH_1",
@@ -18533,7 +19016,8 @@
         "coins_underlying_names": [
             "CRV",
             "yCRV"
-        ]
+        ],
+        "volume": 0
     },
     "0x68a39B6EB2f9AD3A5E58808CDC4907dA260E44C8": {
         "name": "Curve.fi Factory Crypto Pool: DARTH2",
@@ -18573,7 +19057,8 @@
         "coins_underlying_names": [
             "CRV",
             "yCRV"
-        ]
+        ],
+        "volume": 0
     },
     "0xEd46F331F85BaD38bD99B60938C700c1a92Fd940": {
         "name": "Curve.fi Factory Crypto Pool: DARTH3",
@@ -18613,7 +19098,8 @@
         "coins_underlying_names": [
             "CRV",
             "yCRV"
-        ]
+        ],
+        "volume": 703
     },
     "0xa246eD2954539f2eAa8e1FB72E02637f2a402AB7": {
         "name": "Curve.fi Factory Crypto Pool: TRYB/FRAXBP",
@@ -18655,7 +19141,8 @@
             "TRYB",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     },
     "0xd18712370F840b1563D85eA6bD221f53d766ffA8": {
         "name": "Curve.fi Factory Crypto Pool: Curve Test/ETH",
@@ -18695,7 +19182,8 @@
         "coins_underlying_names": [
             "Test",
             "WETH"
-        ]
+        ],
+        "volume": 0
     },
     "0x9F13078A313cAf45146BBED973115dFB5De1D270": {
         "name": "Curve.fi Factory Crypto Pool: Curve Test/ETH",
@@ -18735,7 +19223,8 @@
         "coins_underlying_names": [
             "Test",
             "WETH"
-        ]
+        ],
+        "volume": 31
     },
     "0x0E9B5B092caD6F1c5E6bc7f89Ffe1abb5c95F1C2": {
         "name": "Curve.fi Factory Crypto Pool: Curve GEAR/ETH",
@@ -18775,7 +19264,8 @@
         "coins_underlying_names": [
             "GEAR",
             "WETH"
-        ]
+        ],
+        "volume": 1529
     },
     "0x6868Eb3fcefe1684486F601d2dC10Bbf0C4EEB8b": {
         "name": "Curve.fi Factory Crypto Pool: TRYB / 3pool",
@@ -18820,7 +19310,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x53DfCF5Ca1E1D5311Db29f585D56A9A9dcC2441b": {
         "name": "Curve.fi Factory Crypto Pool: TRYB/USD (3crv)",
@@ -18865,7 +19356,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 0
     },
     "0x51Bcba35e5fa277592Cea83Ad14408A0963b86f8": {
         "name": "Curve.fi Factory Crypto Pool: TRYB/USD (3crv)",
@@ -18911,7 +19403,8 @@
             "DAI",
             "USDC",
             "USDT"
-        ]
+        ],
+        "volume": 517
     },
     "0x4CC9385d9909d2Bf529A4c1E847Dc4eE01F4927A": {
         "name": "Curve.fi Factory Crypto Pool: EURS/FRAXBP",
@@ -18954,7 +19447,8 @@
             "EURS",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 187
     },
     "0x675993fB30a2d58Cd4D29d15F89B4Be9ca8765AE": {
         "name": "Curve.fi Factory Crypto Pool: EURS/FRAXBP",
@@ -18996,6 +19490,7 @@
             "EURS",
             "FRAX",
             "USDC"
-        ]
+        ],
+        "volume": 0
     }
 }
