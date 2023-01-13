@@ -2,301 +2,6 @@
     "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD": [
         {
             "type": "sandwich",
-            "blockNumber": 16161408,
-            "unixtime": 1670760995,
-            "profit": 9854,
-            "profitUnit": "USDC",
-            "loss": 20213,
-            "lossUnit": "LP-Token",
-            "tx": [
-                {
-                    "type": "swap",
-                    "txHash": "0x19f51991b9404bb33d455cd998bf89ffa0230d054adff6578a79ebea1e6769c7",
-                    "blockNumber": 16161408,
-                    "position": 0,
-                    "trader": "0xf480fAb87c07EC2dDd68A83eC0319BB466B1Afa2",
-                    "tradeDetails": {
-                        "amountIn": 14063943,
-                        "nameIn": "USDC",
-                        "amountOut": 13772055,
-                        "nameOut": "DAI",
-                        "fee": 5626,
-                        "value": 14063943
-                    },
-                    "unixtime": 1670760995
-                },
-                {
-                    "type": "deposit",
-                    "txHash": "0xe6f0c13a4b275a62d9a79c9c47ca1065e7bc3416bec6ab39a59d1175f205425b",
-                    "blockNumber": 16161408,
-                    "position": 1,
-                    "trader": "0xbDfA4f4492dD7b7Cf211209C4791AF8d52BF5c50",
-                    "tradeDetails": [
-                        {
-                            "amountIn": 1224238,
-                            "nameOut": "USDC",
-                            "value": 1224238.294662
-                        }
-                    ],
-                    "value": 1224238.294662,
-                    "unixtime": 1670760995
-                },
-                {
-                    "type": "swap",
-                    "txHash": "0x610218460da1661cefe841d2073f2582b96e32b99a41b6ab748fb725dd1e6a8e",
-                    "blockNumber": 16161408,
-                    "position": 2,
-                    "trader": "0xf480fAb87c07EC2dDd68A83eC0319BB466B1Afa2",
-                    "tradeDetails": {
-                        "amountIn": 13772055,
-                        "nameIn": "DAI",
-                        "amountOut": 14073797,
-                        "nameOut": "USDC",
-                        "fee": 5509,
-                        "value": 13772055
-                    },
-                    "unixtime": 1670760995
-                }
-            ]
-        },
-        {
-            "type": "sandwich",
-            "blockNumber": 16164291,
-            "unixtime": 1670795783,
-            "profit": 84.42,
-            "profitUnit": "USDC",
-            "loss": 119,
-            "lossUnit": "sUSD",
-            "tx": [
-                {
-                    "type": "swap",
-                    "txHash": "0x1ff1c4c2118610658a8d25ff4adb1933592a4dff522dda8795b860f2536b6de4",
-                    "blockNumber": 16164291,
-                    "position": 1,
-                    "trader": "0xFac983fCe7ef3ceE8FFb2cEB967e1b2362AAda00",
-                    "tradeDetails": {
-                        "amountIn": 45071,
-                        "nameIn": "USDC",
-                        "amountOut": 44621,
-                        "nameOut": "sUSD",
-                        "fee": 18,
-                        "value": 45071
-                    },
-                    "unixtime": 1670795783
-                },
-                {
-                    "type": "swap",
-                    "txHash": "0xf2188a1806a877b57ff5c1bf6b82d4d08daf1605621f8d1522f2f17ac046d9df",
-                    "blockNumber": 16164291,
-                    "position": 2,
-                    "trader": "0x149d0f9282333681Ee41D30589824b2798E9fb47",
-                    "tradeDetails": {
-                        "amountIn": 799978,
-                        "nameIn": "USDC",
-                        "amountOut": 790918,
-                        "nameOut": "sUSD",
-                        "fee": 320,
-                        "value": 799978
-                    },
-                    "unixtime": 1670795783
-                },
-                {
-                    "type": "swap",
-                    "txHash": "0x62f7741cea393c4421a0d2473b49a0ffef8c4bcfd90460ecf134fc734003831d",
-                    "blockNumber": 16164291,
-                    "position": 3,
-                    "trader": "0xFac983fCe7ef3ceE8FFb2cEB967e1b2362AAda00",
-                    "tradeDetails": {
-                        "amountIn": 44621,
-                        "nameIn": "sUSD",
-                        "amountOut": 45155,
-                        "nameOut": "USDC",
-                        "fee": 18,
-                        "value": 44621
-                    },
-                    "unixtime": 1670795783
-                }
-            ]
-        },
-        {
-            "type": "sandwich",
-            "blockNumber": 16165679,
-            "unixtime": 1670812523,
-            "profit": 174,
-            "profitUnit": "USDC",
-            "loss": 1678,
-            "lossUnit": "LP-Token",
-            "tx": [
-                {
-                    "type": "swap",
-                    "txHash": "0xc6f516661bfad22213df824ffaeecea9622332fbb1fb16e2a748f30a0c5526ba",
-                    "blockNumber": 16165679,
-                    "position": 3,
-                    "trader": "0x7944E84D18803f926743Fa56fb7A9bB9Ba5f5F24",
-                    "tradeDetails": {
-                        "amountIn": 1746441,
-                        "nameIn": "USDC",
-                        "amountOut": 1723688,
-                        "nameOut": "sUSD",
-                        "fee": 699,
-                        "value": 1746441
-                    },
-                    "unixtime": 1670812523
-                },
-                {
-                    "type": "deposit",
-                    "txHash": "0x7152d665c91139369a3c35ea74047b0da4c86ae7b584335c08e42c6633003f9b",
-                    "blockNumber": 16165679,
-                    "position": 4,
-                    "trader": "0xbDfA4f4492dD7b7Cf211209C4791AF8d52BF5c50",
-                    "tradeDetails": [
-                        {
-                            "amountIn": 1111058,
-                            "nameOut": "USDC",
-                            "value": 1111058.347116
-                        }
-                    ],
-                    "value": 1111058.347116,
-                    "unixtime": 1670812523
-                },
-                {
-                    "type": "swap",
-                    "txHash": "0xe5bffe5e1ad92343a9db9bd5083b138c76da923ddea025dc04b653bf13a90ca3",
-                    "blockNumber": 16165679,
-                    "position": 5,
-                    "trader": "0x7944E84D18803f926743Fa56fb7A9bB9Ba5f5F24",
-                    "tradeDetails": {
-                        "amountIn": 1723688,
-                        "nameIn": "sUSD",
-                        "amountOut": 1746615,
-                        "nameOut": "USDC",
-                        "fee": 689,
-                        "value": 1723688
-                    },
-                    "unixtime": 1670812523
-                }
-            ]
-        },
-        {
-            "type": "sandwich",
-            "blockNumber": 16165709,
-            "unixtime": 1670812883,
-            "profit": 313,
-            "profitUnit": "USDC",
-            "loss": 1822,
-            "lossUnit": "LP-Token",
-            "tx": [
-                {
-                    "type": "swap",
-                    "txHash": "0x5423c48a527dbfce45bfd74d46c90b48c84664cf1b2dc19b06d43b48c4c3d28e",
-                    "blockNumber": 16165709,
-                    "position": 0,
-                    "trader": "0x7944E84D18803f926743Fa56fb7A9bB9Ba5f5F24",
-                    "tradeDetails": {
-                        "amountIn": 1746972,
-                        "nameIn": "USDC",
-                        "amountOut": 1722877,
-                        "nameOut": "sUSD",
-                        "fee": 699,
-                        "value": 1746972
-                    },
-                    "unixtime": 1670812883
-                },
-                {
-                    "type": "deposit",
-                    "txHash": "0x66a820d9d52dbddd7d8f23a8979ee3e61c3b6b71187721b7e1bf559d5bdf2782",
-                    "blockNumber": 16165709,
-                    "position": 1,
-                    "trader": "0x56451156E59a92217A90Ee3F4b7D3fe9044c385A",
-                    "tradeDetails": [
-                        {
-                            "amountIn": 1203485,
-                            "nameOut": "USDC",
-                            "value": 1203484.897657
-                        }
-                    ],
-                    "value": 1203484.897657,
-                    "unixtime": 1670812883
-                },
-                {
-                    "type": "swap",
-                    "txHash": "0xe80796b881e1d7b507474d71ee7ddab91ccbe0bb31eb7d7ea4476cab3024e7a8",
-                    "blockNumber": 16165709,
-                    "position": 2,
-                    "trader": "0x7944E84D18803f926743Fa56fb7A9bB9Ba5f5F24",
-                    "tradeDetails": {
-                        "amountIn": 1722877,
-                        "nameIn": "sUSD",
-                        "amountOut": 1747285,
-                        "nameOut": "USDC",
-                        "fee": 689,
-                        "value": 1722877
-                    },
-                    "unixtime": 1670812883
-                }
-            ]
-        },
-        {
-            "type": "sandwich",
-            "blockNumber": 16165834,
-            "unixtime": 1670814383,
-            "profit": 406,
-            "profitUnit": "USDC",
-            "loss": 2190,
-            "lossUnit": "LP-Token",
-            "tx": [
-                {
-                    "type": "swap",
-                    "txHash": "0x90797942db915ea497d104e99a4a709bfa75bb84e612fa5acbf61921d53ac166",
-                    "blockNumber": 16165834,
-                    "position": 1,
-                    "trader": "0xFac983fCe7ef3ceE8FFb2cEB967e1b2362AAda00",
-                    "tradeDetails": {
-                        "amountIn": 2117008,
-                        "nameIn": "USDC",
-                        "amountOut": 2084608,
-                        "nameOut": "sUSD",
-                        "fee": 847,
-                        "value": 2117008
-                    },
-                    "unixtime": 1670814383
-                },
-                {
-                    "type": "deposit",
-                    "txHash": "0xece26e900e5c80d6ccdf1b011104ac00186a77b5bf7c2ae3fb7c55c74501e48d",
-                    "blockNumber": 16165834,
-                    "position": 2,
-                    "trader": "0x52e541Ef1592B7e01D322D7c90D66D803780f9F2",
-                    "tradeDetails": [
-                        {
-                            "amountIn": 1190467,
-                            "nameOut": "USDC",
-                            "value": 1190467.288893
-                        }
-                    ],
-                    "value": 1190467.288893,
-                    "unixtime": 1670814383
-                },
-                {
-                    "type": "swap",
-                    "txHash": "0xc97bc7f43c957d0fd710fb5f8b46e2391ab99d155e1a0cdb592baa8e199f1bd3",
-                    "blockNumber": 16165834,
-                    "position": 3,
-                    "trader": "0xFac983fCe7ef3ceE8FFb2cEB967e1b2362AAda00",
-                    "tradeDetails": {
-                        "amountIn": 2084608,
-                        "nameIn": "sUSD",
-                        "amountOut": 2117414,
-                        "nameOut": "USDC",
-                        "fee": 834,
-                        "value": 2084608
-                    },
-                    "unixtime": 1670814383
-                }
-            ]
-        },
-        {
-            "type": "sandwich",
             "blockNumber": 16176153,
             "unixtime": 1670939015,
             "profit": 334,
@@ -1211,11 +916,13 @@
                     "blockNumber": 16338795,
                     "position": 1,
                     "trader": "0x11d67Fa925877813B744aBC0917900c2b1D6Eb81",
-                    "tradeDetails": {
-                        "amountOut": 825489,
-                        "nameOut": "USDC",
-                        "value": 825489
-                    },
+                    "tradeDetails": [
+                        {
+                            "amountIn": 825489,
+                            "nameOut": "USDC",
+                            "value": 825489
+                        }
+                    ],
                     "unixtime": 1672900043
                 },
                 {
@@ -1267,11 +974,13 @@
                     "blockNumber": 16338818,
                     "position": 1,
                     "trader": "0x11d67Fa925877813B744aBC0917900c2b1D6Eb81",
-                    "tradeDetails": {
-                        "amountOut": 694084,
-                        "nameOut": "USDC",
-                        "value": 694084
-                    },
+                    "tradeDetails": [
+                        {
+                            "amountIn": 694084,
+                            "nameOut": "USDC",
+                            "value": 694084
+                        }
+                    ],
                     "unixtime": 1672900319
                 },
                 {
