@@ -10,6 +10,23 @@ let poolAddress = whiteListedPoolAddress
 const pool_socket = io.connect("http://localhost:2424/" + poolAddress)
 
 pool_socket.on("message", data => {
-	// handle JSON-data here
 	console.log(data)
+})
+
+pool_socket.on("initial_all", data => {
+	// handle JSON-data here
+	//console.log(data)
+	console.log("initial_all")
+})
+
+pool_socket.on("initial_mev", data => {
+	// handle JSON-data here
+	//console.log(data)
+	console.log("initial_mev")
+})
+
+pool_socket.on("latest", data => {
+	// handle JSON-data here
+	//console.log(data)
+	console.log("latest")
 })
