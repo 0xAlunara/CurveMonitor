@@ -2,65 +2,6 @@
  "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD": [
   {
    "type": "sandwich",
-   "blockNumber": 16192206,
-   "unixtime": 1671132779,
-   "profit": 189,
-   "profitUnit": "USDT",
-   "loss": 61.97,
-   "lossUnit": "sUSD",
-   "tx": [
-    {
-     "type": "swap",
-     "txHash": "0x8108a123bf635705f7edd14e3cafdd535be1354305d05cfb5d58bad63f9e9095",
-     "blockNumber": 16192206,
-     "position": 2,
-     "trader": "0xFac983fCe7ef3ceE8FFb2cEB967e1b2362AAda00",
-     "tradeDetails": {
-      "amountIn": 309599,
-      "nameIn": "USDT",
-      "amountOut": 306260,
-      "nameOut": "sUSD",
-      "feeUSD": 124,
-      "valueUSD": 309599
-     },
-     "unixtime": 1671132779
-    },
-    {
-     "type": "swap",
-     "txHash": "0xf65b15c494e6926335c7e099b18b1b5a20dbd6b88de4c9d72f44f97b2271b8d2",
-     "blockNumber": 16192206,
-     "position": 3,
-     "trader": "0x398890BE7c4FAC5d766E1AEFFde44B2EE99F38EF",
-     "tradeDetails": {
-      "amountIn": 59971,
-      "nameIn": "USDT",
-      "amountOut": 59286,
-      "nameOut": "sUSD",
-      "feeUSD": 24,
-      "valueUSD": 59971
-     },
-     "unixtime": 1671132779
-    },
-    {
-     "type": "swap",
-     "txHash": "0xc1bc3475e56b67b555293c2801f851ae129609d56b521d1731ca841ad2cb3c74",
-     "blockNumber": 16192206,
-     "position": 4,
-     "trader": "0xFac983fCe7ef3ceE8FFb2cEB967e1b2362AAda00",
-     "tradeDetails": {
-      "amountIn": 306260,
-      "nameIn": "sUSD",
-      "amountOut": 309788,
-      "nameOut": "USDT",
-      "feeUSD": 123,
-      "valueUSD": 306260
-     },
-     "unixtime": 1671132779
-    }
-   ]
-  },
-  {
-   "type": "sandwich",
    "blockNumber": 16197906,
    "unixtime": 1671201515,
    "profit": 330,
@@ -705,65 +646,63 @@
      "unixtime": 1673279915
     }
    ]
-  }
- ],
- "0x342D1C4Aa76EA6F5E5871b7f11A019a0eB713A4f": [
+  },
   {
    "type": "sandwich",
-   "blockNumber": 16400571,
-   "unixtime": 1673645435,
-   "profit": 0.134,
-   "profitUnit": "WETH",
-   "loss": 26.62,
-   "lossUnit": "CLEV",
+   "blockNumber": 16413996,
+   "unixtime": 1673807387,
+   "profit": 122,
+   "profitUnit": "USDC",
+   "loss": 1202,
+   "lossUnit": "sUSD",
    "tx": [
     {
      "type": "swap",
-     "txHash": "0xf241d267b8f5f15af0b72c493b2a8c1e7f4d11702f224ee07787f873762e01c6",
-     "blockNumber": 16400571,
-     "position": 0,
-     "trader": "0x654Fae4aa229d104CAbead47e56703f58b174bE4",
+     "txHash": "0xcce8165e840ee45b0e361910d9737f86fa9bc51fdf0020d9f7f02ceb9240ebaf",
+     "blockNumber": 16413996,
+     "position": 3,
+     "trader": "0x4970197593EF5aed9D2C33409b953F5f9bb22563",
      "tradeDetails": {
-      "amountIn": 0.677,
-      "nameIn": "WETH",
-      "amountOut": 149,
-      "nameOut": "CLEV",
-      "feeUSD": 0,
-      "valueUSD": 965
+      "amountIn": 2705071,
+      "nameIn": "USDC",
+      "amountOut": 2700356,
+      "nameOut": "sUSD",
+      "feeUSD": 1082,
+      "valueUSD": 2705071
      },
-     "unixtime": 1673645435
+     "unixtime": 1673807387
     },
     {
      "type": "swap",
-     "txHash": "0xb27dd18147fbccf193cea1362e6c1468434ac975d8b49ed9a8f5c97ff03d4900",
-     "blockNumber": 16400571,
-     "position": 1,
-     "trader": "0xC72AED14386158960D0E93Fecb83642e68482E4b",
+     "txHash": "0x0662f41a7c68eb559ca53188b225bb4de3d33340b87a349ae16d3f7938544920",
+     "blockNumber": 16413996,
+     "position": 4,
+     "trader": "0x1098d651576137EAcF5182bB5f18a14037196688",
      "tradeDetails": {
-      "amountIn": 27.91,
-      "nameIn": "WETH",
-      "amountOut": 5530,
-      "nameOut": "CLEV",
-      "feeUSD": 16,
-      "valueUSD": 39805
+      "amountIn": 760000,
+      "nameIn": "USDC",
+      "amountOut": 757872,
+      "nameOut": "sUSD",
+      "feeUSD": 304,
+      "valueUSD": 760000
      },
-     "unixtime": 1673645435
+     "unixtime": 1673807387
     },
     {
      "type": "swap",
-     "txHash": "0xee1ae5d1e563f39e20cf02817e22267b9bd090b8cd28e6b4729f94ea6175a13e",
-     "blockNumber": 16400571,
-     "position": 2,
-     "trader": "0x654Fae4aa229d104CAbead47e56703f58b174bE4",
+     "txHash": "0x7d38f96656505595745660e003198ab7ad68a77839bd60f6103bf4805870b018",
+     "blockNumber": 16413996,
+     "position": 5,
+     "trader": "0x4970197593EF5aed9D2C33409b953F5f9bb22563",
      "tradeDetails": {
-      "amountIn": 149,
-      "nameIn": "CLEV",
-      "amountOut": 0.81,
-      "nameOut": "WETH",
-      "feeUSD": 0,
-      "valueUSD": 1156
+      "amountIn": 2700356,
+      "nameIn": "sUSD",
+      "amountOut": 2705193,
+      "nameOut": "USDC",
+      "feeUSD": 1080,
+      "valueUSD": 2700356
      },
-     "unixtime": 1673645435
+     "unixtime": 1673807387
     }
    ]
   }
