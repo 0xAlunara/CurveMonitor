@@ -160,10 +160,10 @@ async function socketSetup() {
 			socket.send("successfully connected to socket for " + poolAddress)
 
 			let data = JSON.parse(fs.readFileSync("processedTxLog_ALL.json"))
-			socket.send(data[poolAddress])
+			socket.emit("initial_all", data[poolAddress])
 
 			data = JSON.parse(fs.readFileSync("processedTxLog_MEV.json"))
-			socket.send(data[poolAddress])
+			socket.emit("initial_mev",data[poolAddress])
 
 			emitter.on("new data" + poolAddress, async (data) => {
 				console.log(data)
@@ -171,7 +171,7 @@ async function socketSetup() {
 					socket.disconnect()
 					console.log("disconnected client", socket.rooms)
 				}
-				socket.send(data)
+				socket.emit("latest",data)
 			})
 
 			socket.on("disconnect", () => {
