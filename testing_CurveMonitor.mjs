@@ -166,11 +166,6 @@ async function socketSetup() {
 			socket.emit("initial_mev",data[poolAddress])
 
 			emitter.on("new data" + poolAddress, async (data) => {
-				console.log(data)
-				if(socket.connected==false){
-					socket.disconnect()
-					console.log("disconnected client", socket.rooms)
-				}
 				socket.emit("latest",data)
 			})
 
@@ -1947,14 +1942,14 @@ async function processTokenExchange(data, poolAddress, type){
 		//console.log("decodedTx undefined")
 	}
 	// exchange_multiple
-	if(exchange_multiple_CHECK=="exchange_multiple"){
-		console.log("\nexchange_multiple spotted",txHash)
+	if(exchange_multiple_CHECK=="exchange_multiple" && !zoom){
+			console.log("\nexchange_multiple spotted",txHash)
 
-		var soldAddress = decodedTx.params[0].value[0]
-		var sold_amount = decodedTx.params[2].value
-		
-		sold_amount = await getCleanedTokenAmount(soldAddress,sold_amount)
-		var token_sold_name = await getTokenName(soldAddress)
+			var soldAddress = decodedTx.params[0].value[0]
+			var sold_amount = decodedTx.params[2].value
+			
+			sold_amount = await getCleanedTokenAmount(soldAddress,sold_amount)
+			var token_sold_name = await getTokenName(soldAddress)
 	
 	// 3Pool
 	}else if((type == "TokenExchangeUnderlying") && (token1Address == "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490")) {
@@ -2073,8 +2068,7 @@ async function processTokenExchange(data, poolAddress, type){
 	let poolName = await buildPoolName(poolAddress)
 
 	// exchange_multiple
-	if(exchange_multiple_CHECK=="exchange_multiple"){
-
+	if(exchange_multiple_CHECK=="exchange_multiple" && !zoom) {
 		poolName = "Pool"
 
 		let numberOfNullAddresses = decodedTx.params[0].value.filter(x => x == "0x0000000000000000000000000000000000000000").length
@@ -2395,7 +2389,11 @@ async function collectionCycle(nextBlockToProceedProcessing,range){
 async function collectionMain(){
 	let oldRange = 10
 
-	let nextBlockToProceedProcessing = await findLastProcessedEvent("0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
+	try{
+		var nextBlockToProceedProcessing = await findLastProcessedEvent("0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
+	} catch(err){
+		var nextBlockToProceedProcessing = await getStartBlock()
+	}
 	let latestBlock = await web3.eth.getBlockNumber()
 	let newRange = latestBlock - nextBlockToProceedProcessing
 
@@ -2406,37 +2404,69 @@ async function collectionMain(){
 	console.log("collection completed, all events fetched and processed")
 }
 
-// by default 2M for both main and test env, but can be set to 1$ here
-//dollar_filter = 2000000 //2M
-
 // toggle to have messages send out to the telegram-bot
-let telegramMessage = false
+let telegramMessage
 
 // toggle to write the trades to the json
-let writeToFile = true
+let writeToFile
 
 // for mvp, only listens to new events on a single poolAddress
-let singlePoolModus = true
-
-await collectionMain()
-
-//await searchFromLogsInRange(await getStartBlock(),214272)
-//await searchFromLogsInRange(16338795,1)
-
-//await debugBlock(16400181,"0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7")
-//await debugBlock(16325101,"0xe6b5CC1B4b47305c58392CE3D359B10282FC36Ea")
-//await activateRealTimeMonitoring(singlePoolModus)
-await activateRealTimeMonitoring(singlePoolModus,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
-
-//await scanBlockRange(16241695,16253755,"0x5a6A4D54456819380173272A5E8E9B9904BdF41B")
+let singlePoolModus
 
 // sUSD pool for mvp
-let whiteListedPoolAddress = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD"
+let whiteListedPoolAddress
 
-// using socket.io, this function will iterate over all pools and create and open custom sockets per pool, for the frontend to connect to.
-await socketSetup()
+async function CurveMonitor(){
 
+	// toggle to have messages send out to the telegram-bot
+	telegramMessage = false
 
-//these belong together, otherwise mayhem 
-await new Promise(resolve => setTimeout(resolve, 30000)) //should be active by default, unless during some tests
-await subscribeToNewBlocks() //should be active by default, unless during some tests
+	// toggle to write the trades to the json
+	writeToFile = true
+
+	// for mvp, only listens to new events on a single poolAddress
+	singlePoolModus = true
+
+	await collectionMain()
+	await activateRealTimeMonitoring(singlePoolModus,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
+
+	// sUSD pool for mvp
+	whiteListedPoolAddress = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD"
+
+	// using socket.io, this function will iterate over all pools and create and open custom sockets per pool, for the frontend to connect to.
+	await socketSetup()
+
+	//these belong together, otherwise mayhem 
+	await new Promise(resolve => setTimeout(resolve, 30000)) //should be active by default, unless during some tests
+	await subscribeToNewBlocks() //should be active by default, unless during some tests
+}
+
+async function telegramBot(){
+
+	// by default 2M for both main and test env, but can be set to 1$ here
+	//dollar_filter = 2000000 //2M
+
+	// toggle to have messages send out to the telegram-bot
+	telegramMessage = true
+
+	// toggle to write the trades to the json
+	writeToFile = false
+
+	// for mvp, only listens to new events on a single poolAddress
+	singlePoolModus = false
+
+	//await searchFromLogsInRange(await getStartBlock(),214272)
+	//await searchFromLogsInRange(16338795,1)
+
+	await debugBlock(16412930,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
+	await debugBlock(16412930,"0xD51a44d3FaE010294C616388b506AcdA1bfAAE46")
+	//await activateRealTimeMonitoring(singlePoolModus)
+	//await activateRealTimeMonitoring(singlePoolModus,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
+	//await scanBlockRange(16241695,16253755,"0x5a6A4D54456819380173272A5E8E9B9904BdF41B")
+}
+
+// show ExchangeMultiple zoomed into target pool (for susd in mvp)
+let zoom = true
+
+await CurveMonitor()
+//await telegramBot()
