@@ -159,21 +159,52 @@ async function socketSetup() {
 			console.log(poolAddress, "socket connected")
 			socket.send("successfully connected to socket for " + poolAddress)
 
-			let data = JSON.parse(fs.readFileSync("processedTxLog_ALL.json"))
-			socket.emit("initial_all", data[poolAddress])
+			// default message at connect to send data for last month
+			messageForSocket("month",socket,poolAddress)
 
-			data = JSON.parse(fs.readFileSync("processedTxLog_MEV.json"))
-			socket.emit("initial_mev",data[poolAddress])
-
-			emitter.on("new data" + poolAddress, async (data) => {
-				socket.emit("latest",data)
+			// next block is for when a user plays with the time-span tabulator
+			socket.on("day", () => {
+				messageForSocket("day",socket,poolAddress)
+			})
+			socket.on("week", () => {
+				messageForSocket("week",socket,poolAddress)
+			})
+			socket.on("month", () => {
+				messageForSocket("month",socket,poolAddress)
 			})
 
 			socket.on("disconnect", () => {
 				console.log("client disconnected")
 			})
+
+			// sending updates
+			emitter.on("new data" + poolAddress, async (data) => {
+				socket.emit("latest",data)
+			})
 		})
 	}
+}
+
+// trimmes down the message for the frontend to ship only data of last 24h, week, or month
+function messageForSocket(timeFrame,socket,poolAddress){
+	let currentTime = new Date().getTime() / 1000
+
+	let dataALL = JSON.parse(fs.readFileSync("processedTxLog_ALL.json"))
+	let dataMEV = JSON.parse(fs.readFileSync("processedTxLog_MEV.json"))
+
+	if(timeFrame == "day") var days = 1
+	if(timeFrame == "week") var days = 7
+	if(timeFrame == "month") var days = 31
+
+	let startingPoint = currentTime - (days * 24 * 60 * 60)
+
+	let trimmedDataALL = dataALL[poolAddress].filter(entry => entry.unixtime >= startingPoint)
+	let trimmedDataMEV = dataMEV[poolAddress].filter(entry => entry.unixtime >= startingPoint)
+
+	socket.send("\nsending data for last " + timeFrame)
+
+	socket.emit("initial_all", trimmedDataALL)
+	socket.emit("initial_mev", trimmedDataMEV)
 }
 
 // updating prices
