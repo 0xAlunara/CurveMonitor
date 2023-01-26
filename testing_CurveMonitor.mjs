@@ -16,7 +16,7 @@ const apiKeys = require('./api_keys')
 
 const utils = require("./utils.js")
 const getABI = utils.getABI
-const processEntry = utils.processEntry
+const saveTxEntry = utils.saveTxEntry
 const findLastProcessedEvent = utils.findLastProcessedEvent
 const collection = utils.collection
 const getCurvePools = utils.getCurvePools
@@ -30,6 +30,8 @@ const priceCollection_OneCombination = price_utils.priceCollection_OneCombinatio
 const findLastStoredBlocknumberForCombination = price_utils.findLastStoredBlocknumberForCombination
 const findLastStoredUnixtimeForCombination = price_utils.findLastStoredUnixtimeForCombination
 const bootPriceJSON = price_utils.bootPriceJSON
+const priceCollectionMain = price_utils.priceCollectionMain
+const savePriceEntry = price_utils.savePriceEntry
 
 const abiDecoder = require("abi-decoder")
 let ABI_Registry_Exchange = [{"name":"TokenExchange","inputs":[{"name":"buyer","type":"address","indexed":true},{"name":"receiver","type":"address","indexed":true},{"name":"pool","type":"address","indexed":true},{"name":"token_sold","type":"address","indexed":false},{"name":"token_bought","type":"address","indexed":false},{"name":"amount_sold","type":"uint256","indexed":false},{"name":"amount_bought","type":"uint256","indexed":false}],"anonymous":false,"type":"event"},{"stateMutability":"nonpayable","type":"constructor","inputs":[{"name":"_address_provider","type":"address"},{"name":"_calculator","type":"address"}],"outputs":[]},{"stateMutability":"payable","type":"fallback"},{"stateMutability":"payable","type":"function","name":"exchange_with_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":1019563733},{"stateMutability":"payable","type":"function","name":"exchange_with_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_receiver","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"gas":1019563733},{"stateMutability":"payable","type":"function","name":"exchange","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":427142},{"stateMutability":"payable","type":"function","name":"exchange","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_receiver","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"gas":427142},{"stateMutability":"payable","type":"function","name":"exchange_multiple","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":313422},{"stateMutability":"payable","type":"function","name":"exchange_multiple","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_pools","type":"address[4]"}],"outputs":[{"name":"","type":"uint256"}],"gas":313422},{"stateMutability":"payable","type":"function","name":"exchange_multiple","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_pools","type":"address[4]"},{"name":"_receiver","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"gas":313422},{"stateMutability":"view","type":"function","name":"get_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"gas":3002213116},{"stateMutability":"view","type":"function","name":"get_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_exclude_pools","type":"address[8]"}],"outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"gas":3002213116},{"stateMutability":"view","type":"function","name":"get_exchange_amount","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":30596},{"stateMutability":"view","type":"function","name":"get_input_amount","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":34701},{"stateMutability":"view","type":"function","name":"get_exchange_amounts","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amounts","type":"uint256[100]"}],"outputs":[{"name":"","type":"uint256[100]"}],"gas":38286},{"stateMutability":"view","type":"function","name":"get_exchange_multiple_amount","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":21334},{"stateMutability":"view","type":"function","name":"get_exchange_multiple_amount","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_pools","type":"address[4]"}],"outputs":[{"name":"","type":"uint256"}],"gas":21334},{"stateMutability":"view","type":"function","name":"get_calculator","inputs":[{"name":"_pool","type":"address"}],"outputs":[{"name":"","type":"address"}],"gas":5215},{"stateMutability":"nonpayable","type":"function","name":"update_registry_address","inputs":[],"outputs":[{"name":"","type":"bool"}],"gas":115368},{"stateMutability":"nonpayable","type":"function","name":"set_calculator","inputs":[{"name":"_pool","type":"address"},{"name":"_calculator","type":"address"}],"outputs":[{"name":"","type":"bool"}],"gas":40695},{"stateMutability":"nonpayable","type":"function","name":"set_default_calculator","inputs":[{"name":"_calculator","type":"address"}],"outputs":[{"name":"","type":"bool"}],"gas":40459},{"stateMutability":"nonpayable","type":"function","name":"claim_balance","inputs":[{"name":"_token","type":"address"}],"outputs":[{"name":"","type":"bool"}],"gas":41823},{"stateMutability":"nonpayable","type":"function","name":"set_killed","inputs":[{"name":"_is_killed","type":"bool"}],"outputs":[{"name":"","type":"bool"}],"gas":40519},{"stateMutability":"view","type":"function","name":"registry","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":2970},{"stateMutability":"view","type":"function","name":"factory_registry","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":3000},{"stateMutability":"view","type":"function","name":"crypto_registry","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":3030},{"stateMutability":"view","type":"function","name":"default_calculator","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":3060},{"stateMutability":"view","type":"function","name":"is_killed","inputs":[],"outputs":[{"name":"","type":"bool"}],"gas":3090}]
@@ -974,7 +976,7 @@ async function processFullSandwich(mevTxBuffer){
         }
 		let poolAddress = messagePosition0[0]
 		emitter.emit("new data" + poolAddress,MEV_entry)
-		processEntry(poolAddress, MEV_entry)
+		saveTxEntry(poolAddress, MEV_entry)
 	}
 
 	if(telegramMessage == true){
@@ -1079,7 +1081,8 @@ async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_am
 			"unixtime":unixtime
 		}
 		emitter.emit("new data" + poolAddress,entry)
-		processEntry(poolAddress, entry)
+		saveTxEntry(poolAddress, entry)
+		await savePriceEntry(poolAddress,blockNumber,unixtime)
 		return [poolAddress, entry]
 	}
 	
@@ -1171,7 +1174,8 @@ async function buildPostRemovalMessage(blockNumber,coin_amount,token_removed_nam
 			"unixtime":unixtime
 		}
 		emitter.emit("new data" + poolAddress,entry)
-		processEntry(poolAddress, entry)
+		saveTxEntry(poolAddress, entry)
+		await savePriceEntry(poolAddress,blockNumber,unixtime)
 		return [poolAddress, entry]
 	}
 
@@ -1288,7 +1292,8 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 			"unixtime":unixtime
 		}
 		emitter.emit("new data" + poolAddress,entry)
-		processEntry(poolAddress,entry)
+		saveTxEntry(poolAddress,entry)
+		await savePriceEntry(poolAddress,blockNumber,unixtime)
 		return [poolAddress, entry]
 	}
 
@@ -1356,7 +1361,7 @@ async function buildPoolName(poolAddress){
 
 // first wave of susbscribing to Token Exchanges
 async function activateRealTimeMonitoring(singlePoolModus,whiteListedPoolAddress){
-	console.log("Real-Time-Monitoring active")
+	console.log("Real-Time-Monitoring active\n")
 	for(const poolAddress of CurvePools) {
 		if(singlePoolModus == true){
 			// for mvp modus, we only listen to events on a single pool (susd -> whiteListedPoolAddress)
@@ -2451,39 +2456,6 @@ let whiteListedPoolAddress
 // show ExchangeMultiple zoomed into target pool (for susd in mvp)
 let zoom = true
 
-async function CurveMonitor(){
-
-	// toggle to have messages send out to the telegram-bot
-	telegramMessage = false
-
-	// toggle to write the trades to the json
-	writeToFile = true
-
-	// for mvp, only listens to new events on a single poolAddress
-	singlePoolModus = true
-
-	// show ExchangeMultiple zoomed into target pool (for susd in mvp)
-	zoom = false
-
-	await collectionMain()
-	await activateRealTimeMonitoring(singlePoolModus,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
-
-	// sUSD pool for mvp
-	whiteListedPoolAddress = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD"
-
-	// using socket.io, this function will iterate over all pools and create and open custom sockets per pool, for the frontend to connect to.
-	if(mode == "local"){
-		await http_SocketSetup()
-	}
-	if(mode == "https"){
-		await https_SocketSetup()
-	}
-
-	//these belong together, otherwise mayhem 
-	await new Promise(resolve => setTimeout(resolve, 30000)) //should be active by default, unless during some tests
-	await subscribeToNewBlocks() //should be active by default, unless during some tests
-}
-
 async function telegramBot(){
 
 	// by default 2M for both main and test env, but can be set to 1$ here
@@ -2511,7 +2483,7 @@ async function telegramBot(){
 	singlePoolModus = false
 
 	// show ExchangeMultiple zoomed into target pool (for susd in mvp)
-	zoom = true
+	zoom = false
 
 	//await searchFromLogsInRange(await getStartBlock(),214272)
 	//await searchFromLogsInRange(16338795,1)
@@ -2523,6 +2495,41 @@ async function telegramBot(){
 	//await scanBlockRange(16241695,16253755,"0x5a6A4D54456819380173272A5E8E9B9904BdF41B")
 }
 
+async function CurveMonitor(){
+
+	// toggle to have messages send out to the telegram-bot
+	telegramMessage = false
+
+	// toggle to write the trades to the json
+	writeToFile = true
+
+	// for mvp, only listens to new events on a single poolAddress
+	singlePoolModus = true
+
+	// show ExchangeMultiple zoomed into target pool (for susd in mvp)
+	zoom = true
+
+	await collectionMain()
+	await activateRealTimeMonitoring(singlePoolModus,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
+
+	// sUSD pool for mvp
+	whiteListedPoolAddress = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD"
+
+	// using socket.io, this function will iterate over all pools and create and open custom sockets per pool, for the frontend to connect to.
+	if(mode == "local"){
+		await http_SocketSetup()
+	}
+	if(mode == "https"){
+		await https_SocketSetup()
+	}
+
+	//these belong together, otherwise mayhem 
+	//await new Promise(resolve => setTimeout(resolve, 30000)) //should be active by default, unless during some tests
+	await subscribeToNewBlocks() //should be active by default, unless during some tests
+
+	//await priceCollectionMain("0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
+}
+
 
 //let mode = "local"
 let mode = "https"
@@ -2530,7 +2537,3 @@ console.log(mode+"-mode")
 
 await CurveMonitor()
 //await telegramBot()
-
-//let poolAddress = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD"
-
-//await priceCollection_AllCombinations(poolAddress)
