@@ -7,6 +7,16 @@ const utils = require("./utils.js")
 const getABI = utils.getABI
 const getCurvePools = utils.getCurvePools
 
+const options = {
+	// Enable auto reconnection
+	reconnect: {
+		auto: true,
+		delay: 89, // ms
+		maxAttempts: 50,
+		onTimeout: false
+	}
+}
+
 const web3HTTP = new Web3(new Web3.providers.HttpProvider(apiKeys.web3HTTP, options))
 const web3HTTP_llamarpc = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com/rpc/"+apiKeys.web3_llamarpc))
 
