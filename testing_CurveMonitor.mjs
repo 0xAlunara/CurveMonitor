@@ -169,7 +169,7 @@ async function http_SocketSetup() {
 
 async function https_SocketSetup() {
 
-	const httpsServer = https({
+	const httpsServer = https.createServer({
 		key: fs.readFileSync("/home/transactions/certs/privkey1.pem"),
 		cert: fs.readFileSync("/home/transactions/certs/cert1.pem"),
 		ca: fs.readFileSync("/home/transactions/certs/fullchain1.pem")
