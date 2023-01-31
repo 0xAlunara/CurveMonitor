@@ -40,29 +40,28 @@ function bootPriceJSON(){
 
 	let pools = getCurvePools()
 	for (const poolAddress of pools) {
-		if(typeof priceJSON[poolAddress] == "undefined") {
-			let originalArray = []
-			let reversedArray  = []
-			let nameArray = curveJSON[poolAddress].coin_names
-			for (let i = 0; i < nameArray.length; i++) {
-				for (let j = i + 1; j < nameArray.length; j++) {
-					originalArray.push({
-						type: "original",
-						priceOf: nameArray[i],
-						priceIn: nameArray[j],
-						data: []
-					})
-					reversedArray.push({
-						type: "reversed",
-						priceOf: nameArray[j],
-						priceIn: nameArray[i],
-						data: []
-					})
-				}
+		if(typeof priceJSON[poolAddress] !== "undefined") continue
+		let originalArray = []
+		let reversedArray  = []
+		let nameArray = curveJSON[poolAddress].coin_names
+		for (let i = 0; i < nameArray.length; i++) {
+			for (let j = i + 1; j < nameArray.length; j++) {
+				originalArray.push({
+					type: "original",
+					priceOf: nameArray[i],
+					priceIn: nameArray[j],
+					data: []
+				})
+				reversedArray.push({
+					type: "reversed",
+					priceOf: nameArray[j],
+					priceIn: nameArray[i],
+					data: []
+				})
 			}
-			let finalArray = originalArray.concat(reversedArray)
-			priceJSON[poolAddress] = finalArray
 		}
+		let finalArray = originalArray.concat(reversedArray)
+		priceJSON[poolAddress] = finalArray
 	}
 	fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4))
 }
@@ -96,7 +95,7 @@ async function priceCollection_OneCombination(poolAddress,combination,dataALL,pr
 	let priceOf = combination.priceOf
 	let priceIn = combination.priceIn
 
-	// pairID is inside price.json, and which place the token-combination is located. example: {"priceOf": "DAI","priceIn": "USDC"},{"priceOf": "DAI","priceIn": "USDT"}
+	// pairID is inside price.json, at which place the token-combination is located. example: {"priceOf": "DAI","priceIn": "USDC"},{"priceOf": "DAI","priceIn": "USDT"}
 	let pairID = priceJSON[poolAddress].findIndex(item => {
 		return item.priceOf == priceOf && item.priceIn == priceIn
 	})
@@ -127,6 +126,9 @@ async function priceCollection_OneCombination(poolAddress,combination,dataALL,pr
 	let index = blockNumbers.indexOf(lastStoredBlocknumberForCombination)
 	blockNumbers = blockNumbers.splice(index+1)
 
+	// removing dupes caused by multiple tx in the same block
+	blockNumbers = blockNumbers.filter((num, index) => blockNumbers.indexOf(num) === index)
+
 	let counter = 1
 	for (const blockNumber of blockNumbers) {
 
@@ -140,7 +142,7 @@ async function priceCollection_OneCombination(poolAddress,combination,dataALL,pr
 		let dy
 
 		if(combination.type == "original") {
-			dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call(blockNumber)
+			dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call({block:blockNumber})
 			dy = dy / 10**curveJSON[poolAddress].decimals[coinID_priceIn]
 			data.push({[unixtime]:dy})
 		}
@@ -223,7 +225,7 @@ async function savePriceEntry(poolAddress, blockNumber,unixtime){
 		let data = priceJSON[poolAddress][pairID].data
 	
 		if(combination.type == "original") {
-			let dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call(blockNumber)
+			let dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call({block:blockNumber})
 			dy = dy / 10**curveJSON[poolAddress].decimals[coinID_priceIn]
 			data.push({[unixtime]:dy})
 		}
@@ -248,6 +250,16 @@ async function priceCollectionMain(poolAddress){
 	console.log("collection of prices complete for pool", poolAddress)
 }
 
+// used to forward the correct priceOf priceIn price-array to the client
+function readPriceArray(poolAddress,priceOf,priceIn){
+	let priceJSON = JSON.parse(fs.readFileSync("prices.json"))
+	let combinationID = priceJSON[poolAddress].findIndex(item => {
+		return item.priceOf == priceOf && item.priceIn == priceIn
+	})
+	let entry = priceJSON[poolAddress][combinationID]
+	return entry.data
+}
+
 module.exports = {
 	priceCollection_AllCombinations,
 	priceCollection_OneCombination,
@@ -255,5 +267,6 @@ module.exports = {
 	findLastStoredUnixtimeForCombination,
 	bootPriceJSON,
 	priceCollectionMain,
-	savePriceEntry
+	savePriceEntry,
+	readPriceArray
 }
