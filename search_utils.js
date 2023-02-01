@@ -58,6 +58,7 @@ function search2ndName(userInput,searchJSON) {
 
 // main
 function search(userInput){
+    if (userInput == "0x") return []
     if (!userInput || userInput === "undefined") {
         return []
     }
