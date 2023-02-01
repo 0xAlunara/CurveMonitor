@@ -61,7 +61,7 @@ function search(userInput){
     if (poolAddress.length == 0) {
         res = res.filter(item => {
             const balance = Object.values(item)[0].balance
-            return balance !== 0
+            return balance !== 0 && balance >= 12
         })        
     } 
 
