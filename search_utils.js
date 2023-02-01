@@ -76,6 +76,14 @@ function search(userInput){
         let final_res = search2ndName(parts[1],searchJSON)
         res = final_res
     }
+
+    // formatting
+    res = res.reduce((acc, item) => {
+        const key = Object.keys(item)[0]
+        acc[key] = item[key]
+        return acc
+    }, {})
+
     return res
 }
 
