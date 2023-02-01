@@ -7,21 +7,21 @@ function findPoolAddress(userInput,searchJSON) {
     Object.keys(searchJSON).forEach(function(address) {
         var pool = searchJSON[address]
         if (userInput.startsWith("0x")) {
-            if (address.toLowerCase().startsWith(userInput) || pool.coins.some(function(coin, index) {
+            if (address.toLowerCase().startsWith(userInput) || pool.coins.some(function(coin) {
                 return coin.toLowerCase().includes(userInput)
             })) {
                 var coinIndex = pool.coins.findIndex(coin => coin.toLowerCase() === userInput)
                 let balance = pool.balances[coinIndex]
-                if (typeof balance == "undefined") balance = 0
+                if (!balance) balance = 0
                 matchingPools.push({[address]: {name: pool.name,balance: balance}})
             }
         } else {
-            if (pool.name.toLowerCase().includes(userInput) || pool.coin_names.some(function(coin, index) {
+            if (pool.name.toLowerCase().includes(userInput) || pool.coin_names.some(function(coin) {
                 return coin.toLowerCase().includes(userInput)
             })) {
-                var coinIndex = pool.coin_names.findIndex(coin => coin.toLowerCase().includes(userInput))
+                var coinIndex = pool.coin_names.findIndex(coin => coin.toLowerCase().startsWith(userInput))
                 let balance = pool.balances[coinIndex]
-                if (typeof balance == "undefined") balance = 0
+                if (!balance) balance = 0
                 matchingPools.push({[address]: {name: pool.name,balance: balance}})
             }
 
@@ -41,13 +41,13 @@ function findPoolAddress(userInput,searchJSON) {
 }
 
 // handles if user starts inputting a 2nd token-name
-function search2ndName(userInput,searchJSON) {
+function search2ndName(userInput,searchJSON,res) {
     let final_res = []
     for (let i = 0; i < res.length; i++) {
       for (const poolAddress in res[i]) {
         let coin_names = searchJSON[poolAddress].coin_names
         for(const coin_name of coin_names) {
-            if (coin_name.toLowerCase().includes(userInput)){
+            if (coin_name.toLowerCase().startsWith(userInput)){
                 final_res.push(res[i]) 
             }
         }
@@ -77,8 +77,8 @@ function search(userInput){
     })
 
     // case: 2nd token name in input
-    if (typeof parts[1] !== "undefined"){
-        let final_res = search2ndName(parts[1],searchJSON)
+    if (parts[1]){
+        let final_res = search2ndName(parts[1],searchJSON,res)
         res = final_res
     }
 
@@ -89,7 +89,7 @@ function search(userInput){
         return acc
     }, {})
 
-    if (Object.keys(res).length === 0 && res.constructor === Object) res =  []
+    if (Object.keys(res).length === 0 && res.constructor === Object) res = []
 
     return res
 }
@@ -99,4 +99,3 @@ module.exports = {
 	search2ndName,
 	search
 }
-
