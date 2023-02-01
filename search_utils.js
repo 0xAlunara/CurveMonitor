@@ -84,6 +84,8 @@ function search(userInput){
         return acc
     }, {})
 
+    if (Object.keys(res).length === 0 && res.constructor === Object) res =  []
+    
     return res
 }
 
