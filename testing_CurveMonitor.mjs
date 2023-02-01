@@ -25,33 +25,19 @@ const getTokenName = utils.getTokenName
 
 // utils for price-data
 const price_utils = require("./price_utils.js")
-const priceCollection_AllCombinations = price_utils.priceCollection_AllCombinations
-const priceCollection_OneCombination = price_utils.priceCollection_OneCombination
-const findLastStoredBlocknumberForCombination = price_utils.findLastStoredBlocknumberForCombination
-const findLastStoredUnixtimeForCombination = price_utils.findLastStoredUnixtimeForCombination
-const bootPriceJSON = price_utils.bootPriceJSON
 const priceCollectionMain = price_utils.priceCollectionMain
 const savePriceEntry = price_utils.savePriceEntry
 const readPriceArray = price_utils.readPriceArray
 
 // utils for pool-balances
 const balances_utils = require("./balances_utils.js")
-const fetchBalancesForPool = balances_utils.fetchBalancesForPool
 const fetchBalanceOnce = balances_utils.fetchBalanceOnce
-const findLastStoredBlocknumber_inBalances = balances_utils.findLastStoredBlocknumber_inBalances
-const findLastStoredUnixtime_inBalances = balances_utils.findLastStoredUnixtime_inBalances
-const getPoolBalance = balances_utils.getPoolBalance
-const getRawBlocknumbers = balances_utils.getRawBlocknumbers
 const bootBalancesJSON = balances_utils.bootBalancesJSON
-const roundNumber = balances_utils.roundNumber
 const balancesCollectionMain = balances_utils.balancesCollectionMain
 const readBalancesArray = balances_utils.readBalancesArray
 
 // for the search bar on the landing page
 const search_utils = require("./search_utils.js")
-
-const findPoolAddress = search_utils.findPoolAddress
-const search2ndName = search_utils.search2ndName
 const search = search_utils.search
 
 const abiDecoder = require("abi-decoder")
@@ -219,6 +205,7 @@ async function startLandingSocket(io){
 		socket.on("search", (data) => {
 			let res = search(data)
 			socket.emit("search_res", res)
+			console.log("user input:",data,"output:",res)
 		})
 		socket.on("disconnect", () => {
 			console.log("client disconnected from landing page")
