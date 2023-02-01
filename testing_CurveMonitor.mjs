@@ -203,9 +203,13 @@ async function startLandingSocket(io){
 	landing_socket.on("connection", async (socket) => {
 		console.log("landing_socket connected")
 		socket.on("search", (data) => {
-			let res = search(data)
-			socket.emit("search_res", res)
-			console.log("user input:",data,"output:",res)
+			try{
+				let res = search(data)
+				socket.emit("search_res", res)
+				console.log("user input:",data,"output:",res)
+			}catch(err){
+				console.log("err in search:",err.message)
+			}
 		})
 		socket.on("disconnect", () => {
 			console.log("client disconnected from landing page")
