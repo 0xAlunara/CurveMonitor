@@ -7,23 +7,32 @@ function findPoolAddress(userInput,searchJSON) {
     Object.keys(searchJSON).forEach(function(address) {
         var pool = searchJSON[address]
         if (userInput.startsWith("0x")) {
-            if (address.toLowerCase().includes(userInput) || pool.coins.some(function(coin, index) {
+            if (address.toLowerCase().startsWith(userInput) || pool.coins.some(function(coin, index) {
                 return coin.toLowerCase().includes(userInput)
             })) {
                 var coinIndex = pool.coins.findIndex(coin => coin.toLowerCase() === userInput)
                 let balance = pool.balances[coinIndex]
-                if(typeof balance == "undefined") balance = 0
+                if (typeof balance == "undefined") balance = 0
                 matchingPools.push({[address]: {name: pool.name,balance: balance}})
             }
         } else {
             if (pool.name.toLowerCase().includes(userInput) || pool.coin_names.some(function(coin, index) {
                 return coin.toLowerCase().includes(userInput)
             })) {
-                var coinIndex = pool.coin_names.findIndex(coin => coin.toLowerCase() === userInput);
+                var coinIndex = pool.coin_names.findIndex(coin => coin.toLowerCase().includes(userInput))
                 let balance = pool.balances[coinIndex]
-                if(typeof balance == "undefined") balance = 0
+                if (typeof balance == "undefined") balance = 0
                 matchingPools.push({[address]: {name: pool.name,balance: balance}})
             }
+
+            // removing empty pools in the suggest unless userInput matches the poolAddress
+            const poolAddress = matchingPools.filter(item => Object.keys(item)[0].toLowerCase() == userInput)
+            if (poolAddress.length == 0) {
+                matchingPools = matchingPools.filter(item => {
+                    const balance = Object.values(item)[0].balance
+                    return balance !== 0 && balance >= 12
+                })        
+            } 
         }
     })
     return matchingPools.sort((a, b) => {
@@ -38,7 +47,7 @@ function search2ndName(userInput,searchJSON) {
       for (const poolAddress in res[i]) {
         let coin_names = searchJSON[poolAddress].coin_names
         for(const coin_name of coin_names) {
-            if(coin_name.toLowerCase().includes(userInput)){
+            if (coin_name.toLowerCase().includes(userInput)){
                 final_res.push(res[i]) 
             }
         }
@@ -49,6 +58,10 @@ function search2ndName(userInput,searchJSON) {
 
 // main
 function search(userInput){
+    if (!userInput || userInput === "undefined") {
+        return []
+    }
+    if (typeof userInput == "number") userInput = userInput.toString()
     let searchJSON = JSON.parse(fs.readFileSync("search.json"))
     userInput = userInput.toLowerCase()
 
@@ -56,23 +69,14 @@ function search(userInput){
 
     let res = findPoolAddress(parts[0],searchJSON)
 
-    // removing empty pools in the suggest unless userInput matches the poolAddress
-    const poolAddress = res.filter(item => Object.keys(item)[0].toLowerCase() == userInput)
-    if (poolAddress.length == 0) {
-        res = res.filter(item => {
-            const balance = Object.values(item)[0].balance
-            return balance !== 0 && balance >= 12
-        })        
-    } 
-
     // removing balances from the array
     res = res.map(item => {
         const key = Object.keys(item)[0]
         return { [key]: item[key].name }
     })
-    
+
     // case: 2nd token name in input
-    if(typeof parts[1] !== "undefined"){
+    if (typeof parts[1] !== "undefined"){
         let final_res = search2ndName(parts[1],searchJSON)
         res = final_res
     }
@@ -85,7 +89,7 @@ function search(userInput){
     }, {})
 
     if (Object.keys(res).length === 0 && res.constructor === Object) res =  []
-    
+
     return res
 }
 
