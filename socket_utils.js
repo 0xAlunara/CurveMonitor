@@ -1,6 +1,8 @@
 
 const fs = require("fs")
 
+const https = require("https")
+
 const generic_utils = require("./generic_utils.js")
 const getCurvePools = generic_utils.getCurvePools
 
