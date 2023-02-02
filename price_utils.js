@@ -3,9 +3,9 @@ const fs = require("fs")
 
 const apiKeys = require('./api_keys')
 
-const utils = require("./utils.js")
-const getABI = utils.getABI
-const getCurvePools = utils.getCurvePools
+const generic_utils = require("./generic_utils.js")
+const getCurvePools = generic_utils.getCurvePools
+const getABI = generic_utils.getABI
 
 const options = {
 	// Enable auto reconnection
@@ -40,7 +40,7 @@ function bootPriceJSON(){
 
 	let pools = getCurvePools()
 	for (const poolAddress of pools) {
-		if(typeof priceJSON[poolAddress] !== "undefined") continue
+		if (typeof priceJSON[poolAddress] !== "undefined") continue
 		let originalArray = []
 		let reversedArray  = []
 		let nameArray = curveJSON[poolAddress].coin_names
@@ -73,7 +73,7 @@ function findLastStoredUnixtimeForCombination(poolAddress,combination,priceJSON)
 		return item.priceOf == priceOf && item.priceIn == priceIn
 	})
 	let data = priceJSON[poolAddress][pairID].data
-	if(data.length==0) return 0
+	if (data.length==0) return 0
 	return Number((Object.keys(data[data.length-1]))[0])
 }
 
@@ -111,7 +111,7 @@ async function priceCollection_OneCombination(poolAddress,combination,dataALL,pr
 	// pairId_Original is the index of the coin0 in coin1 pair in the array (will get used later to invert the price on)
 	let pairId_Original
 	let priceArray_Original
-	if(combination.type == "reversed"){
+	if (combination.type == "reversed"){
 		pairId_Original = priceJSON[poolAddress].findIndex(item => {
 			return item.priceIn == priceOf && item.priceOf == priceIn
 		})
@@ -141,20 +141,20 @@ async function priceCollection_OneCombination(poolAddress,combination,dataALL,pr
 
 		let dy
 
-		if(combination.type == "original") {
+		if (combination.type == "original") {
 			dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call({block:blockNumber})
 			dy = dy / 10**curveJSON[poolAddress].decimals[coinID_priceIn]
 			data.push({[unixtime]:dy})
 		}
 
-		if(combination.type == "reversed") {
+		if (combination.type == "reversed") {
 			dy = (priceArray_Original.find(item => Object.keys(item)[0] == unixtime))[unixtime]
 			dy = 1/dy
 			data.push({[unixtime]:dy})
 		}
 
 		// saving each 100 fetches
-		if(counter % 100 == 0){
+		if (counter % 100 == 0){
 			console.log(counter + "/" + blockNumbers.length, " | ", priceOf + "/" + priceIn," | unixtime",unixtime, " | dy",dy)
 			priceJSON[poolAddress][pairID].data = data
 			fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4))
@@ -192,7 +192,7 @@ async function savePriceEntry(poolAddress, blockNumber,unixtime){
 		let hasUnixtime = combination.data.some(item => {
 			return Object.keys(item)[0] == unixtime
 		})
-		if(hasUnixtime) return
+		if (hasUnixtime) return
 
 		let curveJSON = JSON.parse(fs.readFileSync("CurvePoolData.json"))
 		let CONTRACT = set(await getABI(poolAddress),poolAddress)
@@ -215,7 +215,7 @@ async function savePriceEntry(poolAddress, blockNumber,unixtime){
 		// pairId_Original is the index of the coin0 in coin1 pair in the array (will get used later to invert the price on)
 		let pairId_Original
 		let priceArray_Original
-		if(combination.type == "reversed"){
+		if (combination.type == "reversed"){
 			pairId_Original = priceJSON[poolAddress].findIndex(item => {
 				return item.priceIn == priceOf && item.priceOf == priceIn
 			})
@@ -224,13 +224,13 @@ async function savePriceEntry(poolAddress, blockNumber,unixtime){
 	
 		let data = priceJSON[poolAddress][pairID].data
 	
-		if(combination.type == "original") {
+		if (combination.type == "original") {
 			let dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call({block:blockNumber})
 			dy = dy / 10**curveJSON[poolAddress].decimals[coinID_priceIn]
 			data.push({[unixtime]:dy})
 		}
 
-		if(combination.type == "reversed") {
+		if (combination.type == "reversed") {
 			let dy = (priceArray_Original.find(item => Object.keys(item)[0] == unixtime))[unixtime]
 			dy = 1/dy
 			data.push({[unixtime]:dy})
@@ -245,7 +245,7 @@ async function priceCollectionMain(poolAddress){
 	while(true){
 		let check = await priceCollection_AllCombinations(poolAddress)
 		// check is used to repeat the price collection cycle as long as the last cycle wasn't an empty fetch => up to date
-		if(check.every(element => element == 0)) break
+		if (check.every(element => element == 0)) break
 	}
 	console.log("collection of prices complete for pool", poolAddress)
 }
