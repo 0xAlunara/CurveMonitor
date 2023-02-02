@@ -1,7 +1,9 @@
 const fs = require("fs")
-const axios = require("axios")
 
 const Web3 = require("web3")
+
+const generic_utils = require("./generic_utils.js")
+const getABI = generic_utils.getABI
 
 const options = {
 	// Enable auto reconnection
@@ -23,7 +25,7 @@ let maxRetries = 12
 let minRetryDelay = 100
 let maxRetryDelay = 200
 async function errHandler(error){
-	if(error.code !== 429) {
+	if (error.code !== 429) {
 		//console.log(error.message)
 		//console.log("err in errHandler", error)
 		return
@@ -45,27 +47,6 @@ function getCurvePools(){
     return CurvePools
 }
 
-async function getABI(poolAddress){
-
-    try{
-        var abiDataBase = JSON.parse(fs.readFileSync("abiDataBase.json"))
-    } catch (err) {
-        var abiDataBase = {}
-    }
-
-    let poolABI = abiDataBase[poolAddress]
-
-    if(typeof poolABI == "undefined"){
-        let url = 'https://api.etherscan.io/api?module=contract&action=getabi&address='+ poolAddress + '&apikey=' + apiKeys.etherscanAPI_key
-        let poolABI = (await axios.get(url)).data.result
-        abiDataBase[poolAddress] = poolABI
-        fs.writeFileSync("abiDataBase.json", JSON.stringify(abiDataBase, null, 4))
-        return JSON.parse(poolABI)
-    }else{
-        return JSON.parse(poolABI)
-    }
-}
-
 // takes the raw, unprocessed event logs
 // sorts the events, adds or removes information, and stores the data for both the generic table and the mev table
 function saveTxEntry(poolAddress, entry){
@@ -74,7 +55,7 @@ function saveTxEntry(poolAddress, entry){
     let type = entry.type
     console.log(type)
 
-    if(entry.type == "sandwich"){
+    if (entry.type == "sandwich"){
         var fileName = "processedTxLog_MEV.json"
     } else {
         var fileName = "processedTxLog_ALL.json"
@@ -86,20 +67,20 @@ function saveTxEntry(poolAddress, entry){
         var tradeData = {}
     }
 
-    if(typeof tradeData[poolAddress] == "undefined"){
+    if (typeof tradeData[poolAddress] == "undefined"){
         tradeData[poolAddress] = []
     }
 
     // check if the tx had been saved before
-    if(entry.type == "sandwich"){
+    if (entry.type == "sandwich"){
         let blockNumber = entry.txHash
         for(const entry of tradeData[poolAddress]) {
-            if(blockNumber == entry.blockNumber) return
+            if (blockNumber == entry.blockNumber) return
         }
     } else {
         let txHash = entry.txHash
         for(const entry of tradeData[poolAddress]) {
-            if(txHash == entry.txHash) return
+            if (txHash == entry.txHash) return
         }
     }
 
@@ -163,10 +144,10 @@ async function collection(isCollecting){
 
 	// init the json structure (poolAddresses -> eventNames)
 	for(const poolAddress of CurvePools){
-		if(typeof collectedData[poolAddress] == "undefined") collectedData[poolAddress] = {}
+		if (typeof collectedData[poolAddress] == "undefined") collectedData[poolAddress] = {}
 
 		for(const eventName of eventNames) {
-			if(typeof collectedData[poolAddress][eventName] == "undefined") {
+			if (typeof collectedData[poolAddress][eventName] == "undefined") {
 				collectedData[poolAddress][eventName] = []
 			}
 		}
@@ -176,12 +157,12 @@ async function collection(isCollecting){
 
 	let i = 0
 	for(const poolAddress of CurvePools){
-		if(poolAddress!=="0xA5407eAE9Ba41422680e2e00537571bcC53efBfD") continue // only does its thing for sUSD
+		if (poolAddress!=="0xA5407eAE9Ba41422680e2e00537571bcC53efBfD") continue // only does its thing for sUSD
 		i+=1
 		let ABI = await getABI(poolAddress)
 
 		let fromBlock = findLatestCapturedBlockInRawEventLog(poolAddress,eventNames)
-		if(fromBlock==0){
+		if (fromBlock==0){
 			fromBlock = await getStartBlock()
 		}
 		fromBlock+=1
@@ -213,7 +194,7 @@ async function fetchEvents(collectedData, CONTRACT,eventName,eventNames,masterBl
 	let results = collectedData[poolAddress][eventName]
 	let CurvePools = getCurvePools()
 
-	if(typeof foundEvents == "undefined"){
+	if (typeof foundEvents == "undefined"){
 		foundEvents = 0
 	}
 	try{
@@ -221,7 +202,7 @@ async function fetchEvents(collectedData, CONTRACT,eventName,eventNames,masterBl
 			if (errors) {
 				let message = errors.message
 				const shortenErrMessage = message.slice(0, 42)
-				if(shortenErrMessage == "Returned error: Log response size exceeded"){
+				if (shortenErrMessage == "Returned error: Log response size exceeded"){
 					//console.log("Log response size exceeded")
 					let blockRange = toBlock-fromBlock
 					blockRange = Number((blockRange/10).toFixed(0))
@@ -233,10 +214,10 @@ async function fetchEvents(collectedData, CONTRACT,eventName,eventNames,masterBl
 			} else {
 
 				// no events left
-				if(events.length==0) {
+				if (events.length==0) {
 					fs.writeFileSync("unprocessedEventLogs.json", JSON.stringify(collectedData, null, 1))
-					console.log(i+"/"+CurvePools.length,foundEvents,"events added for",poolAddress,eventName)
-					if(eventName == eventNames[eventNames.length-1]){
+					console.log(foundEvents,"events added for",poolAddress,eventName)
+					if (eventName == eventNames[eventNames.length-1]){
 						console.log("\ncollection of raw logs complete for",poolAddress,"\n")
 						var collectionState = {
 							"collectingRawLogs":false
@@ -300,7 +281,7 @@ async function removeOutdatedBlocksRawLog(eventNames){
             for (let i = 0; i < eventSpecificLogs.length; i++) {
 				let event = eventSpecificLogs[i]
 				let blockNumber = event.blockNumber
-				if(blockNumber<=startBlock){
+				if (blockNumber<=startBlock){
 					outdated+=1
 					eventSpecificLogs.splice(i, 1)
         			i-- // Decrement the index to account for the removed element
@@ -332,7 +313,7 @@ async function removeOutdatedBlocksProcessedLog_ALL(eventNames){
 		for (let i = 0; i < poolSpecificLogs.length; i++) {
 			let event = poolSpecificLogs[i]
 			let blockNumber = event.blockNumber
-			if(blockNumber<=startBlock){
+			if (blockNumber<=startBlock){
 				outdated+=1
 				poolSpecificLogs.splice(i, 1)
 				i-- // Decrement the index to account for the removed element
@@ -363,7 +344,7 @@ async function removeOutdatedBlocksProcessedLog_MEV(eventNames){
 		for (let i = 0; i < poolSpecificLogs.length; i++) {
 			let event = poolSpecificLogs[i]
 			let blockNumber = event.blockNumber
-			if(blockNumber<=startBlock){
+			if (blockNumber<=startBlock){
 				outdated+=1
 				poolSpecificLogs.splice(i, 1)
 				i-- // Decrement the index to account for the removed element
@@ -386,7 +367,7 @@ function findLatestCapturedBlockInRawEventLog(poolAddress,eventNames){
 		for (let i = 0; i < eventSpecificLogs.length; i++) {
 			let event = eventSpecificLogs[i]
 			let blockNumber = event.blockNumber
-			if(blockNumber>latestCapturedBlock){
+			if (blockNumber>latestCapturedBlock){
 				latestCapturedBlock = blockNumber
 			}
 		}
@@ -419,8 +400,8 @@ async function getTokenBalancesInsidePool(provider, poolAddress, blockNumber){
 }
 
 async function getTokenName(tokenAddress){
-	if(tokenAddress == "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") return "ETH"
-	if(tokenAddress == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") return "ETH"
+	if (tokenAddress == "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") return "ETH"
+	if (tokenAddress == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") return "ETH"
 
 	// web3 call
 	/*
@@ -449,8 +430,6 @@ async function getTokenName(tokenAddress){
 }
 
 module.exports = {
-	getABI,
-    getCurvePools,
     saveTxEntry,
     findLastProcessedEvent,
     collection,
