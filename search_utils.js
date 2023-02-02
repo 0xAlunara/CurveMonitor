@@ -58,9 +58,9 @@ function search2ndName(userInput,searchJSON,res) {
 
 // main
 function search(userInput){
-    if (userInput == "0x") return []
+    if (userInput == "0x") return {}
     if (!userInput || userInput === "undefined") {
-        return []
+        return {}
     }
     if (typeof userInput == "number") userInput = userInput.toString()
     let searchJSON = JSON.parse(fs.readFileSync("search.json"))
@@ -89,7 +89,9 @@ function search(userInput){
         return acc
     }, {})
 
-    if (Object.keys(res).length === 0 && res.constructor === Object) res = []
+    if (Object.entries(res).length > 10) {
+        res = Object.fromEntries(Object.entries(res).slice(0, 10))
+    }
 
     return res
 }
@@ -99,3 +101,4 @@ module.exports = {
 	search2ndName,
 	search
 }
+
