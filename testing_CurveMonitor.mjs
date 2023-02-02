@@ -2500,8 +2500,8 @@ async function CurveMonitor(){
 }
 
 
-let mode = "local"
-//let mode = "https"
+//let mode = "local"
+let mode = "https"
 console.log(mode+"-mode")
 
 //await CurveMonitor()
