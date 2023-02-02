@@ -3,9 +3,8 @@ var require = createRequire(import.meta.url)
 
 const fs = require("fs")
 const https = require("https")
-const Web3 = require("web3")
-
 import { Server } from "socket.io"
+const Web3 = require("web3")
 
 const db = require("dirty")
 const DB = new db("ABIs_curveMonitor")
@@ -14,31 +13,32 @@ let tempTxHashStorage = []
 
 const apiKeys = require('./api_keys')
 
-const utils = require("./utils.js")
-const getABI = utils.getABI
-const saveTxEntry = utils.saveTxEntry
-const findLastProcessedEvent = utils.findLastProcessedEvent
-const collection = utils.collection
-const getCurvePools = utils.getCurvePools
-const getTokenBalancesInsidePool = utils.getTokenBalancesInsidePool
-const getTokenName = utils.getTokenName
+const generic_utils = require("./generic_utils.js")
+const getCurrentTime = generic_utils.getCurrentTime
+const getABI = generic_utils.getABI
+const getCurvePools = generic_utils.getCurvePools
+
+const storage_utils = require("./storage_utils.js")
+const saveTxEntry = storage_utils.saveTxEntry
+const findLastProcessedEvent = storage_utils.findLastProcessedEvent
+const collection = storage_utils.collection
+const getTokenName = storage_utils.getTokenName
 
 // utils for price-data
 const price_utils = require("./price_utils.js")
 const priceCollectionMain = price_utils.priceCollectionMain
 const savePriceEntry = price_utils.savePriceEntry
-const readPriceArray = price_utils.readPriceArray
 
 // utils for pool-balances
 const balances_utils = require("./balances_utils.js")
 const fetchBalanceOnce = balances_utils.fetchBalanceOnce
 const bootBalancesJSON = balances_utils.bootBalancesJSON
 const balancesCollectionMain = balances_utils.balancesCollectionMain
-const readBalancesArray = balances_utils.readBalancesArray
 
-// for the search bar on the landing page
-const search_utils = require("./search_utils.js")
-const search = search_utils.search
+// utils to create messages for the socket
+const socket_utils = require("./socket_utils")
+const http_SocketSetup = socket_utils.http_SocketSetup
+const https_SocketSetup = socket_utils.https_SocketSetup
 
 const abiDecoder = require("abi-decoder")
 let ABI_Registry_Exchange = [{"name":"TokenExchange","inputs":[{"name":"buyer","type":"address","indexed":true},{"name":"receiver","type":"address","indexed":true},{"name":"pool","type":"address","indexed":true},{"name":"token_sold","type":"address","indexed":false},{"name":"token_bought","type":"address","indexed":false},{"name":"amount_sold","type":"uint256","indexed":false},{"name":"amount_bought","type":"uint256","indexed":false}],"anonymous":false,"type":"event"},{"stateMutability":"nonpayable","type":"constructor","inputs":[{"name":"_address_provider","type":"address"},{"name":"_calculator","type":"address"}],"outputs":[]},{"stateMutability":"payable","type":"fallback"},{"stateMutability":"payable","type":"function","name":"exchange_with_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":1019563733},{"stateMutability":"payable","type":"function","name":"exchange_with_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_receiver","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"gas":1019563733},{"stateMutability":"payable","type":"function","name":"exchange","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":427142},{"stateMutability":"payable","type":"function","name":"exchange","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_receiver","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"gas":427142},{"stateMutability":"payable","type":"function","name":"exchange_multiple","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":313422},{"stateMutability":"payable","type":"function","name":"exchange_multiple","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_pools","type":"address[4]"}],"outputs":[{"name":"","type":"uint256"}],"gas":313422},{"stateMutability":"payable","type":"function","name":"exchange_multiple","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_pools","type":"address[4]"},{"name":"_receiver","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"gas":313422},{"stateMutability":"view","type":"function","name":"get_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"gas":3002213116},{"stateMutability":"view","type":"function","name":"get_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_exclude_pools","type":"address[8]"}],"outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"gas":3002213116},{"stateMutability":"view","type":"function","name":"get_exchange_amount","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":30596},{"stateMutability":"view","type":"function","name":"get_input_amount","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":34701},{"stateMutability":"view","type":"function","name":"get_exchange_amounts","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amounts","type":"uint256[100]"}],"outputs":[{"name":"","type":"uint256[100]"}],"gas":38286},{"stateMutability":"view","type":"function","name":"get_exchange_multiple_amount","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":21334},{"stateMutability":"view","type":"function","name":"get_exchange_multiple_amount","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_pools","type":"address[4]"}],"outputs":[{"name":"","type":"uint256"}],"gas":21334},{"stateMutability":"view","type":"function","name":"get_calculator","inputs":[{"name":"_pool","type":"address"}],"outputs":[{"name":"","type":"address"}],"gas":5215},{"stateMutability":"nonpayable","type":"function","name":"update_registry_address","inputs":[],"outputs":[{"name":"","type":"bool"}],"gas":115368},{"stateMutability":"nonpayable","type":"function","name":"set_calculator","inputs":[{"name":"_pool","type":"address"},{"name":"_calculator","type":"address"}],"outputs":[{"name":"","type":"bool"}],"gas":40695},{"stateMutability":"nonpayable","type":"function","name":"set_default_calculator","inputs":[{"name":"_calculator","type":"address"}],"outputs":[{"name":"","type":"bool"}],"gas":40459},{"stateMutability":"nonpayable","type":"function","name":"claim_balance","inputs":[{"name":"_token","type":"address"}],"outputs":[{"name":"","type":"bool"}],"gas":41823},{"stateMutability":"nonpayable","type":"function","name":"set_killed","inputs":[{"name":"_is_killed","type":"bool"}],"outputs":[{"name":"","type":"bool"}],"gas":40519},{"stateMutability":"view","type":"function","name":"registry","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":2970},{"stateMutability":"view","type":"function","name":"factory_registry","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":3000},{"stateMutability":"view","type":"function","name":"crypto_registry","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":3030},{"stateMutability":"view","type":"function","name":"default_calculator","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":3060},{"stateMutability":"view","type":"function","name":"is_killed","inputs":[],"outputs":[{"name":"","type":"bool"}],"gas":3090}]
@@ -71,19 +71,23 @@ console.clear()
 // set 2 = curve monitor
 let keySet = 2
 
-if(keySet==1){
-	var ws_KEY1 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY1, options))
-	var ws_KEY2 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY2, options))
-	var ws_KEY3 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY3, options))
-	var ws_KEY4 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY4, options))
-	var ws_KEY5 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY5, options))
+if (keySet==1){
+	var ws_KEY1 = setProvider(apiKeys.ws_KEY1)
+	var ws_KEY2 = setProvider(apiKeys.ws_KEY2)
+	var ws_KEY3 = setProvider(apiKeys.ws_KEY3)
+	var ws_KEY4 = setProvider(apiKeys.ws_KEY4)
+	var ws_KEY5 = setProvider(apiKeys.ws_KEY5)
 }
-if(keySet==2){
-	var ws_KEY1 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY6, options))
-	var ws_KEY2 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY7, options))
-	var ws_KEY3 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY8, options))
-	var ws_KEY4 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY9, options))
-	var ws_KEY5 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.ws_KEY10, options))
+if (keySet==2){
+	var ws_KEY1 = setProvider(apiKeys.ws_KEY6)
+	var ws_KEY2 = setProvider(apiKeys.ws_KEY7)
+	var ws_KEY3 = setProvider(apiKeys.ws_KEY8)
+	var ws_KEY4 = setProvider(apiKeys.ws_KEY9)
+	var ws_KEY5 = setProvider(apiKeys.ws_KEY10)
+}
+
+function setProvider(key){
+	return new Web3(new Web3.providers.WebsocketProvider(key, options))
 }
 
 const web3 = new Web3(new Web3.providers.WebsocketProvider(apiKeys.web3, options))
@@ -93,10 +97,6 @@ const web3HTTP = new Web3(new Web3.providers.HttpProvider(apiKeys.web3HTTP, opti
 const web3HTTP_llamarpc = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com/rpc/"+apiKeys.web3_llamarpc))
 
 //process.env["NTBA_FIX_319"] = 1
-
-function setWS(abi,address) {
-	return new web3.eth.Contract(abi, address)
-}
 
 function set(abi,address) {
 	return new web3HTTP.eth.Contract(abi, address)
@@ -147,220 +147,17 @@ for (let i = 0; i < maxRetries; i++) {
 
 // to deal with compute units / s
 let maxRetries = 12
-let minRetryDelay = 100
-let maxRetryDelay = 200
+let minRetryDelay = 200
+let maxRetryDelay = 400
 
 async function errHandler(error){
-	if(error.code !== 429) {
-		//console.log(error.message)
-		//console.log("err in errHandler", error)
+	if (error.code !== 429) {
+		console.log("errHandler",error)
 		return
 	}
-	console.log("err in errHandler", error)
-	console.log(error.code)
-	let retryDelay = Math.floor(Math.random() * (maxRetryDelay - minRetryDelay + 1) + minRetryDelay);
+	console.log("errHandler",error)
+	let retryDelay = Math.floor(Math.random() * (maxRetryDelay - minRetryDelay + 1) + minRetryDelay)
 	await new Promise(resolve => setTimeout(resolve, retryDelay))
-}
-
-async function http_SocketSetup() {
-
-	const io = new Server(2424, {
-		cors: {
-			origin: "http://localhost:2424",
-			methods: ["GET", "POST"]
-		}
-	})
-
-	await initSocketMessages(io)
-	await startLandingSocket(io)
-}
-
-async function https_SocketSetup() {
-
-	const httpsServer = https.createServer({
-		key: fs.readFileSync("/home/transactions/certs/privkey1.pem"),
-		cert: fs.readFileSync("/home/transactions/certs/cert1.pem"),
-		ca: fs.readFileSync("/home/transactions/certs/fullchain1.pem")
-	})
-
-	const io = new Server(httpsServer, {
-		cors: {
-			origin: "*",
-			methods: ["GET", "POST"]
-		},
-		requestCert: false,
-		rejectUnauthorized: false,
-	})
-	
-	await initSocketMessages(io)
-	await startLandingSocket(io)
-
-	httpsServer.listen(2053)
-}
-
-async function startLandingSocket(io){
-	const landing_socket = io.of("/" )
-	landing_socket.on("connection", async (socket) => {
-		console.log("landing_socket connected")
-		socket.on("search", (data) => {
-			try{
-				let res = search(data)
-				socket.emit("search_res", res)
-				console.log("user input:",data,"output:",res)
-			}catch(err){
-				console.log("err in search:",err.message)
-			}
-		})
-		socket.on("disconnect", () => {
-			console.log("client disconnected from landing page")
-		})
-	})
-}
-
-/**
- * on pool connect: 
- * send table data full (so one month)
- * send data cut for 1 month for: price chart (later balances and more)
- * then socket.on("timePeriod") => send data for: price chart (later balances and more)
- */ 
-
-async function initSocketMessages(io){
-	let pools = getCurvePools()
-	for (const poolAddress of pools) {
-		if(poolAddress!== whiteListedPoolAddress) continue
-		const pool_socket = io.of("/" + poolAddress)
-
-		pool_socket.on("connection", async (socket) => {
-			console.log(poolAddress, "socket connected")
-			socket.send("successfully connected to socket for " + poolAddress)
-
-			//sending the array of token names, used in the price chart switch (priceOf: [...] priceIn: [...] on the UI)
-			let curveJSON = JSON.parse(fs.readFileSync("CurvePoolData.json"))
-			let coin_names = curveJSON[poolAddress].coin_names
-			socket.emit("token names inside pool", coin_names)
-
-			// eg [ 'sUSD', 'DAI' ] => price of sUSD in DAI
-			let price_combination = [coin_names[coin_names.length-1],coin_names[0]]
-			if(poolAddress == "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD") price_combination = [ 'sUSD', 'USDC' ]
-
-			// needed for when a user changes coins in the price chart, to keep track in which 
-			let timeFrame = "month"
-
-			socket.on("priceOf", (priceOf) => {
-				price_combination[0] = priceOf
-				//socket.emit("search_res", res)
-			})
-
-			socket.on("priceIn", (priceIn) => {
-				price_combination[1] = priceIn
-				//socket.emit("search_res", res)
-			})
-
-			// messages on connect
-			sendTableData(socket,poolAddress)
-			sendPriceData(timeFrame,socket,poolAddress,price_combination)
-			sendBalanceData(timeFrame,socket,poolAddress)
-			// sendTVLData()
-			// sendVolumeData()
-
-			// next block is for when a user plays with the time-span tabulator
-			socket.on("day", () => {
-				timeFrame = "day"
-				sendPriceData("day",socket,poolAddress,price_combination)
-				// sendBalanceData()
-				// sendTVLData()
-				// sendVolumeData()
-			})
-			socket.on("week", () => {
-				timeFrame = "week"
-				sendPriceData("week",socket,poolAddress,price_combination)
-				// sendBalanceData()
-				// sendTVLData()
-				// sendVolumeData()
-			})
-			socket.on("month", () => {
-				timeFrame = "month"
-				sendPriceData("month",socket,poolAddress,price_combination)
-				// sendBalanceData()
-				// sendTVLData()
-				// sendVolumeData()
-			})
-
-			socket.on("disconnect", () => {
-				console.log("client disconnected")
-			})
-
-			// sending updates
-			emitter.on("Update Table-ALL" + poolAddress, async (data) => {
-				socket.emit("Update Table-ALL",data)
-			})
-			emitter.on("Update Table-MEV" + poolAddress, async (data) => {
-				socket.emit("Update Table-MEV",data)
-			})
-			emitter.on("Update Price-Chart" + poolAddress, async (unixtime) => {
-				socket.emit("Update Price-Chart",unixtime)
-			})
-			emitter.on("Update Balance-Chart" + poolAddress, async (data) => {
-				socket.emit("Update Balance-Chart",data)
-			})
-			emitter.on("Update TVL-Chart" + poolAddress, async (data) => {
-				socket.emit("Update TVL-Chart",data)
-			})
-			emitter.on("Update Volume-Chart" + poolAddress, async (data) => {
-				socket.emit("Update Volume-Chart",data)
-			})
-
-		})
-	}
-}
-
-function sendTableData(socket,poolAddress){
-	let currentTime = new Date().getTime() / 1000
-	var days = 31
-	let startingPoint = currentTime - (days * 24 * 60 * 60)
-
-	let dataALL = JSON.parse(fs.readFileSync("processedTxLog_ALL.json"))
-	let dataMEV = JSON.parse(fs.readFileSync("processedTxLog_MEV.json"))
-
-	let trimmedDataALL = dataALL[poolAddress].filter(entry => entry.unixtime >= startingPoint)
-	let trimmedDataMEV = dataMEV[poolAddress].filter(entry => entry.unixtime >= startingPoint)
-
-	socket.emit("table_all", trimmedDataALL)
-	socket.emit("table_mev", trimmedDataMEV)
-}
-
-// trimmes down the message for the frontend to ship only data of last 24h, week, or month
-function sendPriceData(timeFrame,socket,poolAddress,price_combination){
-	let currentTime = new Date().getTime() / 1000
-
-	if(timeFrame == "day") var days = 1
-	if(timeFrame == "week") var days = 7
-	if(timeFrame == "month") var days = 31
-
-	let startingPoint = currentTime - (days * 24 * 60 * 60)
-
-	let priceOf = price_combination[0]
-	let priceIn = price_combination[1]
-	let data = readPriceArray(poolAddress,priceOf,priceIn)
-
-	let trimmedData = data.filter(item => Object.keys(item)[0] >= startingPoint)
-	socket.emit("price_chart_combination", price_combination)
-	socket.emit("price_chart", trimmedData)
-}
-
-function sendBalanceData(timeFrame,socket,poolAddress){
-	let currentTime = new Date().getTime() / 1000
-
-	if(timeFrame == "day") var days = 1
-	if(timeFrame == "week") var days = 7
-	if(timeFrame == "month") var days = 31
-
-	let startingPoint = currentTime - (days * 24 * 60 * 60)
-
-	let data = readBalancesArray(poolAddress)
-
-	let trimmedData = data.filter(item => Object.keys(item)[0] >= startingPoint)
-	socket.emit("balances_chart", trimmedData)
 }
 
 // updating prices
@@ -480,15 +277,15 @@ function cleanTxHashStorage(){
         let now = Math.floor(new Date().getTime()/1000)
         let storedTime = tempTxHashStorage[i]["time"]
         let secondsPast = now-storedTime
-        if(secondsPast>=15){
+        if (secondsPast>=15){
             tempTxHashStorage.splice(i,1)
         }
     }
 }setInterval(cleanTxHashStorage,60000)
 
 async function send(message){
-	if(message=="abort") return
-	if(telegramMessage == true) {
+	if (message=="abort") return
+	if (telegramMessage) {
 		bot.sendMessage(GROUP_ID, message, {parse_mode : "HTML",disable_web_page_preview :"true"})
 	}
 }
@@ -550,7 +347,7 @@ async function convertToUSD(name,amount){
 async function buildMessageFromBuffer(i,forcePush){
 
 	let extraData = mevTxBuffer[i].extraData
-	if(mevTxBuffer[i]["type"]=="classicCurveMonitor"){
+	if (mevTxBuffer[i]["type"]=="classicCurveMonitor"){
 		var message = await buildClassicCurveMonitorMessage(
 			mevTxBuffer[i].data.blockNumber,
 			extraData.sold_amount,
@@ -568,7 +365,7 @@ async function buildMessageFromBuffer(i,forcePush){
 			forcePush
 		)
 	}
-	if(mevTxBuffer[i]["type"]=="Removal"){
+	if (mevTxBuffer[i]["type"]=="Removal"){
 		var message = await buildPostRemovalMessage(
 			mevTxBuffer[i].data.blockNumber,
 			extraData.coin_amount,
@@ -582,7 +379,7 @@ async function buildMessageFromBuffer(i,forcePush){
 			forcePush
 		)
 	}
-	if(mevTxBuffer[i]["type"]=="Deposit"){
+	if (mevTxBuffer[i]["type"]=="Deposit"){
 		var message = await buildPost_DepositMessage(
 			mevTxBuffer[i].data.blockNumber,
 			extraData.coinArray,
@@ -602,13 +399,12 @@ async function buildMessageFromBuffer(i,forcePush){
 // tx that had been stored as pot. sandwich-tx, but were in fact not part of sandwich, are getting processed as normal tx from here on out
 async function cleanMevTxBuffer(brand_new_block){
 	while(true){
-		if(mevTxBuffer.length==0) break
-		if(mevTxBuffer[0].blockNumber<brand_new_block){
-			if(!(tempTxHashStorage.find(tx => tx.txHash === mevTxBuffer[0].txHash))){
+		if (mevTxBuffer.length==0) break
+		if (mevTxBuffer[0].blockNumber<brand_new_block){
+			if (!(tempTxHashStorage.find(tx => tx.txHash === mevTxBuffer[0].txHash))){
 				let message = await buildMessageFromBuffer(0)
 				tempTxHashStorage.push({"txHash":mevTxBuffer[0].txHash,"time":Math.floor(new Date().getTime() / 1000)})
-				if(message=="abort")return
-				if(typeof message == "undefined") return
+				if (message == "abort" || !message) return
 				await send(message)
 			}
 			mevTxBuffer.shift()
@@ -642,10 +438,10 @@ let mevTxBuffer = []
 async function mevBuffer(blockNumber,position,txHash,type,extraData,isSwapUnderlying,data){
 
 	// first we need to solve multiple blocks getting jammed together:
-	if(mevTxBuffer.length!==0){
+	if (mevTxBuffer.length!==0){
 		for(var i = 0; i < mevTxBuffer.length; i++){
 			// going through the elements in mevTxBuffer, to find old entries and clear them
-			if(mevTxBuffer[i].data.blockNumber !== blockNumber){
+			if (mevTxBuffer[i].data.blockNumber !== blockNumber){
 				console.log("missmatching block found, cleaning")
 				let message = await buildMessageFromBuffer(i)
 				mevTxBuffer.splice(i,1)
@@ -655,11 +451,11 @@ async function mevBuffer(blockNumber,position,txHash,type,extraData,isSwapUnderl
 	}
 
 	for(const entry of mevTxBuffer) {
-		if(entry.txHash==txHash){
+		if (entry.txHash==txHash){
 			// if newPool and oldPool of the same tx are the same: remove doubling
 			let newPool = data.address
 			let oldPool = entry.data.address
-			if(newPool==oldPool) return // same txHash and same pool. Remaining edge case: multiple swaps in the same pool in the same transaction
+			if (newPool==oldPool) return // same txHash and same pool. Remaining edge case: multiple swaps in the same pool in the same transaction
 		}
 	}
 
@@ -667,20 +463,20 @@ async function mevBuffer(blockNumber,position,txHash,type,extraData,isSwapUnderl
 
 	let numUniqueTxHashes = countUniqueTxHashes(mevTxBuffer)
 
-	if(numUniqueTxHashes==1){
+	if (numUniqueTxHashes==1){
 		// can't make a sandwich with 1 slice of toast
 		return
-	} else if(numUniqueTxHashes==2){
+	} else if (numUniqueTxHashes==2){
 		// 2 slices of toast now, center peace missing, improvise
 		/*
 
 		let buyer0 = mevTxBuffer[0].extraData.buyer
 		let buyer1 = mevTxBuffer[1].extraData.buyer
 
-		if(buyer0!==buyer1)return
+		if (buyer0!==buyer1)return
 
 		// filtering out the case of one bot doing 2 more or less unrelated arbs 
-		if(mevTxBuffer[1].extraData.sold_amount/mevTxBuffer[0].extraData.bought_amount >= 2) return 
+		if (mevTxBuffer[1].extraData.sold_amount/mevTxBuffer[0].extraData.bought_amount >= 2) return 
 
 		mevTxBuffer.sort(function(a, b) {
 			return a.position - b.position
@@ -689,7 +485,7 @@ async function mevBuffer(blockNumber,position,txHash,type,extraData,isSwapUnderl
 		await processFullSandwich(mevTxBuffer)
 		*/
 		return 
-	} else if(numUniqueTxHashes==3){
+	} else if (numUniqueTxHashes==3){
 		// fully scouted sandwich
 		mevTxBuffer.sort(function(a, b) {
 			return a.position - b.position
@@ -698,7 +494,7 @@ async function mevBuffer(blockNumber,position,txHash,type,extraData,isSwapUnderl
 		let buyer0 = mevTxBuffer[0].extraData.buyer
 		let buyer2 = mevTxBuffer[2].extraData.buyer
 
-		if(buyer0!==buyer2)return
+		if (buyer0!==buyer2)return
 
 		await processFullSandwich(mevTxBuffer)
 		return
@@ -767,12 +563,12 @@ async function get_lp_token(poolAddress){
 // using the metaregistry to get the array which holds the tokenAddresses of the Tokens of the Pool
 async function get_coins(poolAddress){
 	let curveJSON = JSON.parse(fs.readFileSync("CurvePoolData.json"))
-	if(typeof curveJSON[poolAddress] !== "undefined"){
+	if (typeof curveJSON[poolAddress] !== "undefined"){
 		return curveJSON[poolAddress].coins
 	} else {
 		let pools = getCurvePools()
 		for(var pool in pools){
-			if((pools[pool]).toLowerCase() == poolAddress){
+			if ((pools[pool]).toLowerCase() == poolAddress){
 				return curveJSON[pools[pool]].coins
 			}
 		}
@@ -812,15 +608,15 @@ async function processFullSandwich(mevTxBuffer){
 
 	let victimData = mevTxBuffer[1]
 
-	if(mevTxBuffer.length==2){
+	if (mevTxBuffer.length==2){
 
 		// filtering a case of un-related swaps. The token that was bought, has to be the same Token that gets sold afterwards.
-		if(mevTxBuffer[0].extraData.token_bought_name!==mevTxBuffer[1].extraData.token_sold_name) return
+		if (mevTxBuffer[0].extraData.token_bought_name!==mevTxBuffer[1].extraData.token_sold_name) return
 
 		var messagePosition0 = await buildMessageFromBuffer(0,forcePush)
-		if(messagePosition0 == "abort") return
+		if (messagePosition0 == "abort") return
 		var messagePosition1 = await buildMessageFromBuffer(1,forcePush)
-		if(messagePosition1 == "abort") return
+		if (messagePosition1 == "abort") return
 
 		for(var i = 0; i < mevTxBuffer.length; i++){
 			tempTxHashStorage.push({"txHash":mevTxBuffer[i].txHash,"time":Math.floor(new Date().getTime() / 1000)})
@@ -831,7 +627,7 @@ async function processFullSandwich(mevTxBuffer){
 		let victimTx = await getTx(victimTxHash)
 		let to = victimTx.to
 		let unkownTo
-		if(to=="0x1111111254fb6c44bAC0beD2854e76F90643097d"){
+		if (to=="0x1111111254fb6c44bAC0beD2854e76F90643097d"){
 			unkownTo = "  (1Inch-Swap)"
 		}else{
 			unkownTo = "  (Most likely not Curve-User)"
@@ -839,34 +635,34 @@ async function processFullSandwich(mevTxBuffer){
 		console.log("victimTx",victimTx)
 		let txHashURL = "https://etherscan.io/tx/"+victimTxHash
 		var messageVictim = "🥪🥪🥪 Victim: " + hyperlink(txHashURL,"Tx Hash") + unkownTo
-	}else if(mevTxBuffer.length==3){
+	}else if (mevTxBuffer.length==3){
 
 		// filtering the another case of un-related swaps
-		if(mevTxBuffer[0].extraData.token_bought_name!==mevTxBuffer[2].extraData.token_sold_name)return
+		if (mevTxBuffer[0].extraData.token_bought_name!==mevTxBuffer[2].extraData.token_sold_name)return
 
 		var messagePosition0 = await buildMessageFromBuffer(0,forcePush)
-		if(messagePosition0 == "abort") return
+		if (messagePosition0 == "abort") return
 
 		var messageVictim = await buildMessageFromBuffer(1,forcePush)
-		if(messageVictim == "abort") return
+		if (messageVictim == "abort") return
 
 		var messagePosition1 = await buildMessageFromBuffer(2,forcePush)
-		if(messagePosition1 == "abort") return
+		if (messagePosition1 == "abort") return
 
 		// updating the txHashStorage, so messages don't get send multiple time
 		for(var i = 0; i < mevTxBuffer.length; i++){
 			tempTxHashStorage.push({"txHash":mevTxBuffer[i].txHash,"time":Math.floor(new Date().getTime() / 1000)})
 		}
 
-	}else if(mevTxBuffer.length==4){
+	}else if (mevTxBuffer.length==4){
 		
 		// filtering the another case of un-related swaps
-		if(mevTxBuffer[0].extraData.token_bought_name!==mevTxBuffer[3].extraData.token_sold_name)return
+		if (mevTxBuffer[0].extraData.token_bought_name!==mevTxBuffer[3].extraData.token_sold_name)return
 
 		var messagePosition0 = await buildMessageFromBuffer(0,forcePush)
 		let pool0 = mevTxBuffer[0].data.address
 		let pool1 = mevTxBuffer[1].data.address
-		if(pool0==pool1){
+		if (pool0==pool1){
 			var messageVictim = await buildMessageFromBuffer(1,forcePush)
 			victimData = mevTxBuffer[1]
 		}else{
@@ -884,13 +680,13 @@ async function processFullSandwich(mevTxBuffer){
 
 	console.log("\nvictimData",victimData,"\n")
 
-	if(victimData.data.returnValues.buyer=="0x55B916Ce078eA594c10a874ba67eCc3d62e29822"){
+	if (victimData.data.returnValues.buyer=="0x55B916Ce078eA594c10a874ba67eCc3d62e29822"){
 
 		// exchange_underlying
 
 		let params_decodedTx
 		let addressPath
-		if(victimData.data.hacked_data !== undefined){
+		if (victimData.data.hacked_data !== undefined){
 			params_decodedTx = victimData.data.hacked_data[0]
 			addressPath = params_decodedTx.value
 		}
@@ -902,7 +698,7 @@ async function processFullSandwich(mevTxBuffer){
 		let j
 		let boughtAddress = victimData.extraData.boughtAddress
 
-		if(sold_id==0){
+		if (sold_id==0){
 			i = 0
 			console.log("A")
 
@@ -913,7 +709,7 @@ async function processFullSandwich(mevTxBuffer){
 			let coinOut_ID_within_metapool = await findCoinId(basepoolAddress,boughtAddress)
 
 			j = coinOut_ID_within_metapool + 1
-		}else if(bought_id == 0){
+		}else if (bought_id == 0){
 			j = 0
 			console.log("B")
 
@@ -952,11 +748,11 @@ async function processFullSandwich(mevTxBuffer){
 		let i
 		let j
 
-		if(sold_id==0){
+		if (sold_id==0){
 			i = 0
 			let coinOut_ID_within_metapool = await findCoinId(basepoolAddress,boughtAddress)
 			j = coinOut_ID_within_metapool + 1
-		}else if(bought_id == 0){
+		}else if (bought_id == 0){
 			j = 0
 			let coinOut_ID_within_metapool = await findCoinId(basepoolAddress,boughtAddress)
 			i = coinOut_ID_within_metapool + 1
@@ -969,7 +765,7 @@ async function processFullSandwich(mevTxBuffer){
 		let dy_underlying = await get_dy_underlying(poolAddress,blockNumber,i,j,dx)
 		var peacefulAmountOut = await getCleanedTokenAmount(boughtAddress,dy_underlying)
 	
-	} else if(victimData.type == "Deposit"){
+	} else if (victimData.type == "Deposit"){
 		// Case: Added Liquidity
 
 		let poolAddress = victimData.data.address
@@ -989,7 +785,7 @@ async function processFullSandwich(mevTxBuffer){
 		var addOn2 = "Loss Victim: " + DELTA_VICTIM + " " + name
 		console.log("addOn2",DELTA_VICTIM,name)
 
-	} else if(victimData.type == "Removal"){
+	} else if (victimData.type == "Removal"){
 		// Case: Removed Liquidity
 
 		let blockNumber = victimData.blockNumber
@@ -1015,7 +811,7 @@ async function processFullSandwich(mevTxBuffer){
 		var addOn2 = "Loss Victim: " + DELTA_VICTIM + " " + name
 		//
 
-	} else if(typeof victimData.isSwapUnderlying == 'undefined'){
+	} else if (typeof victimData.isSwapUnderlying == 'undefined'){
 		// Not Underlying
 
 		let poolAddress = victimData.extraData.poolAddress
@@ -1031,7 +827,7 @@ async function processFullSandwich(mevTxBuffer){
 	}
 
 	if (mevTxBuffer.length==2){
-		if((mevTxBuffer[0]["type"]=="classicCurveMonitor")&&(mevTxBuffer[1]["type"]=="classicCurveMonitor")){
+		if ((mevTxBuffer[0]["type"]=="classicCurveMonitor")&&(mevTxBuffer[1]["type"]=="classicCurveMonitor")){
 			//Delta MEV Bot
 			let amountIn = mevTxBuffer[0].extraData.sold_amount
 			let amountOut = mevTxBuffer[1].extraData.bought_amount
@@ -1042,7 +838,7 @@ async function processFullSandwich(mevTxBuffer){
 			var addOn2 = ""
 		}
 	} else if (mevTxBuffer.length==3){
-		if((mevTxBuffer[0]["type"]=="classicCurveMonitor")&&(mevTxBuffer[2]["type"]=="classicCurveMonitor")){
+		if ((mevTxBuffer[0]["type"]=="classicCurveMonitor")&&(mevTxBuffer[2]["type"]=="classicCurveMonitor")){
 			//Delta MEV Bot
 			let amountIn = mevTxBuffer[0].extraData.sold_amount
 			let amountOut = mevTxBuffer[2].extraData.bought_amount
@@ -1059,7 +855,7 @@ async function processFullSandwich(mevTxBuffer){
 			}
 		}
 	} else if (mevTxBuffer.length==4){
-		if((mevTxBuffer[0]["type"]=="classicCurveMonitor")&&(mevTxBuffer[3]["type"]=="classicCurveMonitor")){
+		if ((mevTxBuffer[0]["type"]=="classicCurveMonitor")&&(mevTxBuffer[3]["type"]=="classicCurveMonitor")){
 			//Delta MEV Bot
 			let amountIn = mevTxBuffer[0].extraData.sold_amount
 			let amountOut = mevTxBuffer[3].extraData.bought_amount
@@ -1077,7 +873,7 @@ async function processFullSandwich(mevTxBuffer){
 		}
 	}
 
-	if(writeToFile == true){
+	if (writeToFile){
 		let unixtime = (await web3HTTP.eth.getBlock(messagePosition0[1].blockNumber)).timestamp
 		let MEV_entry = {
 			"type":"sandwich",
@@ -1094,7 +890,7 @@ async function processFullSandwich(mevTxBuffer){
 		saveTxEntry(poolAddress, MEV_entry)
 	}
 
-	if(telegramMessage == true){
+	if (telegramMessage){
 		await send(messagePosition0 + "\n\n" + messageVictim + "\n\n" + messagePosition1 + "\n\n" + addOn + "\n" + addOn2)
 	}
 	mevTxBuffer.length = 0
@@ -1102,11 +898,11 @@ async function processFullSandwich(mevTxBuffer){
 
 var prevTxHash
 async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_amount,token_sold_name,soldAddress,token_bought_name,boughtAddress,poolAddress,txHash,buyer,to,position,poolName,forcePush){
-	if(txHash==prevTxHash)return
+	if (txHash==prevTxHash)return
 	prevTxHash = txHash
 	let holderFee = "-"
 
-	if((typeof poolName == undefined)||(poolName=="undefined")){
+	if ((typeof poolName == undefined)||(poolName=="undefined")){
 		console.log("pool name fetch failed for",txHash)
 		poolName = "Pool"
 	}
@@ -1114,7 +910,7 @@ async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_am
 	let dollarAmount = "-"
 	dollarAmount = await convertToUSD(token_sold_name,sold_amount)
 
-	if(typeof dollarAmount == 'undefined'){
+	if (typeof dollarAmount == 'undefined'){
 		dollarAmount = await convertToUSD(token_bought_name,bought_amount)
 	}
 
@@ -1124,19 +920,19 @@ async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_am
 	}
 
 	// filter small amounts
-	if(forcePush!== true){
-		if(dollarAmount<dollar_filter) {
+	if (!forcePush){
+		if (dollarAmount<dollar_filter) {
 			console.log(formatForPrint(dollarAmount)+"$")
 			return "abort"
 		}
-		if(typeof dollarAmount == "undefined"){
+		if (typeof dollarAmount == "undefined"){
 			console.log("abort, undefined dollarAmount sold",sold_amount,token_sold_name,"bought",bought_amount,token_bought_name,poolAddress)
 			return "abort"
 		}
 	}
 
 	// adding tag
-	if((to.substring(2,9))=="0000000") {
+	if ((to.substring(2,9))=="0000000") {
 		var buyers_tag = "MEV Bot"
 	} else if (buyer == "0x561f551f0C65A14Df1966E5d38C19D03b03263F5"){
 		var buyers_tag = "Notorious USDT-Trader"
@@ -1145,7 +941,7 @@ async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_am
 	}
 	
 	// adding position
-	if(position<8){
+	if (position<8){
 		var position_indicator = "<i>block " + blockNumber + "</i>" + " | #" + position
 	} else {
 		var position_indicator = ""
@@ -1153,7 +949,7 @@ async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_am
 
 	// adding fee
 	holderFee = (dollarAmount/100)*0.04
-	if(poolAddress == "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7"){
+	if (poolAddress == "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7"){
 		holderFee /=4
 	}	
 
@@ -1166,7 +962,7 @@ async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_am
 	let txHashURL = "https://etherscan.io/tx/"+txHash
 	let buyerURL = "https://etherscan.io/address/"+buyer
 
-	if(dollarAmount=="NaN"){
+	if (dollarAmount=="NaN"){
 		var dollarAddon = ""
 	}else{
 		var dollarAddon = " ($" + dollarAmount + ")"
@@ -1177,7 +973,7 @@ async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_am
 
 	console.log("sold", sold_amount, token_sold_name, "bought", bought_amount, token_bought_name)
 
-	if(writeToFile == true) {
+	if (writeToFile) {
 		let unixtime = (await web3HTTP.eth.getBlock(blockNumber)).timestamp
 		let entry = {
 			"type":"swap",
@@ -1208,7 +1004,7 @@ async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_am
 		return [poolAddress, entry]
 	}
 	
-	if(telegramMessage == true){
+	if (telegramMessage){
 		let message = "🚀Swap " + sold_amount + hyperlink(tokenInURL,token_sold_name) + " to " + bought_amount + hyperlink(tokenOutURL,token_bought_name) + dollarAddon
 			+ "\n" + "LP & veCRV Holder Fee: $" + holderFee + "💰"
 			+ "\n" + "Links:" +  hyperlink(poolURL,poolName) + " |" + hyperlink(txHashURL,"Tx Hash") + " |" + hyperlink(buyerURL,buyers_tag) + " 🦙🦙🦙"
@@ -1225,12 +1021,12 @@ async function buildPostRemovalMessage(blockNumber,coin_amount,token_removed_nam
 	if (isNaN(dollarAmount)) return "abort"
 
 	// filter small amounts
-	if(forcePush!== true){
-		if(dollarAmount<dollar_filter) {
+	if (!forcePush){
+		if (dollarAmount<dollar_filter) {
 			console.log(formatForPrint(dollarAmount)+"$")
 			return "abort"
 		}
-		if(typeof dollarAmount == "undefined"){
+		if (typeof dollarAmount == "undefined"){
 			console.log("abort, undefined dollarAmount sold",coin_amount,token_removed_name,poolAddress)
 			return "abort"
 		}
@@ -1240,7 +1036,7 @@ async function buildPostRemovalMessage(blockNumber,coin_amount,token_removed_nam
 	dollarAmount = (Number(Number(dollarAmount).toFixed(0))).toLocaleString()
 
 	// adding tag
-	if((to.substring(2,9))=="0000000") {
+	if ((to.substring(2,9))=="0000000") {
 		var buyers_tag = "MEV Bot"
 	} else if (agentAddress == "0x561f551f0C65A14Df1966E5d38C19D03b03263F5"){
 		var buyers_tag = "Notorious USDT-Trader"
@@ -1256,7 +1052,7 @@ async function buildPostRemovalMessage(blockNumber,coin_amount,token_removed_nam
 	let buyerURL = "https://etherscan.io/address/"+agentAddress
 
 	// adding position
-	if(position<8){
+	if (position<8){
 		var position_indicator = "<i>block " + blockNumber + "</i>" + " | #" + position
 	} else {
 		var position_indicator = ""
@@ -1264,14 +1060,14 @@ async function buildPostRemovalMessage(blockNumber,coin_amount,token_removed_nam
 
 	let poolName = await buildPoolName(poolAddress)
 
-	if((typeof poolName == undefined)||(poolName=="undefined")){
+	if ((typeof poolName == undefined)||(poolName=="undefined")){
 		console.log("pool name fetch failed for",txHash)
 		poolName = "Pool"
 	}
 
 	console.log("removed",coin_amount,token_removed_name,"from",poolName,txHash)
 
-	if(dollarAmount=="NaN"){
+	if (dollarAmount=="NaN"){
 		var dollarAddon = ""
 	}else{
 		var dollarAddon = " ($" + dollarAmount + ")"
@@ -1284,7 +1080,7 @@ async function buildPostRemovalMessage(blockNumber,coin_amount,token_removed_nam
 		"valueUSD":parseFloat(dollarAmount.replaceAll(',', ''))
 	})
 	
-	if(writeToFile == true) {
+	if (writeToFile) {
 		let unixtime = (await web3HTTP.eth.getBlock(blockNumber)).timestamp
 		let entry = {
 			"type":"remove",
@@ -1307,7 +1103,7 @@ async function buildPostRemovalMessage(blockNumber,coin_amount,token_removed_nam
 		return [poolAddress, entry]
 	}
 
-	if(telegramMessage == true){
+	if (telegramMessage){
 		let message = "💰Removed " + coin_amount + hyperlink(tokenURL,token_removed_name) + dollarAddon
 			+ "\n" + "Links:" +  hyperlink(poolURL,poolName) + " |" + hyperlink(txHashURL,"Tx Hash") + " |" + hyperlink(buyerURL,buyers_tag) + " 🦙🦙🦙"
 			+ "\n" + position_indicator
@@ -1324,11 +1120,11 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 		let token_deposited_name = coin.token_deposited_name
 		let coin_amount = coin.coin_amount
 
-		if(Number(coin_amount)==0) continue
+		if (Number(coin_amount)==0) continue
 
 		let dollarAmount
 		dollarAmount = await convertToUSD(token_deposited_name,coin_amount)
-		if(typeof dollarAmount == "undefined"){
+		if (typeof dollarAmount == "undefined"){
 			dollarAmount = coin_amount
 			console.log("no dollar value known for", token_deposited_name, "(undefined)")
 			return "abort"
@@ -1353,12 +1149,12 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 	}
 
 	// filter small amounts
-	if(forcePush!== true){
-		if(dollarAmountTotal<dollar_filter) {
+	if (!forcePush){
+		if (dollarAmountTotal<dollar_filter) {
 			console.log(formatForPrint(dollarAmountTotal)+"$")
 			return "abort"
 		}
-		if(typeof dollarAmountTotal == "undefined"){
+		if (typeof dollarAmountTotal == "undefined"){
 			console.log("abort, undefined dollarAmount sold",coinArray,poolAddress)
 			return "abort"
 		}
@@ -1369,7 +1165,7 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 	
 
 	// adding tag
-	if((to.substring(2,9))=="0000000") {
+	if ((to.substring(2,9))=="0000000") {
 		var buyers_tag = "MEV Bot"
 	} else if (agentAddress == "0x561f551f0C65A14Df1966E5d38C19D03b03263F5"){
 		var buyers_tag = "Notorious USDT-Trader"
@@ -1378,7 +1174,7 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 	}
 	
 	// adding position
-	if(position<8){
+	if (position<8){
 		var position_indicator = "<i>block " + blockNumber + "</i>" + " | #" + position
 	} else {
 		var position_indicator = ""
@@ -1390,12 +1186,12 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 
 	let poolName = await buildPoolName(poolAddress)
 
-	if((typeof poolName == undefined)||(poolName=="undefined")){
+	if ((typeof poolName == undefined)||(poolName=="undefined")){
 		console.log("pool name fetch failed for",txHash)
 		poolName = "Pool"
 	}
 
-	if((dollarAmount==0)||(dollarAmount==NaN)) {
+	if ((dollarAmount==0)||(dollarAmount==NaN)) {
 		dollarAmount = "-"
 		var dollarAddon = "" 
 	} else {
@@ -1408,7 +1204,7 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 
 	console.log("deposited",dollarAmount+"$ into",poolName,"txHash",txHash)
 
-	if(writeToFile == true) {
+	if (writeToFile) {
 		let unixtime = (await web3HTTP.eth.getBlock(blockNumber)).timestamp
 		let entry = {
 			"type":"deposit",
@@ -1431,7 +1227,7 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 		return [poolAddress, entry]
 	}
 
-	if(telegramMessage == true){
+	if (telegramMessage){
 		let message = "💰Deposit " + depositedTokenString + dollarAddon
 			//+ "\n" + "LP & veCRV Holder Fee: " + holderFee
 			+ "\n" + "Links:" +  hyperlink(poolURL,poolName) + " |" + hyperlink(txHashURL,"Tx Hash") + " |" + hyperlink(buyerURL,buyers_tag) + " 🦙🦙🦙"
@@ -1443,19 +1239,19 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 
 async function post_classicCurveMonitor(blockNumber,sold_amount,bought_amount,token_sold_name,soldAddress,token_bought_name,boughtAddress,poolAddress,txHash,buyer,to,position,poolName){
 	let message = await buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_amount,token_sold_name,soldAddress,token_bought_name,boughtAddress,poolAddress,txHash,buyer,to,position,poolName)
-	if((typeof message == 'undefined')||(message == 'abort')) return
+	if (!message || message == 'abort') return
 	await send(message)
 }
 
 async function post_Removal(blockNumber,coin_amount,token_removed_name,removedAddress,poolAddress,txHash,agentAddress,to,position){
 	let message = await buildPostRemovalMessage(blockNumber,coin_amount,token_removed_name,removedAddress,poolAddress,txHash,agentAddress,to,position)
-	if((typeof message == 'undefined')||(message == 'abort')) return
+	if (!message || message == 'abort') return
 	await send(message)
 }
 
 async function post_Deposit(blockNumber,coinArray,originalPoolAddress,feeArray,poolAddress,txHash,agentAddress,to,position){
 	let message = await buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddress,feeArray,poolAddress,txHash,agentAddress,to,position)
-	if((typeof message == 'undefined')||(message == 'abort')) return
+	if (!message || message == 'abort') return
 	await send(message)
 }
 
@@ -1475,9 +1271,9 @@ let HACKED_ABI_CALC_TOKEN_AMOUNT = [{"name":"calc_token_amount","outputs":[{"typ
 let CurvePools = getCurvePools()
 
 async function buildPoolName(poolAddress){
-	if(poolAddress == "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7") return "3Pool"
-	if(poolAddress == "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD") return "sUSD v2 Swap"
-	if(poolAddress == "0xD51a44d3FaE010294C616388b506AcdA1bfAAE46") return "tricrypto2"
+	if (poolAddress == "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7") return "3Pool"
+	if (poolAddress == "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD") return "sUSD v2 Swap"
+	if (poolAddress == "0xD51a44d3FaE010294C616388b506AcdA1bfAAE46") return "tricrypto2"
 	var poolName = ""
 	let id = 0
 	while(true){
@@ -1489,7 +1285,7 @@ async function buildPoolName(poolAddress){
 		poolName+=tokenName+"/"
 	}
 	poolName = poolName.slice(0, -1)
-	if(poolName.length>=18) poolName = "Pool"
+	if (poolName.length>=18) poolName = "Pool"
 	return poolName
 }
 
@@ -1497,69 +1293,97 @@ async function buildPoolName(poolAddress){
 async function activateRealTimeMonitoring(singlePoolModus,whiteListedPoolAddress){
 	console.log("Real-Time-Monitoring active\n")
 	for(const poolAddress of CurvePools) {
-		if(singlePoolModus == true){
+		if (singlePoolModus){
 			// for mvp modus, we only listen to events on a single pool (susd -> whiteListedPoolAddress)
-			if(poolAddress.toLocaleLowerCase() !== whiteListedPoolAddress.toLocaleLowerCase()) continue
+			if (poolAddress.toLocaleLowerCase() !== whiteListedPoolAddress.toLocaleLowerCase()) continue
 		}
-		if(poolAddress == "0x675993fB30a2d58Cd4D29d15F89B4Be9ca8765AE") console.log("init complete")
+		if (poolAddress == "0x675993fB30a2d58Cd4D29d15F89B4Be9ca8765AE") console.log("init complete")
 
 		//RemoveLiquidity
 		let CONTRACT_RemoveLiquidity = new ws_KEY1.eth.Contract(HACKED_ABI_RemoveLiquidity, poolAddress)
 		CONTRACT_RemoveLiquidity.events.RemoveLiquidity()
 		.on("data", async (data) => {
-			//if(tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
+			console.log(getCurrentTime(),"event at CONTRACT_RemoveLiquidity")
+			//if (tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
 			await processRemoveLiquidity (data,poolAddress)
+		})
+		.on("error", (error) => {
+			console.error("Error in RemoveLiquidity event: ", error)
 		})
 
 		//RemoveLiquidityOne
 		let CONTRACT_RemoveLiquidityOne = new ws_KEY2.eth.Contract(HACKED_ABI_RemoveLiquidityOne, poolAddress)
 		CONTRACT_RemoveLiquidityOne.events.RemoveLiquidityOne()
 		.on("data", async (data) => {
-			//if(tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
+			console.log(getCurrentTime(),"event at CONTRACT_RemoveLiquidityOne")
+			//if (tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
 			await processRemoveLiquidityOne (data,poolAddress)
+		})
+		.on("error", (error) => {
+			console.error("Error in RemoveLiquidityOne event: ", error)
 		})
 
 		//RemoveLiquidityImbalance
 		let CONTRACT_RemoveLiquidityImbalance = new ws_KEY3.eth.Contract(HACKED_ABI_RemoveLiquidityImbalance, poolAddress)
 		CONTRACT_RemoveLiquidityImbalance.events.RemoveLiquidityImbalance()
 		.on("data", async (data) => {
-			//if(tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
+			console.log(getCurrentTime(),"event at CONTRACT_RemoveLiquidityImbalance")
+			//if (tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
 			await processRemoveLiquidityImbalance (data,poolAddress)
+		})
+		.on("error", (error) => {
+			console.error("Error in RemoveLiquidityImbalance event: ", error)
 		})
 
 		// AddLiquidity
 		let CONTRACT_AddLiquidity = new ws_KEY4.eth.Contract(HACKED_ABI_AddLiquidity, poolAddress)
 		CONTRACT_AddLiquidity.events.AddLiquidity()
 		.on("data", async (data) => {
+			console.log(getCurrentTime(),"event at CONTRACT_AddLiquidity")
 			await new Promise(resolve => setTimeout(resolve, 5000))
 			await processAddLiquidity (data,poolAddress)
+		})
+		.on("error", (error) => {
+			console.error("Error in AddLiquidity event: ", error)
 		})
 
 		// TokenExchange
 		let CONTRACT_TokenExchange = new ws_KEY5.eth.Contract(HACKED_ABI_TokenExchange, poolAddress)
 		CONTRACT_TokenExchange.events.TokenExchange()
 		.on("data", async (data) => {
-			//if(tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
-			console.log("\n new TokenExchange spotted with the following data:\n",data,"\n")
+			console.log(getCurrentTime(),"event at CONTRACT_TokenExchange")
+			//if (tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
+			//console.log("\n new TokenExchange spotted with the following data:\n",data,"\n")
 			await processTokenExchange (data,poolAddress)
+		})
+		.on("error", (error) => {
+			console.error("Error in TokenExchange event: ", error)
 		})
 
 		// TokenExchange2
 		let CONTRACT_TokenExchange2 = new ws_KEY1.eth.Contract(HACKED_ABI_TokenExchange2, poolAddress)
 		CONTRACT_TokenExchange2.events.TokenExchange()
 		.on("data", async (data) => {
-			//if(tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
-			console.log("\n new TokenExchange spotted with the following data:\n",data,"\n")
+			console.log(getCurrentTime(),"event at CONTRACT_TokenExchange2")
+			//if (tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
+			//console.log("\n new TokenExchange spotted with the following data:\n",data,"\n")
 			await processTokenExchange (data,poolAddress)
+		})
+		.on("error", (error) => {
+			console.error("Error in TokenExchange2 event: ", error)
 		})
 
 		// TokenExchangeUnderlying
 		let CONTRACT_Exchange_Underlying = new ws_KEY2.eth.Contract(HACKED_ABI_Exchange_Underlying, poolAddress)
 		CONTRACT_Exchange_Underlying.events.TokenExchangeUnderlying()
 		.on("data", async (data) => {
-			//if(tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
-			console.log("\n new TokenExchangeUnderlying spotted with the following data:\n",data,"\n")
+			console.log(getCurrentTime(),"event at CONTRACT_Exchange_Underlying")
+			//if (tempTxHashStorage.find(tx => tx.txHash === data.transactionHash)) return
+			//console.log("\n new TokenExchangeUnderlying spotted with the following data:\n",data,"\n")
 			await processTokenExchange (data,poolAddress,"TokenExchangeUnderlying")
+		})
+		.on("error", (error) => {
+			console.error("Error in TokenExchangeUnderlying event: ", error)
 		})
 
 	}
@@ -1575,14 +1399,14 @@ async function getTokenAddress(poolAddress, id){
 async function findCoinId(poolAddress,tokenAddress){
 	for(var i = 0; i < 100; i++){
 		let returnedAddress = await getTokenAddress(poolAddress, i)
-		if(returnedAddress.toUpperCase()==tokenAddress.toUpperCase()) return i
-		if(returnedAddress=="0x0000000000000000000000000000000000000000") return 0 // metapool coin case a la LUSD/3Pool
+		if (returnedAddress.toUpperCase()==tokenAddress.toUpperCase()) return i
+		if (returnedAddress=="0x0000000000000000000000000000000000000000") return 0 // metapool coin case a la LUSD/3Pool
 	}
 }
 	
 async function getTokenDecimals(tokenAddress){
-	if(tokenAddress == "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") return 18
-	if(tokenAddress == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") return 18
+	if (tokenAddress == "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") return 18
+	if (tokenAddress == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") return 18
 
 	// web3 call
 	/*
@@ -1619,7 +1443,7 @@ async function getCleanedTokenAmount(address,amount){
 
 function formatForPrint(someNumber){
 	someNumber = Math.abs(someNumber)
-	if(someNumber>100) {
+	if (someNumber>100) {
 		someNumber = (Number(Number(someNumber).toFixed(0))).toLocaleString()
 	} else if (someNumber>5) {
 		someNumber = (Number(Number(someNumber).toFixed(2))).toLocaleString()
@@ -1660,19 +1484,25 @@ async function getAddLiquidityAmounts(CONTRACT,block){
 }
 
 async function getTokenTransfers(tokenAddress,block){
+	console.log("called getTokenTransfers with tokenAddress:",tokenAddress,"block",block)
 	let ABI_TRANSFER_EVENT = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_from","type":"address"},{"indexed":true,"internalType":"address","name":"_to","type":"address"},{"indexed":false,"internalType":"uint256","name":"_value","type":"uint256"}],"name":"Transfer","type":"event"}]
 	let CONTRACT = set(ABI_TRANSFER_EVENT, tokenAddress)
 	let TransferAmounts = []
-	await CONTRACT.getPastEvents("Transfer", { fromBlock: block, toBlock: block }, async function (errors, events) {
-		if (errors) {
-			console.log(errors)
-		} else {
-			for(const event of events) {
-				let token_amounts = event.returnValues._value
-				TransferAmounts.push(Number(token_amounts))
-			}
-		}
-	})
+	for (let i = 0; i < maxRetries; i++) {
+		try {
+			await CONTRACT.getPastEvents("Transfer", { fromBlock: block, toBlock: block }, async function (errors, events) {
+				if (errors) {
+					console.log("err at getTokenTransfers",errors)
+				} else {
+					for(const event of events) {
+						let token_amounts = event.returnValues._value
+						TransferAmounts.push(Number(token_amounts))
+					}
+				}
+			})
+			break
+		} catch(error){await errHandler(error)}
+	}
 	return TransferAmounts
 }
 
@@ -1681,17 +1511,17 @@ async function getTokenAddressFromStake(poolAddress,blockNumber,coin_amount){
 	let ethSpotter = 0
 	while(true){
 		var tokenAddress = await getTokenAddress(poolAddress, id)
-		if(tokenAddress=="0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") ethSpotter = 1
-		if(tokenAddress == "0x0000000000000000000000000000000000000000") break
+		if (tokenAddress=="0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") ethSpotter = 1
+		if (tokenAddress == "0x0000000000000000000000000000000000000000") break
 		let transferAmounts = await getTokenTransfers(tokenAddress,blockNumber)
 		for(let transferAmount of transferAmounts) {
-			if(transferAmount == coin_amount) {
+			if (transferAmount == coin_amount) {
 				return tokenAddress
 			}
 		}
 		id+=1
 	}
-	if((tokenAddress=="0x0000000000000000000000000000000000000000")&&(ethSpotter==1)) {
+	if ((tokenAddress=="0x0000000000000000000000000000000000000000")&&(ethSpotter==1)) {
 		return "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
 	}
 }
@@ -1700,7 +1530,6 @@ async function getTokenAddressFromStake(poolAddress,blockNumber,coin_amount){
 // it checks if there was a swap in the same pool in the same block
 // if there wasn't any, we know for sure that it was a deposit
 // if there are events, we compare txHashes. Matching txHases show it was actually just a swap
-
 async function checkForTokenExchange(poolAddress,block,txHash){
 	let data = "empty"
 	let ABI_TokenExchange0 = [{"name":"TokenExchange","inputs":[{"type":"address","name":"buyer","indexed":true},{"type":"int128","name":"sold_id","indexed":false},{"type":"uint256","name":"tokens_sold","indexed":false},{"type":"int128","name":"bought_id","indexed":false},{"type":"uint256","name":"tokens_bought","indexed":false}],"anonymous":false,"type":"event"}]
@@ -1758,15 +1587,15 @@ async function processRemoveLiquidityOne(data, poolAddress){
 	let provider = data.returnValues.provider
 	let type = undefined
 	console.log("\nRemoveLiquidityOne spotted\n","poolAddress",poolAddress,"txHash",txHash,"\n")
-	if(typeof data.event !== 'undefined'){
-		if(data.event=="TokenExchange") return
+	if (typeof data.event !== 'undefined'){
+		if (data.event=="TokenExchange") return
 	}
-	if(CurvePools.includes(provider) == true){
+	if (CurvePools.includes(provider) == true){
 		let data = await checkForTokenExchangeUnderlying(provider,blockNumber,txHash)
 		await processTokenExchange(data, provider,"TokenExchangeUnderlying")
 		return
 	}
-	if(provider == "0xA79828DF1850E8a3A3064576f380D90aECDD3359"){ // Curve Finance: 3Pool Deposit Zap
+	if (provider == "0xA79828DF1850E8a3A3064576f380D90aECDD3359"){ // Curve Finance: 3Pool Deposit Zap
 		console.log("aborting")
 		return
 	}
@@ -1780,15 +1609,15 @@ async function processRemoveLiquidityOne(data, poolAddress){
 	let tx = await getTx(txHash)
 
 	// might be exchange_multiple
-	if(tx.to=="0x55B916Ce078eA594c10a874ba67eCc3d62e29822"){
+	if (tx.to=="0x55B916Ce078eA594c10a874ba67eCc3d62e29822"){
 		let decodedTx = abiDecoder.decodeMethod(tx.input)
 		let methodName = decodedTx.name
-		if(methodName=="exchange_multiple"){
+		if (methodName=="exchange_multiple"){
 			let route = decodedTx.params[0].value
 			for(let poolAddress of route) {
-				if(poolAddress=="0x0000000000000000000000000000000000000000") continue
+				if (poolAddress=="0x0000000000000000000000000000000000000000") continue
 				let data = await checkForTokenExchange(poolAddress,blockNumber,txHash)
-				if(data=="empty") continue
+				if (data=="empty") continue
 				await processTokenExchange(data, poolAddress)
 				return
 			}
@@ -1796,12 +1625,12 @@ async function processRemoveLiquidityOne(data, poolAddress){
 	}
 
 	// or just a simple exchange	
-	if(tx.to=="0x97aDC08FA1D849D2C48C5dcC1DaB568B169b0267"){
+	if (tx.to=="0x97aDC08FA1D849D2C48C5dcC1DaB568B169b0267"){
 		let decodedTx = abiDecoder.decodeMethod(tx.input)
-		if(decodedTx.name == "exchange"){
+		if (decodedTx.name == "exchange"){
 			let _poolAddress = decodedTx.params[0].value
 			let dataExchange = await checkForTokenExchange(_poolAddress,blockNumber,txHash)
-			if(data!=="empty"){
+			if (data!=="empty"){
 				let buyer = tx.from
 				let position = tx.transactionIndex
 				let to = tx.to
@@ -1817,7 +1646,7 @@ async function processRemoveLiquidityOne(data, poolAddress){
 				let bought_amount = data.returnValues.coin_amount
 				bought_amount = await getCleanedTokenAmount(boughtAddress,bought_amount)
 
-				if(position>7){
+				if (position>7){
 					await post_classicCurveMonitor(blockNumber,sold_amount,bought_amount,token_sold_name,soldAddress,token_bought_name,boughtAddress,_poolAddress,txHash,buyer,to,position,poolName)
 				} else {
 					let extraData = {
@@ -1839,7 +1668,7 @@ async function processRemoveLiquidityOne(data, poolAddress){
 				return
 			}
 		}
-		if(decodedTx.name == "remove_liquidity_one_coin"){
+		if (decodedTx.name == "remove_liquidity_one_coin"){
 			poolAddress = decodedTx.params[0].value
 		}
 	}
@@ -1853,7 +1682,7 @@ async function processRemoveLiquidityOne(data, poolAddress){
 				break
 			} catch(error){
 				let goodError = "Returned values aren't valid, did it run Out of Gas? You might also see this error if you are not using the correct ABI for the contract you are retrieving data from, requesting data from a block number that does not exist, or querying a node which is not fully synced."
-				if(error.message == goodError) continue
+				if (error.message == goodError) continue
 				await errHandler(error)
 			}
 		}
@@ -1865,7 +1694,7 @@ async function processRemoveLiquidityOne(data, poolAddress){
 	let to = tx.to
 	let position = tx.transactionIndex
 
-	if(position>7){
+	if (position>7){
 		tempTxHashStorage.push({"txHash":txHash,"time":Math.floor(new Date().getTime() / 1000)})
 		await post_Removal(blockNumber,coin_amount,token_removed_name,removedAddress,poolAddress,txHash,agentAddress,to,position)
 	} else {
@@ -1912,7 +1741,7 @@ async function processRemoveLiquidityImbalance(data, poolAddress){
 
 	coin_amount = await getCleanedTokenAmount(removedAddress,coin_amount)
 
-	if(position>7){
+	if (position>7){
 		tempTxHashStorage.push({"txHash":txHash,"time":Math.floor(new Date().getTime() / 1000)})
 		await post_Removal(blockNumber,coin_amount,token_removed_name,removedAddress,poolAddress,txHash,agentAddress,to,position)
 	} else {
@@ -1944,16 +1773,16 @@ async function processAddLiquidity(data, poolAddress){
 	let blockNumber = tx.blockNumber
 	let type = undefined
 
-	if(provider=="0x97aDC08FA1D849D2C48C5dcC1DaB568B169b0267"){
+	if (provider=="0x97aDC08FA1D849D2C48C5dcC1DaB568B169b0267"){
 		//
 		console.log('provider=="0x97aDC08FA1D849D2C48C5dcC1DaB568B169b0267')
 	}
 
-	if(to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822"){
+	if (to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822"){
 		var decodedTx = abiDecoder.decodeMethod(tx.input)
 		console.log(decodedTx.params[4])
-		if(typeof decodedTx !== 'undefined'){
-			if(decodedTx.name=="exchange_multiple"){
+		if (typeof decodedTx !== 'undefined'){
+			if (decodedTx.name=="exchange_multiple"){
 				if (decodedTx.params[4].value[0] !== "0x0000000000000000000000000000000000000000"){
 					poolAddress = decodedTx.params[4].value[0]
 				}
@@ -1961,16 +1790,16 @@ async function processAddLiquidity(data, poolAddress){
 		}
 	}
 
-	if(CurvePools.includes(provider)){
+	if (CurvePools.includes(provider)){
 		let tempData  = await checkForTokenExchangeUnderlying(provider,blockNumber,txHash)
-		if(tempData !== "empty") {
+		if (tempData !== "empty") {
 			data = tempData
 			await processTokenExchange(data, provider)
 			return
 		}
 	}
 	let tempData = await checkForTokenExchange(poolAddress,blockNumber,txHash)
-	if((tempData !== "empty")&&(typeof tempData !== 'undefined')) {
+	if ((tempData !== "empty")&&(typeof tempData !== 'undefined')) {
 		data = tempData
 		await processTokenExchange(data, poolAddress)
 		return
@@ -1979,7 +1808,7 @@ async function processAddLiquidity(data, poolAddress){
 	//await new Promise(resolve => setTimeout(resolve, 2000))
 
 	for(let i = 0; i < tempTxHashStorage.length; i++){
-		if(data.transactionHash == tempTxHashStorage[i]["txHash"]) return
+		if (data.transactionHash == tempTxHashStorage[i]["txHash"]) return
 	}
 	console.log("\nAddLiquidity spotted")
 	console.log("poolAddress",poolAddress,"txHash",txHash)
@@ -1988,15 +1817,15 @@ async function processAddLiquidity(data, poolAddress){
 
 	let feeArray = data.returnValues.fees
 	// (Curve Finance: 3Pool Deposit Zap)
-	if(to == "0xA79828DF1850E8a3A3064576f380D90aECDD3359"){
+	if (to == "0xA79828DF1850E8a3A3064576f380D90aECDD3359"){
 		let decodedTx = abiDecoder.decodeMethod(tx.input)
 		var realPool = decodedTx.params[0].value
 		token_amounts = decodedTx.params[1].value
 		numberOfCoins = token_amounts.length
 		for(let i = 0; i < numberOfCoins; i++){
-			if(token_amounts[i]==0) continue
+			if (token_amounts[i]==0) continue
 			let coin_amount = Number(token_amounts[i])
-			if(i==0){
+			if (i==0){
 				var deposited_Address = await getTokenAddress(realPool, i)
 			} else {
 				var deposited_Address = await getTokenAddress(poolAddress, i-1)
@@ -2010,10 +1839,10 @@ async function processAddLiquidity(data, poolAddress){
 			})
 		}
 	// Zap for 3pool metapools
-	} else if(to == "0x97aDC08FA1D849D2C48C5dcC1DaB568B169b0267"){
+	} else if (to == "0x97aDC08FA1D849D2C48C5dcC1DaB568B169b0267"){
 		var decodedTx = abiDecoder.decodeMethod(tx.input)
-		if(decodedTx["name"] == "exchange") return
-		if(decodedTx["name"] !== "add_liquidity") {
+		if (decodedTx["name"] == "exchange") return
+		if (decodedTx["name"] !== "add_liquidity") {
 			console.log("something went wrong at Zap for 3pool metapools")
 			return
 		}
@@ -2021,9 +1850,9 @@ async function processAddLiquidity(data, poolAddress){
 		token_amounts = decodedTx.params[1].value
 		numberOfCoins = token_amounts.length
 		for(let i = 0; i < numberOfCoins; i++){
-			if(token_amounts[i]==0) continue
+			if (token_amounts[i]==0) continue
 			let coin_amount = Number(token_amounts[i])
-			if(i==0){
+			if (i==0){
 				var deposited_Address = await getTokenAddress(realPool, i)
 			} else {
 				var deposited_Address = await getTokenAddress(poolAddress, i-1)
@@ -2062,11 +1891,11 @@ async function processAddLiquidity(data, poolAddress){
 		}
 	}
 
-	if((to == "0x97aDC08FA1D849D2C48C5dcC1DaB568B169b0267") || (to == "0xA79828DF1850E8a3A3064576f380D90aECDD3359")){
+	if ((to == "0x97aDC08FA1D849D2C48C5dcC1DaB568B169b0267") || (to == "0xA79828DF1850E8a3A3064576f380D90aECDD3359")){
 		poolAddress = realPool
 	}
 
-	if(position>7){
+	if (position>7){
 		tempTxHashStorage.push({"txHash":txHash,"time":Math.floor(new Date().getTime() / 1000)})
 		post_Deposit(blockNumber,coinArray,originalPoolAddress,feeArray,poolAddress,txHash,agentAddress,to,position)
 	} else {
@@ -2092,7 +1921,7 @@ async function processTokenExchange(data, poolAddress, type){
 	let sold_id = returnValues.sold_id
 	let tokens_sold = returnValues.tokens_sold
 
-	if(data.event == "TokenExchangeUnderlying"){
+	if (data.event == "TokenExchangeUnderlying"){
 		type = "TokenExchangeUnderlying"
 	}
 
@@ -2106,14 +1935,14 @@ async function processTokenExchange(data, poolAddress, type){
 	let blockNumber = tx.blockNumber
 
 	let decodedTx = abiDecoder.decodeMethod(tx.input)
-	if( typeof decodedTx !== 'undefined'){
+	if ( typeof decodedTx !== 'undefined'){
 		var exchange_multiple_CHECK = decodedTx.name
 		data.hacked_data = decodedTx.params
 	} else {
 		//console.log("decodedTx undefined")
 	}
 	// exchange_multiple
-	if(exchange_multiple_CHECK=="exchange_multiple" && !zoom){
+	if (exchange_multiple_CHECK=="exchange_multiple" && !zoom){
 			console.log("\nexchange_multiple spotted",txHash)
 
 			var soldAddress = decodedTx.params[0].value[0]
@@ -2123,16 +1952,16 @@ async function processTokenExchange(data, poolAddress, type){
 			var token_sold_name = await getTokenName(soldAddress)
 	
 	// 3Pool
-	}else if((type == "TokenExchangeUnderlying") && (token1Address == "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490")) {
-		if(sold_id == 0) {
+	}else if ((type == "TokenExchangeUnderlying") && (token1Address == "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490")) {
+		if (sold_id == 0) {
 			var soldAddress = await getTokenAddress(poolAddress, 0)
 			var sold_amount = data.returnValues.tokens_sold
 			sold_amount = await getCleanedTokenAmount(soldAddress,sold_amount)
 			var token_sold_name = await getTokenName(soldAddress)
 		}
-		if(sold_id == 1) {
+		if (sold_id == 1) {
 			var soldAddress = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
-			if((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
+			if ((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
 				var sold_amount = ((abiDecoder.decodeMethod(tx.input)).params[2].value)/10**18
 			} else {
 				let addedLiquidityAmounts = await getAddLiquidityAmounts(THREEPOOL,blockNumber)
@@ -2145,9 +1974,9 @@ async function processTokenExchange(data, poolAddress, type){
 			}
 			var token_sold_name = "DAI"
 		}
-		if(sold_id == 2) {
+		if (sold_id == 2) {
 			var soldAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-			if((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
+			if ((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
 				var sold_amount = ((abiDecoder.decodeMethod(tx.input)).params[2].value)/10**6
 			} else {
 				//example case at block 16139972 (TokenExchangeUnderlying)
@@ -2161,9 +1990,9 @@ async function processTokenExchange(data, poolAddress, type){
 			}
 			var token_sold_name = "USDC"
 		}
-		if(sold_id == 3) {
+		if (sold_id == 3) {
 			var soldAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-			if((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
+			if ((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
 				var sold_amount = ((abiDecoder.decodeMethod(tx.input)).params[2].value)/10**6
 			} else {
 				
@@ -2178,22 +2007,22 @@ async function processTokenExchange(data, poolAddress, type){
 			var token_sold_name = "USDT"
 		}
 	// BTC Metapool
-	} else if((type == "TokenExchangeUnderlying") && (sold_id != 0) && (token1Address == "0x075b1bb99792c9E1041bA13afEf80C91a1e70fB3")) {
-		if(sold_id == 1) {
+	} else if ((type == "TokenExchangeUnderlying") && (sold_id != 0) && (token1Address == "0x075b1bb99792c9E1041bA13afEf80C91a1e70fB3")) {
+		if (sold_id == 1) {
 			var token_sold_name = "renBTC"
 			var soldAddress = "0xEB4C2781e4ebA804CE9a9803C67d0893436bB27D"
 			let addedLiquidityAmounts = await getAddLiquidityAmounts(BTC_Swap,blockNumber)
 			let closestDeposit = addedLiquidityAmounts.reduce((prev, curr) => Math.abs(curr - tokens_sold) < Math.abs(prev - tokens_sold) ? curr : prev)
 			var sold_amount = closestDeposit/10**8
 		}
-		if(sold_id == 2) {
+		if (sold_id == 2) {
 			var token_sold_name = "WBTC"
 			var soldAddress = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
 			let addedLiquidityAmounts = await getAddLiquidityAmounts(BTC_Swap,blockNumber)
 			let closestDeposit = addedLiquidityAmounts.reduce((prev, curr) => Math.abs(curr - tokens_sold) < Math.abs(prev - tokens_sold) ? curr : prev)
 			var sold_amount = closestDeposit/10**8
 		}
-		if(sold_id == 3) {
+		if (sold_id == 3) {
 			var token_sold_name = "sBTC"
 			var soldAddress = "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6"
 			let addedLiquidityAmounts = await getAddLiquidityAmounts(BTC_Swap,blockNumber)
@@ -2202,11 +2031,11 @@ async function processTokenExchange(data, poolAddress, type){
 		}
 
 	// FRAX/USDC
-	} else if((type == "TokenExchangeUnderlying") && (sold_id != 0) && (token1Address == "0x3175Df0976dFA876431C2E9eE6Bc45b65d3473CC")) {
-		if(sold_id == 1) {
+	} else if ((type == "TokenExchangeUnderlying") && (sold_id != 0) && (token1Address == "0x3175Df0976dFA876431C2E9eE6Bc45b65d3473CC")) {
+		if (sold_id == 1) {
 			var token_sold_name = "FRAX"
 			var soldAddress = "0x853d955aCEf822Db058eb8505911ED77F175b99e"
-			if((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
+			if ((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
 				var sold_amount = ((abiDecoder.decodeMethod(tx.input)).params[2].value)/10**18
 			} else {
 				let addedLiquidityAmounts = await getAddLiquidityAmounts(FRAXBP,blockNumber)
@@ -2214,10 +2043,10 @@ async function processTokenExchange(data, poolAddress, type){
 				var sold_amount = closestDeposit/10**18
 			}
 		}
-		if(sold_id == 2) {
+		if (sold_id == 2) {
 			var token_sold_name = "USDC"
 			var soldAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-			if((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
+			if ((to == "0x55B916Ce078eA594c10a874ba67eCc3d62e29822") || (to == poolAddress)){
 				//var sold_amount = ((abiDecoder.decodeMethod(tx.input)).params[2].value)/10**6
 			} else {
 				let addedLiquidityAmounts = await getAddLiquidityAmounts(FRAXBP,blockNumber)
@@ -2239,7 +2068,7 @@ async function processTokenExchange(data, poolAddress, type){
 	let poolName = await buildPoolName(poolAddress)
 
 	// exchange_multiple
-	if(exchange_multiple_CHECK=="exchange_multiple" && !zoom) {
+	if (exchange_multiple_CHECK=="exchange_multiple" && !zoom) {
 		poolName = "Pool"
 
 		let numberOfNullAddresses = decodedTx.params[0].value.filter(x => x == "0x0000000000000000000000000000000000000000").length
@@ -2247,7 +2076,7 @@ async function processTokenExchange(data, poolAddress, type){
 
 		let expected = decodedTx.params[3].value
 
-		if(boughtAddress!="0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"){
+		if (boughtAddress!="0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"){
 			let tokenTransfers = await getTokenTransfers(boughtAddress,blockNumber)
 			var closestTransfer = tokenTransfers.reduce((prev, curr) => Math.abs(curr - expected) < Math.abs(prev - expected) ? curr : prev)
 		} else {
@@ -2259,18 +2088,18 @@ async function processTokenExchange(data, poolAddress, type){
 		var token_bought_name = await getTokenName(boughtAddress)
 	
 	// 3Pool
-	}else if((type == "TokenExchangeUnderlying") && (bought_id != 0) && (token1Address == "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490")) {
-		if(bought_id == 1) {
+	}else if ((type == "TokenExchangeUnderlying") && (bought_id != 0) && (token1Address == "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490")) {
+		if (bought_id == 1) {
 			var boughtAddress = "0x6B175474E89094C44Da98b954EedeAC495271d0F"
 			var bought_amount = tokens_bought/10**18
 			var token_bought_name = "DAI"
 		}
-		if(bought_id == 2) {
+		if (bought_id == 2) {
 			var boughtAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
 			var bought_amount = tokens_bought/10**6
 			var token_bought_name = "USDC"
 		}
-		if(bought_id == 3) {
+		if (bought_id == 3) {
 			var boughtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"
 			var bought_amount = tokens_bought/10**6
 			var token_bought_name = "USDT"
@@ -2278,24 +2107,24 @@ async function processTokenExchange(data, poolAddress, type){
 
 	// BTC Metapool
 	} else if ((type == "TokenExchangeUnderlying") && (bought_id != 0) && (token1Address == "0x075b1bb99792c9E1041bA13afEf80C91a1e70fB3")) {
-		if(bought_id == 0) {
+		if (bought_id == 0) {
 			var boughtAddress = await getTokenAddress(poolAddress, 0)
 			console.log("boughtAddress",boughtAddress)
 			var bought_amount = await getCleanedTokenAmount(boughtAddress,tokens_bought)
 			console.log("bought_amount",bought_amount)
 			var token_bought_name = await getTokenName(boughtAddress)
 		}
-		if(bought_id == 1) {
+		if (bought_id == 1) {
 			var token_bought_name = "renBTC"
 			var bought_amount = tokens_bought/10**8
 			var boughtAddress = "0xEB4C2781e4ebA804CE9a9803C67d0893436bB27D"
 		}
-		if(bought_id == 2) {
+		if (bought_id == 2) {
 			var token_bought_name = "WBTC"
 			var bought_amount = tokens_bought/10**8
 			var boughtAddress = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
 		}
-		if(bought_id == 3) {
+		if (bought_id == 3) {
 			var token_bought_name = "sBTC"
 			var bought_amount = tokens_bought/10**18
 			var boughtAddress = "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6"
@@ -2303,12 +2132,12 @@ async function processTokenExchange(data, poolAddress, type){
 		
 	// FRAX/USDC
 	} else if ((type == "TokenExchangeUnderlying") && (bought_id != 0) && (token1Address == "0x3175Df0976dFA876431C2E9eE6Bc45b65d3473CC")) {
-		if(bought_id == 1) {
+		if (bought_id == 1) {
 			var boughtAddress = "0x853d955aCEf822Db058eb8505911ED77F175b99e"
 			var bought_amount = tokens_bought/10**18
 			var token_bought_name = "FRAX"
 		}
-		if(bought_id == 2) {
+		if (bought_id == 2) {
 			var boughtAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
 			var bought_amount = tokens_bought/10**6
 			var token_bought_name = "USDC"
@@ -2325,7 +2154,7 @@ async function processTokenExchange(data, poolAddress, type){
 	
 	let position = tx.transactionIndex
 
-	if(position>7){
+	if (position>7){
 		tempTxHashStorage.push({"txHash":txHash,"time":Math.floor(new Date().getTime() / 1000)})
 		await post_classicCurveMonitor(blockNumber,sold_amount,bought_amount,token_sold_name,soldAddress,token_bought_name,boughtAddress,poolAddress,txHash,buyer,to,position,poolName)
 	} else {
@@ -2349,7 +2178,7 @@ async function processTokenExchange(data, poolAddress, type){
 
 async function debugBlock(blockNumber, poolAddress_){
 	for(const poolAddress of CurvePools) {
-		if(typeof poolAddress_ !== 'undefined' && poolAddress!==poolAddress_) continue
+		if (typeof poolAddress_ !== 'undefined' && poolAddress!==poolAddress_) continue
 
 		let ABI = await getABI(poolAddress_)
 		let CONTRACT = set(ABI, poolAddress)
@@ -2361,7 +2190,7 @@ async function debugBlock(blockNumber, poolAddress_){
 					if (errors) {
 						console.log(errors)
 					} else {
-						if(events.length==0) return
+						if (events.length==0) return
 						for(const data of events) {
 							await processRemoveLiquidity(data, poolAddress)
 						}
@@ -2378,7 +2207,7 @@ async function debugBlock(blockNumber, poolAddress_){
 					if (errors) {
 						console.log(errors)
 					} else {
-						if(events.length==0) return
+						if (events.length==0) return
 						for(const data of events) {
 							await processRemoveLiquidityOne(data, poolAddress)
 						}
@@ -2395,7 +2224,7 @@ async function debugBlock(blockNumber, poolAddress_){
 					if (errors) {
 						console.log(errors)
 					} else {
-						if(events.length==0) return
+						if (events.length==0) return
 						for(const data of events) {
 							await processRemoveLiquidityImbalance(data, poolAddress)
 						}
@@ -2412,7 +2241,7 @@ async function debugBlock(blockNumber, poolAddress_){
 					if (errors) {
 						console.log(errors)
 					} else {
-						if(events.length==0) return
+						if (events.length==0) return
 						for(const data of events) {
 							await processAddLiquidity(data, poolAddress)
 						}
@@ -2429,7 +2258,7 @@ async function debugBlock(blockNumber, poolAddress_){
 					if (errors) {
 						console.log(errors)
 					} else {
-						if(events.length==0) return
+						if (events.length==0) return
 						for(const data of events) {
 							await processTokenExchange(data, poolAddress)
 						}
@@ -2446,7 +2275,7 @@ async function debugBlock(blockNumber, poolAddress_){
 					if (errors) {
 						console.log(errors)
 					} else {
-						if(events.length==0) return
+						if (events.length==0) return
 						for(const data of events) {
 							await processTokenExchange(data, poolAddress,"TokenExchangeUnderlying")
 						}
@@ -2488,15 +2317,15 @@ async function searchEventsInBlock(blockNumber,unprocessedEventLogs){
         for(const eventName of eventNames){
             let eventSpecificLogs = unprocessedEventLogs[poolAddress][eventName]
             for(const event of eventSpecificLogs){
-                if(blockNumber==event.blockNumber){
+                if (blockNumber==event.blockNumber){
                     foundEvents.push(event)
 					let eventName = event.event
-					if(eventName == "RemoveLiquidity") await processRemoveLiquidity(event, poolAddress) 
-					if(eventName == "RemoveLiquidityOne") await processRemoveLiquidityOne(event, poolAddress) 
-					if(eventName == "RemoveLiquidityImbalance") await processRemoveLiquidityImbalance(event, poolAddress) 
-					if(eventName == "AddLiquidity") await processAddLiquidity(event, poolAddress) 
-					if(eventName == "TokenExchange") await processTokenExchange(event, poolAddress) 
-					if(eventName == "TokenExchangeUnderlying") await processTokenExchange(event, poolAddress,"TokenExchangeUnderlying") 
+					if (eventName == "RemoveLiquidity") await processRemoveLiquidity(event, poolAddress) 
+					if (eventName == "RemoveLiquidityOne") await processRemoveLiquidityOne(event, poolAddress) 
+					if (eventName == "RemoveLiquidityImbalance") await processRemoveLiquidityImbalance(event, poolAddress) 
+					if (eventName == "AddLiquidity") await processAddLiquidity(event, poolAddress) 
+					if (eventName == "TokenExchange") await processTokenExchange(event, poolAddress) 
+					if (eventName == "TokenExchangeUnderlying") await processTokenExchange(event, poolAddress,"TokenExchangeUnderlying") 
                 }
         
             }
@@ -2514,7 +2343,7 @@ async function searchFromLogsInRange(firstBlock,range){
 		let percentage = Number((i / range * 100).toFixed(0))
 		//let percentage = Number((i / range * 100).toFixed(1))
 
-		if(percentage!==last_percentage){
+		if (percentage!==last_percentage){
 			//console.log(percentage, "%")
 			last_percentage = percentage
 		}
@@ -2541,7 +2370,7 @@ async function collectionCycle(nextBlockToProceedProcessing,range){
 	//  this loop is used to give the raw log collection enough time to be processed and saved.
 	while(true){
 		let isCollecting = JSON.parse(fs.readFileSync("collectorState.json"))
-		if(isCollecting.collectingRawLogs == false) break
+		if (isCollecting.collectingRawLogs == false) break
 		await new Promise(resolve => setTimeout(resolve, 10))
 	}
 
@@ -2598,7 +2427,7 @@ async function telegramBot(){
 	// toggle to have messages send out to the telegram-bot
 	telegramMessage = true
 
-	if(telegramMessage) {
+	if (telegramMessage) {
 		bot = new TelegramBot(token, { polling: true })
 		bot.on("message", async(msg) => {
 			if (msg.text == "bot u with us") {
@@ -2622,8 +2451,9 @@ async function telegramBot(){
 	//await searchFromLogsInRange(await getStartBlock(),214272)
 	//await searchFromLogsInRange(16338795,1)
 
-	await debugBlock(16412930,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
-	await debugBlock(16412930,"0xD51a44d3FaE010294C616388b506AcdA1bfAAE46")
+	//await debugBlock(16412930,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
+	//await debugBlock(16412930,"0xD51a44d3FaE010294C616388b506AcdA1bfAAE46")
+	await activateRealTimeMonitoring()
 	//await activateRealTimeMonitoring(singlePoolModus)
 	//await activateRealTimeMonitoring(singlePoolModus,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
 	//await scanBlockRange(16241695,16253755,"0x5a6A4D54456819380173272A5E8E9B9904BdF41B")
@@ -2650,11 +2480,11 @@ async function CurveMonitor(){
 	await activateRealTimeMonitoring(singlePoolModus,whiteListedPoolAddress)
 
 	// using socket.io, this function will iterate over all pools and create and open a custom sockets per pool, for the frontend to connect to.
-	if(mode == "local"){
-		await http_SocketSetup()
+	if (mode == "local"){
+		await http_SocketSetup(Server,emitter,whiteListedPoolAddress)
 	}
-	if(mode == "https"){
-		await https_SocketSetup()
+	if (mode == "https"){
+		await https_SocketSetup(Server,emitter,whiteListedPoolAddress)
 	}
 
 	//these belong together, otherwise mayhem 
@@ -2670,10 +2500,10 @@ async function CurveMonitor(){
 }
 
 
-//let mode = "local"
-let mode = "https"
+let mode = "local"
+//let mode = "https"
 console.log(mode+"-mode")
 
-await CurveMonitor()
-//await telegramBot()
+//await CurveMonitor()
+await telegramBot()
 
