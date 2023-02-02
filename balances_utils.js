@@ -3,9 +3,9 @@ const fs = require("fs")
 
 const apiKeys = require('./api_keys')
 
-const utils = require("./utils.js")
-const getABI = utils.getABI
-const getCurvePools = utils.getCurvePools
+const generic_utils = require("./generic_utils.js")
+const getCurvePools = generic_utils.getCurvePools
+const getABI = generic_utils.getABI
 
 const options = {
 	// Enable auto reconnection
@@ -47,7 +47,7 @@ function bootBalancesJSON(){
 	}
 	let pools = getCurvePools()
 	for (const poolAddress of pools) {
-		if(typeof balancesJSON[poolAddress] !== "undefined") continue
+		if (typeof balancesJSON[poolAddress] !== "undefined") continue
 		balancesJSON[poolAddress] = []
 	}
 	fs.writeFileSync("balances.json", JSON.stringify(balancesJSON, null, 4))
@@ -127,7 +127,7 @@ async function fetchBalancesForPool(poolAddress){
 		data.push({[unixtime]: balances})
 
 		// saving each 100 fetches
-		if(counter % 100 == 0){
+		if (counter % 100 == 0){
 			balancesJSON[poolAddress] = data
 			fs.writeFileSync("balances.json", JSON.stringify(balancesJSON, null, 4))
             console.log(counter + "/" + blockNumbers.length, unixtime, balances,poolAddress)
@@ -171,7 +171,7 @@ async function balancesCollectionMain(poolAddress){
 	while(true){
 		let check = await fetchBalancesForPool(poolAddress)
 		// check is used to repeat the balances collection cycle as long as the last cycle wasn't an empty fetch => up to date
-		if(check==0) break
+		if (check==0) break
 	}
 	console.log("collection of balances complete for pool", poolAddress)
 }
