@@ -2451,7 +2451,7 @@ async function telegramBot(){
 	//await searchFromLogsInRange(await getStartBlock(),214272)
 	//await searchFromLogsInRange(16338795,1)
 
-	//await debugBlock(16412930,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
+	//await debugBlock(16338795,"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD")
 	//await debugBlock(16412930,"0xD51a44d3FaE010294C616388b506AcdA1bfAAE46")
 	await activateRealTimeMonitoring()
 	//await activateRealTimeMonitoring(singlePoolModus)
@@ -2504,6 +2504,6 @@ async function CurveMonitor(){
 let mode = "https"
 console.log(mode+"-mode")
 
-//await CurveMonitor()
-await telegramBot()
+await CurveMonitor()
+//await telegramBot()
 
