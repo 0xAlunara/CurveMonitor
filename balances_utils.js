@@ -6,6 +6,10 @@ const apiKeys = require('./api_keys')
 const generic_utils = require("./generic_utils.js")
 const getCurvePools = generic_utils.getCurvePools
 const getABI = generic_utils.getABI
+const errHandler = generic_utils.errHandler
+
+// to deal with compute units / s
+let maxRetries = 12
 
 const options = {
 	// Enable auto reconnection
@@ -64,6 +68,12 @@ async function getPoolBalance(METAREGISTRY,poolAddress,blockNumber){
 
 	// example: balances = ['18640063536133844603972293','18564920428085','17811701123312','16056764826637922459027923','0','0','0','0' ]
 	let balances = await METAREGISTRY.methods.get_balances(poolAddress).call({block:blockNumber})
+	for (let i = 0; i < maxRetries; i++) {
+		try {
+			balances = await METAREGISTRY.methods.get_balances(poolAddress).call({block:blockNumber})
+			break
+		} catch(error){await errHandler(error)}
+	}
 
 	// example: balances = ['18640063536133844603972293','18564920428085','17811701123312','16056764826637922459027923' ]
 	balances = balances.slice(0, -curveJSON[poolAddress].n_coins)
