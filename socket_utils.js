@@ -72,6 +72,28 @@ async function startLandingSocket(io){
 	})
 }
 
+// making use of socket.io rooms
+async function manageUpdates(io,emitter,poolAddress){
+	emitter.on("Update Table-ALL" + poolAddress, async (data) => {
+		io.in(poolAddress).emit("Update Table-ALL",data)
+	})
+	emitter.on("Update Table-MEV" + poolAddress, async (data) => {
+		io.in(poolAddress).emit("Update Table-MEV",data)
+	})
+	emitter.on("Update Price-Chart" + poolAddress, async (unixtime) => {
+		io.in(poolAddress).emit("Update Price-Char",unixtime)
+	})
+	emitter.on("Update Balance-Chart" + poolAddress, async (data) => {
+		io.in(poolAddress).emit("Update Balance-Chart",data)
+	})
+	emitter.on("Update TVL-Chart" + poolAddress, async (data) => {
+		io.in(poolAddress).emit("Update TVL-ALL",data)
+	})
+	emitter.on("Update Volume-Chart" + poolAddress, async (data) => {
+		io.in(poolAddress).emit("Update Volume-Chart",data)
+	})
+}
+
 /**
  * on pool connect: 
  * send table data full (so one month)
@@ -85,9 +107,12 @@ async function initSocketMessages(io,emitter,whiteListedPoolAddress){
 		if (poolAddress!== whiteListedPoolAddress) continue
 		const pool_socket = io.of("/" + poolAddress)
 
+		await manageUpdates(io,emitter,poolAddress)
+
 		pool_socket.on("connection", async (socket) => {
-			console.log(poolAddress, "socket connected")
+			socket.join("room_"+poolAddress)
 			socket.send("successfully connected to socket for " + poolAddress)
+			console.log(poolAddress, "socket connected")
 
 			//sending the array of token names, used in the price chart switch (priceOf: [...] priceIn: [...] on the UI)
 			let curveJSON = JSON.parse(fs.readFileSync("CurvePoolData.json"))
@@ -140,29 +165,9 @@ async function initSocketMessages(io,emitter,whiteListedPoolAddress){
 				// sendTVLData()
 				// sendVolumeData()
 			})
-
+			
 			socket.on("disconnect", () => {
 				console.log("client disconnected")
-			})
-
-			// sending updates
-			emitter.on("Update Table-ALL" + poolAddress, async (data) => {
-				socket.emit("Update Table-ALL",data)
-			})
-			emitter.on("Update Table-MEV" + poolAddress, async (data) => {
-				socket.emit("Update Table-MEV",data)
-			})
-			emitter.on("Update Price-Chart" + poolAddress, async (unixtime) => {
-				socket.emit("Update Price-Chart",unixtime)
-			})
-			emitter.on("Update Balance-Chart" + poolAddress, async (data) => {
-				socket.emit("Update Balance-Chart",data)
-			})
-			emitter.on("Update TVL-Chart" + poolAddress, async (data) => {
-				socket.emit("Update TVL-Chart",data)
-			})
-			emitter.on("Update Volume-Chart" + poolAddress, async (data) => {
-				socket.emit("Update Volume-Chart",data)
 			})
 
 		})
