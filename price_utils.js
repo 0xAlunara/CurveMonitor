@@ -6,6 +6,10 @@ const apiKeys = require('./api_keys')
 const generic_utils = require("./generic_utils.js")
 const getCurvePools = generic_utils.getCurvePools
 const getABI = generic_utils.getABI
+const errHandler = generic_utils.errHandler
+
+// to deal with compute units / s
+let maxRetries = 12
 
 const options = {
 	// Enable auto reconnection
@@ -225,7 +229,13 @@ async function savePriceEntry(poolAddress, blockNumber,unixtime){
 		let data = priceJSON[poolAddress][pairID].data
 	
 		if (combination.type == "original") {
-			let dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call({block:blockNumber})
+			let dy
+			for (let i = 0; i < maxRetries; i++) {
+				try {
+					dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call({block:blockNumber})
+					break
+				} catch(error){await errHandler(error)}
+			}
 			dy = dy / 10**curveJSON[poolAddress].decimals[coinID_priceIn]
 			data.push({[unixtime]:dy})
 		}
