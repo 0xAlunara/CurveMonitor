@@ -17,6 +17,7 @@ const generic_utils = require("./generic_utils.js")
 const getCurrentTime = generic_utils.getCurrentTime
 const getABI = generic_utils.getABI
 const getCurvePools = generic_utils.getCurvePools
+const errHandler = generic_utils.errHandler
 
 const storage_utils = require("./storage_utils.js")
 const saveTxEntry = storage_utils.saveTxEntry
@@ -147,18 +148,6 @@ for (let i = 0; i < maxRetries; i++) {
 
 // to deal with compute units / s
 let maxRetries = 12
-let minRetryDelay = 200
-let maxRetryDelay = 400
-
-async function errHandler(error){
-	if (error.code !== 429) {
-		console.log("errHandler",error)
-		return
-	}
-	console.log("errHandler",error)
-	let retryDelay = Math.floor(Math.random() * (maxRetryDelay - minRetryDelay + 1) + minRetryDelay)
-	await new Promise(resolve => setTimeout(resolve, retryDelay))
-}
 
 // updating prices
 let eurPrice
