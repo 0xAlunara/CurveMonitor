@@ -13,10 +13,18 @@ landing_socket.on("search_res", data => {
 	console.log("search_res",data)
 })
 
+//Ping-Pong:
+setInterval(() => {
+	landing_socket.emit("ping")
+}, 2 * 1000) // pings every 2 seconds
+
+landing_socket.on("pong", () => {
+	console.log("pong") // => server alive
+})
+
+// setting up the socket for sUSD
 let whiteListedPoolAddress = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD"
-
 let poolAddress = whiteListedPoolAddress
-
 const pool_socket = io.connect("http://localhost:2424/" + poolAddress)
 
 pool_socket.on("token names inside pool", data => {
@@ -101,5 +109,5 @@ let timeFrame = "day"
 //let timeFrame = "week"
 //let timeFrame = "month"
 
-// emit(timeFrame) not to be used on init connection (defaults to 1 month). Only used when a user starts changing time-spans
+// pool_socket.emit(timeFrame) not to be used on init connection (defaults to 1 month). Only used when a user starts changing time-spans
 //pool_socket.emit(timeFrame)
