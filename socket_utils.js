@@ -66,6 +66,9 @@ async function startLandingSocket(io){
 				console.log("err in search:",err.message)
 			}
 		})
+		socket.on("ping", () => {
+			socket.emit("pong")
+		})
 		socket.on("disconnect", () => {
 			console.log("client disconnected from landing page")
 		})
