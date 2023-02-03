@@ -12,6 +12,18 @@ function getCurvePools(){
     return CurvePools
 }
 
+async function errHandler(error){
+	let minRetryDelay = 200
+	let maxRetryDelay = 400
+	if (error.code !== 429) {
+		console.log("errHandler",error)
+		return
+	}
+	console.log("errHandler",error)
+	let retryDelay = Math.floor(Math.random() * (maxRetryDelay - minRetryDelay + 1) + minRetryDelay)
+	await new Promise(resolve => setTimeout(resolve, retryDelay))
+}
+
 function getCurrentTime() {
 	const date = new Date()
 	let hours = date.getHours()
@@ -51,5 +63,6 @@ async function getABI(poolAddress){
 module.exports = {
 	getCurrentTime,
     getABI,
-    getCurvePools
+    getCurvePools,
+    errHandler
 }
