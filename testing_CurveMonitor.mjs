@@ -248,15 +248,14 @@ async function update_crv_price() {
 } setInterval(update_crv_price, 1*60*1000)
 
 async function getTx(txHash) {
-	while(true){
-		try{
-			let tx = await web3HTTP.eth.getTransaction(txHash)
-			return tx
-		} catch(err){
-			console.log(err)
-			await new Promise(resolve => setTimeout(resolve, 1000))
-		}
+	let tx
+	for (let i = 0; i < maxRetries; i++) {
+		try {
+			tx = await web3HTTP.eth.getTransaction(txHash)
+			break
+		} catch(error){await errHandler(error)}
 	}
+	return tx
 }
 
 // runs through the stored txHashes once a minute, and removes the ones that are older than 15 seconds
