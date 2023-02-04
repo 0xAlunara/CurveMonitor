@@ -149,22 +149,22 @@ async function initSocketMessages(io,emitter,whiteListedPoolAddress){
 			// next block is for when a user plays with the time-span tabulator
 			socket.on("day", () => {
 				timeFrame = "day"
-				sendPriceData("day",socket,poolAddress,price_combination)
-				// sendBalanceData()
+				sendPriceData(timeFrame,socket,poolAddress,price_combination)
+				sendBalanceData(timeFrame,socket,poolAddress)
 				// sendTVLData()
 				// sendVolumeData()
 			})
 			socket.on("week", () => {
 				timeFrame = "week"
-				sendPriceData("week",socket,poolAddress,price_combination)
-				// sendBalanceData()
+				sendPriceData(timeFrame,socket,poolAddress,price_combination)
+				sendBalanceData(timeFrame,socket,poolAddress)
 				// sendTVLData()
 				// sendVolumeData()
 			})
 			socket.on("month", () => {
 				timeFrame = "month"
-				sendPriceData("month",socket,poolAddress,price_combination)
-				// sendBalanceData()
+				sendPriceData(timeFrame,socket,poolAddress,price_combination)
+				sendBalanceData(timeFrame,socket,poolAddress)
 				// sendTVLData()
 				// sendVolumeData()
 			})
