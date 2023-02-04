@@ -144,10 +144,10 @@ async function priceCollection_OneCombination(poolAddress,combination,dataALL,pr
 		})
 
 		let dy
-
 		if (combination.type == "original") {
-			dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call({block:blockNumber})
+			dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call(blockNumber)
 			dy = dy / 10**curveJSON[poolAddress].decimals[coinID_priceIn]
+			//console.log("block",blockNumber, " | dy",dy, " | priceOf:",priceOf, "(",coinID_priceOf,") | priceIn:",priceIn, "(",coinID_priceIn,") | dx:",dx)
 			data.push({[unixtime]:dy})
 		}
 
@@ -191,6 +191,7 @@ async function priceCollection_AllCombinations(poolAddress){
 }
 
 async function savePriceEntry(poolAddress, blockNumber,unixtime){
+	bootPriceJSON()
 	let priceJSON = JSON.parse(fs.readFileSync("prices.json"))
 	for(const combination of priceJSON[poolAddress]) {
 		let hasUnixtime = combination.data.some(item => {
@@ -232,7 +233,7 @@ async function savePriceEntry(poolAddress, blockNumber,unixtime){
 			let dy
 			for (let i = 0; i < maxRetries; i++) {
 				try {
-					dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call({block:blockNumber})
+					dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call(blockNumber)
 					break
 				} catch(error){await errHandler(error)}
 			}
