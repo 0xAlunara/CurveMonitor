@@ -77,22 +77,22 @@ async function startLandingSocket(io){
 // making use of socket.io rooms
 async function manageUpdates(io,emitter,poolAddress){
 	emitter.on("Update Table-ALL" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update Table-ALL" + poolAddress,data)
+		io.in(poolAddress).emit("Update Table-ALL",data)
 	})
 	emitter.on("Update Table-MEV" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update Table-MEV" + poolAddress,data)
+		io.in(poolAddress).emit("Update Table-MEV",data)
 	})
 	emitter.on("Update Price-Chart" + poolAddress, async (unixtime) => {
-		io.in(poolAddress).emit("Update Price-Char" + poolAddress,unixtime)
+		io.in(poolAddress).emit("Update Price-Char",unixtime)
 	})
 	emitter.on("Update Balance-Chart" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update Balance-Chart" + poolAddress,data)
+		io.in(poolAddress).emit("Update Balance-Chart",data)
 	})
 	emitter.on("Update TVL-Chart" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update TVL-ALL" + poolAddress,data)
+		io.in(poolAddress).emit("Update TVL-ALL",data)
 	})
 	emitter.on("Update Volume-Chart" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update Volume-Chart" + poolAddress,data)
+		io.in(poolAddress).emit("Update Volume-Chart",data)
 	})
 }
 
