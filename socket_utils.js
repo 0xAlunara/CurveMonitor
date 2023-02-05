@@ -112,7 +112,7 @@ async function initSocketMessages(io,emitter,whiteListedPoolAddress){
 		await manageUpdates(io,emitter,poolAddress)
 
 		pool_socket.on("connection", async (socket) => {
-			socket.join("room_"+poolAddress)
+			socket.join(poolAddress)
 			socket.send("successfully connected to socket for " + poolAddress)
 			console.log(poolAddress, "socket connected")
 
