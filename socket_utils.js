@@ -61,7 +61,6 @@ async function startLandingSocket(io){
 			try{
 				let res = search(data)
 				socket.emit("search_res", res)
-				console.log("user input:",data,"output:",res)
 			}catch(err){
 				console.log("err in search:",err.message)
 			}
@@ -78,22 +77,22 @@ async function startLandingSocket(io){
 // making use of socket.io rooms
 async function manageUpdates(io,emitter,poolAddress){
 	emitter.on("Update Table-ALL" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update Table-ALL",data)
+		io.in(poolAddress).emit("Update Table-ALL" + poolAddress,data)
 	})
 	emitter.on("Update Table-MEV" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update Table-MEV",data)
+		io.in(poolAddress).emit("Update Table-MEV" + poolAddress,data)
 	})
 	emitter.on("Update Price-Chart" + poolAddress, async (unixtime) => {
-		io.in(poolAddress).emit("Update Price-Char",unixtime)
+		io.in(poolAddress).emit("Update Price-Char" + poolAddress,unixtime)
 	})
 	emitter.on("Update Balance-Chart" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update Balance-Chart",data)
+		io.in(poolAddress).emit("Update Balance-Chart" + poolAddress,data)
 	})
 	emitter.on("Update TVL-Chart" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update TVL-ALL",data)
+		io.in(poolAddress).emit("Update TVL-ALL" + poolAddress,data)
 	})
 	emitter.on("Update Volume-Chart" + poolAddress, async (data) => {
-		io.in(poolAddress).emit("Update Volume-Chart",data)
+		io.in(poolAddress).emit("Update Volume-Chart" + poolAddress,data)
 	})
 }
 
