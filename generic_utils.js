@@ -1,5 +1,6 @@
 const fs = require("fs")
 const axios = require("axios")
+const apiKeys = require('./api_keys')
 
 function getCurvePools(){
     let curveJSON = JSON.parse(fs.readFileSync("CurvePoolData.json"))
@@ -15,11 +16,7 @@ function getCurvePools(){
 async function errHandler(error){
 	let minRetryDelay = 200
 	let maxRetryDelay = 400
-	if (error.code !== 429) {
-		console.log("errHandler",error)
-		return
-	}
-	console.log("errHandler",error)
+	if (error.code !== 429) return
 	let retryDelay = Math.floor(Math.random() * (maxRetryDelay - minRetryDelay + 1) + minRetryDelay)
 	await new Promise(resolve => setTimeout(resolve, retryDelay))
 }
@@ -36,11 +33,10 @@ function getCurrentTime() {
 	seconds = (seconds < 10) ? "0" + seconds : seconds
 	milliseconds = (milliseconds < 100) ? "0" + milliseconds : milliseconds
   
-	return `\n${hours}:${minutes}:${seconds}:${milliseconds}`
+	return `${hours}:${minutes}:${seconds}:${milliseconds}`
 }
 
 async function getABI(poolAddress){
-   
     try{
         var abiDataBase = JSON.parse(fs.readFileSync("abiDataBase.json"))
     } catch (err) {
@@ -49,7 +45,7 @@ async function getABI(poolAddress){
 
     let poolABI = abiDataBase[poolAddress]
 
-    if (typeof poolABI == "undefined"){
+    if (!poolABI){
         let url = 'https://api.etherscan.io/api?module=contract&action=getabi&address='+ poolAddress + '&apikey=' + apiKeys.etherscanAPI_key
         let poolABI = (await axios.get(url)).data.result
         abiDataBase[poolAddress] = poolABI
