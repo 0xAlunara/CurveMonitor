@@ -109,7 +109,7 @@ async function initSocketMessages(io,emitter,whiteListedPoolAddress){
 		if (poolAddress!== whiteListedPoolAddress) continue
 		const pool_socket = io.of("/" + poolAddress)
 
-		await manageUpdates(io,emitter,poolAddress)
+		await manageUpdates(pool_socket,emitter,poolAddress)
 
 		pool_socket.on("connection", async (socket) => {
 			socket.join(poolAddress)
