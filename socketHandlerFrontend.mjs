@@ -3,6 +3,8 @@ var require = createRequire(import.meta.url)
 
 const io = require("socket.io-client")
 
+console.clear()
+
 let landing_socket = io.connect("http://localhost:2424/")
 
 // example for user input in search bar.
@@ -19,7 +21,7 @@ setInterval(() => {
 }, 2 * 1000) // pings every 2 seconds
 
 landing_socket.on("pong", () => {
-	console.log("pong") // => server alive
+	//console.log("pong") // => server alive
 })
 
 // setting up the socket for sUSD
@@ -52,7 +54,7 @@ pool_socket.on("table_mev", data => {
 
 // example for price_chart_combination: [ 'sUSD', 'USDC' ] => price of sUSD in USDC (default)
 pool_socket.on("price_chart_combination", data => {
-	console.log("\nprice_chart_combination:s",data)
+	console.log("\nprice_chart_combinations:",data)
 })
 
 // example for price_chart:  [ { '1675078547': 1.00078609029431 },{ '1675081511': 1.0007863914931368 },{...} ]
@@ -72,7 +74,7 @@ pool_socket.on("balances_chart", data => {
  * Updates, only latest entry, without history
  */
 
-pool_socket.on("\nUpdate Table-ALL", data => {
+pool_socket.on("Update Table-ALL", data => {
 	// handle JSON-data here
 	console.log("Update Table-ALL",data)
 })
@@ -92,7 +94,7 @@ pool_socket.on("Update Balance-Chart", data => {
 	console.log("Update Balance-Chart",data)
 })
 
-//to-do: Balance-Chart, TVL-Chart, Volume-Chart
+//to-do: TVL-Chart, Volume-Chart
 /*
 pool_socket.on("Update TVL-Chart", data => {
 	// handle JSON-data here
