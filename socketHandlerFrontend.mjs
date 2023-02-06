@@ -1,6 +1,7 @@
 import { createRequire } from "module"
 var require = createRequire(import.meta.url)
 
+const fs = require("fs")
 const io = require("socket.io-client")
 
 console.clear()
@@ -60,13 +61,30 @@ pool_socket.on("price_chart_combination", data => {
 // example for price_chart:  [ { '1675078547': 1.00078609029431 },{ '1675081511': 1.0007863914931368 },{...} ]
 pool_socket.on("price_chart", data => {
 	// handle JSON-data here
-	console.log("<price_chart>", data.length,"entries send")
+	console.log("\n<price_chart>", data.length,"entries send")
 })
 
 // example for balances_chart: [ { '1672493903': [ 18636729, 18298801, 17929766, 16040727 ] },{ '1672494839': [ 18636729, 18298801, 17929766, 16040727 ] },{...} ]
 pool_socket.on("balances_chart", data => {
 	// handle JSON-data here
 	console.log("\n<balances_chart>", data.length,"entries send")
+})
+
+// example for volume_chart:  [ { '1675078547': 865 },{ '1675081511': 1216 },{...} ]
+pool_socket.on("volume_chart", data => {
+	// handle JSON-data here
+	console.log("\n<volume_chart>", data.length,"entries send")
+})
+
+// example for tvl_chart:  [ { '1675078547': 70906023 },{ '1675081511': 70904179 },{...} ]
+pool_socket.on("tvl_chart", data => {
+	// handle JSON-data here
+	console.log("\n<tvl_chart>", data.length,"entries send")
+})
+
+pool_socket.on("bonding_curve", data => {
+	// handle JSON-data here
+	console.log("\n<bonding_curve>", data)
 })
 
 
@@ -94,18 +112,15 @@ pool_socket.on("Update Balance-Chart", data => {
 	console.log("Update Balance-Chart",data)
 })
 
-//to-do: TVL-Chart, Volume-Chart
-/*
-pool_socket.on("Update TVL-Chart", data => {
-	// handle JSON-data here
-	console.log("Update TVL-Chart",data)
-})
-
 pool_socket.on("Update Volume-Chart", data => {
 	// handle JSON-data here
 	console.log("Update Volume-Chart",data)
 })
-*/
+
+pool_socket.on("Update TVL-Chart", data => {
+	// handle JSON-data here
+	console.log("Update TVL-Chart",data)
+})
 
 let timeFrame = "day"
 //let timeFrame = "week"
