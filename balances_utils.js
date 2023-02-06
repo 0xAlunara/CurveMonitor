@@ -67,10 +67,10 @@ function getRawBlocknumbers(poolAddress){
 async function getPoolBalance(METAREGISTRY,poolAddress,blockNumber){
 
 	// example: balances = ['18640063536133844603972293','18564920428085','17811701123312','16056764826637922459027923','0','0','0','0' ]
-	let balances = await METAREGISTRY.methods.get_balances(poolAddress).call({block:blockNumber})
+	let balances = await METAREGISTRY.methods.get_balances(poolAddress).call(blockNumber)
 	for (let i = 0; i < maxRetries; i++) {
 		try {
-			balances = await METAREGISTRY.methods.get_balances(poolAddress).call({block:blockNumber})
+			balances = await METAREGISTRY.methods.get_balances(poolAddress).call(blockNumber)
 			break
 		} catch(error){await errHandler(error)}
 	}
@@ -152,7 +152,7 @@ async function fetchBalancesForPool(poolAddress){
 }
 
 // extra set up because it needs a different web3 provider
-async function fetchBalanceOnce(poolAddress,blockNumber){
+async function fetchBalancesOnce(poolAddress,blockNumber){
 	let balancesJSON = JSON.parse(fs.readFileSync("balances.json"))
 	let data = balancesJSON[poolAddress]
     let addressMetaregistry = "0xF98B45FA17DE75FB1aD0e7aFD971b0ca00e379fC"
@@ -194,7 +194,7 @@ function readBalancesArray(poolAddress){
 
 module.exports = {
 	fetchBalancesForPool,
-	fetchBalanceOnce,
+	fetchBalancesOnce,
 	findLastStoredBlocknumber_inBalances,
 	findLastStoredUnixtime_inBalances,
 	getPoolBalance,
