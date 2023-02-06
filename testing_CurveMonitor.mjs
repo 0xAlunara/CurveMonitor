@@ -32,7 +32,7 @@ const savePriceEntry = price_utils.savePriceEntry
 
 // utils for pool-balances
 const balances_utils = require("./balances_utils.js")
-const fetchBalanceOnce = balances_utils.fetchBalanceOnce
+const fetchBalancesOnce = balances_utils.fetchBalancesOnce
 const bootBalancesJSON = balances_utils.bootBalancesJSON
 const balancesCollectionMain = balances_utils.balancesCollectionMain
 
@@ -40,6 +40,10 @@ const balancesCollectionMain = balances_utils.balancesCollectionMain
 const socket_utils = require("./socket_utils")
 const http_SocketSetup = socket_utils.http_SocketSetup
 const https_SocketSetup = socket_utils.https_SocketSetup
+
+// utils to fetch and store bonding curves
+const bondingCurve_utils = require("./bondingCurve_utils.js")
+const updateBondingCurvesForPool = bondingCurve_utils.updateBondingCurvesForPool
 
 const abiDecoder = require("abi-decoder")
 let ABI_Registry_Exchange = [{"name":"TokenExchange","inputs":[{"name":"buyer","type":"address","indexed":true},{"name":"receiver","type":"address","indexed":true},{"name":"pool","type":"address","indexed":true},{"name":"token_sold","type":"address","indexed":false},{"name":"token_bought","type":"address","indexed":false},{"name":"amount_sold","type":"uint256","indexed":false},{"name":"amount_bought","type":"uint256","indexed":false}],"anonymous":false,"type":"event"},{"stateMutability":"nonpayable","type":"constructor","inputs":[{"name":"_address_provider","type":"address"},{"name":"_calculator","type":"address"}],"outputs":[]},{"stateMutability":"payable","type":"fallback"},{"stateMutability":"payable","type":"function","name":"exchange_with_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":1019563733},{"stateMutability":"payable","type":"function","name":"exchange_with_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_receiver","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"gas":1019563733},{"stateMutability":"payable","type":"function","name":"exchange","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":427142},{"stateMutability":"payable","type":"function","name":"exchange","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_receiver","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"gas":427142},{"stateMutability":"payable","type":"function","name":"exchange_multiple","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":313422},{"stateMutability":"payable","type":"function","name":"exchange_multiple","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_pools","type":"address[4]"}],"outputs":[{"name":"","type":"uint256"}],"gas":313422},{"stateMutability":"payable","type":"function","name":"exchange_multiple","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_expected","type":"uint256"},{"name":"_pools","type":"address[4]"},{"name":"_receiver","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"gas":313422},{"stateMutability":"view","type":"function","name":"get_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"gas":3002213116},{"stateMutability":"view","type":"function","name":"get_best_rate","inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_exclude_pools","type":"address[8]"}],"outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"gas":3002213116},{"stateMutability":"view","type":"function","name":"get_exchange_amount","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":30596},{"stateMutability":"view","type":"function","name":"get_input_amount","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":34701},{"stateMutability":"view","type":"function","name":"get_exchange_amounts","inputs":[{"name":"_pool","type":"address"},{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amounts","type":"uint256[100]"}],"outputs":[{"name":"","type":"uint256[100]"}],"gas":38286},{"stateMutability":"view","type":"function","name":"get_exchange_multiple_amount","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"}],"outputs":[{"name":"","type":"uint256"}],"gas":21334},{"stateMutability":"view","type":"function","name":"get_exchange_multiple_amount","inputs":[{"name":"_route","type":"address[9]"},{"name":"_swap_params","type":"uint256[3][4]"},{"name":"_amount","type":"uint256"},{"name":"_pools","type":"address[4]"}],"outputs":[{"name":"","type":"uint256"}],"gas":21334},{"stateMutability":"view","type":"function","name":"get_calculator","inputs":[{"name":"_pool","type":"address"}],"outputs":[{"name":"","type":"address"}],"gas":5215},{"stateMutability":"nonpayable","type":"function","name":"update_registry_address","inputs":[],"outputs":[{"name":"","type":"bool"}],"gas":115368},{"stateMutability":"nonpayable","type":"function","name":"set_calculator","inputs":[{"name":"_pool","type":"address"},{"name":"_calculator","type":"address"}],"outputs":[{"name":"","type":"bool"}],"gas":40695},{"stateMutability":"nonpayable","type":"function","name":"set_default_calculator","inputs":[{"name":"_calculator","type":"address"}],"outputs":[{"name":"","type":"bool"}],"gas":40459},{"stateMutability":"nonpayable","type":"function","name":"claim_balance","inputs":[{"name":"_token","type":"address"}],"outputs":[{"name":"","type":"bool"}],"gas":41823},{"stateMutability":"nonpayable","type":"function","name":"set_killed","inputs":[{"name":"_is_killed","type":"bool"}],"outputs":[{"name":"","type":"bool"}],"gas":40519},{"stateMutability":"view","type":"function","name":"registry","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":2970},{"stateMutability":"view","type":"function","name":"factory_registry","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":3000},{"stateMutability":"view","type":"function","name":"crypto_registry","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":3030},{"stateMutability":"view","type":"function","name":"default_calculator","inputs":[],"outputs":[{"name":"","type":"address"}],"gas":3060},{"stateMutability":"view","type":"function","name":"is_killed","inputs":[],"outputs":[{"name":"","type":"bool"}],"gas":3090}]
@@ -982,8 +986,18 @@ async function buildClassicCurveMonitorMessage(blockNumber,sold_amount,bought_am
 		await savePriceEntry(poolAddress,blockNumber,unixtime)
 		emitter.emit("Update Price-Chart" + poolAddress,unixtime)
 
-		let balances_entry = await fetchBalanceOnce(poolAddress,blockNumber)
+		let balances_entry = await fetchBalancesOnce(poolAddress,blockNumber)
 		emitter.emit("Update Balance-Chart" + poolAddress,balances_entry)
+
+		let volume_entry = {[unixtime]:parseFloat(dollarAmount.replaceAll(',', ''))}
+		emitter.emit("Update Volume-Chart" + poolAddress,volume_entry)
+
+		let balances = Object.values(balances_entry)[0]
+		let tvl = balances.reduce((a, b) => a + b, 0)
+		let tvl_entry = {[unixtime]:tvl}
+		emitter.emit("Update TVL-Chart" + poolAddress,tvl_entry)
+
+		await updateBondingCurvesForPool(poolAddress)
 
 		return [poolAddress, entry]
 	}
@@ -1081,8 +1095,18 @@ async function buildPostRemovalMessage(blockNumber,coin_amount,token_removed_nam
 		await savePriceEntry(poolAddress,blockNumber,unixtime)
 		emitter.emit("Update Price-Chart" + poolAddress,unixtime)
 
-		let balances_entry = await fetchBalanceOnce(poolAddress,blockNumber)
+		let balances_entry = await fetchBalancesOnce(poolAddress,blockNumber)
 		emitter.emit("Update Balance-Chart" + poolAddress,balances_entry)
+
+		let volume_entry = {[unixtime]:parseFloat(dollarAmount.replaceAll(',', ''))}
+		emitter.emit("Update Volume-Chart" + poolAddress,volume_entry)
+
+		let balances = Object.values(balances_entry)[0]
+		let tvl = balances.reduce((a, b) => a + b, 0)
+		let tvl_entry = {[unixtime]:tvl}
+		emitter.emit("Update TVL-Chart" + poolAddress,tvl_entry)
+
+		await updateBondingCurvesForPool(poolAddress)
 
 		return [poolAddress, entry]
 	}
@@ -1205,8 +1229,18 @@ async function buildPost_DepositMessage(blockNumber,coinArray,originalPoolAddres
 		await savePriceEntry(poolAddress,blockNumber,unixtime)
 		emitter.emit("Update Price-Chart" + poolAddress,unixtime)
 
-		let balances_entry = await fetchBalanceOnce(poolAddress,blockNumber)
+		let balances_entry = await fetchBalancesOnce(poolAddress,blockNumber)
 		emitter.emit("Update Balance-Chart" + poolAddress,balances_entry)
+
+		let volume_entry = {[unixtime]:dollarAmountTotal}
+		emitter.emit("Update Volume-Chart" + poolAddress,volume_entry)
+
+		let balances = Object.values(balances_entry)[0]
+		let tvl = balances.reduce((a, b) => a + b, 0)
+		let tvl_entry = {[unixtime]:tvl}
+		emitter.emit("Update TVL-Chart" + poolAddress,tvl_entry)
+
+		await updateBondingCurvesForPool(poolAddress)
 
 		return [poolAddress, entry]
 	}
@@ -2506,6 +2540,9 @@ async function CurveMonitor(){
 	// start with balances collection
 	bootBalancesJSON()
 	await(balancesCollectionMain(whiteListedPoolAddress))
+
+	// start with bonding curve
+	await updateBondingCurvesForPool(whiteListedPoolAddress)
 }
 
 
