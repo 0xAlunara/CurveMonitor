@@ -17,6 +17,10 @@ const readPriceArray = price_utils.readPriceArray
 const search_utils = require("./search_utils.js")
 const search = search_utils.search
 
+// utils to fetch and store bonding curves
+const bondingCurve_utils = require("./bondingCurve_utils.js")
+const getBondingCurveForPoolAndCombination = bondingCurve_utils.getBondingCurveForPoolAndCombination
+
 async function http_SocketSetup(Server,emitter,whiteListedPoolAddress) {
 
 	const io = new Server(2424, {
@@ -142,30 +146,31 @@ async function initSocketMessages(io,emitter,whiteListedPoolAddress){
 			sendTableData(socket,poolAddress)
 			sendPriceData(timeFrame,socket,poolAddress,price_combination)
 			sendBalanceData(timeFrame,socket,poolAddress)
-			// sendTVLData()
-			// sendVolumeData()
+			sendVolumeData(timeFrame,socket,poolAddress)
+			sendTVLData(timeFrame,socket,poolAddress)
+			sendBondingCurve(socket,poolAddress,price_combination)
 
 			// next block is for when a user plays with the time-span tabulator
 			socket.on("day", () => {
 				timeFrame = "day"
 				sendPriceData(timeFrame,socket,poolAddress,price_combination)
 				sendBalanceData(timeFrame,socket,poolAddress)
-				// sendTVLData()
-				// sendVolumeData()
+				sendVolumeData(timeFrame,socket,poolAddress)
+				sendTVLData(timeFrame,socket,poolAddress)
 			})
 			socket.on("week", () => {
 				timeFrame = "week"
 				sendPriceData(timeFrame,socket,poolAddress,price_combination)
 				sendBalanceData(timeFrame,socket,poolAddress)
-				// sendTVLData()
-				// sendVolumeData()
+				sendVolumeData(timeFrame,socket,poolAddress)
+				sendTVLData(timeFrame,socket,poolAddress)
 			})
 			socket.on("month", () => {
 				timeFrame = "month"
 				sendPriceData(timeFrame,socket,poolAddress,price_combination)
 				sendBalanceData(timeFrame,socket,poolAddress)
-				// sendTVLData()
-				// sendVolumeData()
+				sendVolumeData(timeFrame,socket,poolAddress)
+				sendTVLData(timeFrame,socket,poolAddress)
 			})
 			
 			socket.on("disconnect", () => {
@@ -224,6 +229,53 @@ function sendBalanceData(timeFrame,socket,poolAddress){
 
 	let trimmedData = data.filter(item => Object.keys(item)[0] >= startingPoint)
 	socket.emit("balances_chart", trimmedData)
+}
+
+function sendVolumeData(timeFrame,socket,poolAddress){
+	let currentTime = new Date().getTime() / 1000
+	if (timeFrame == "day") var days = 1
+	if (timeFrame == "week") var days = 7
+	if (timeFrame == "month") var days = 31
+	let startingPoint = currentTime - (days * 24 * 60 * 60)
+
+	// first getting trimmed processedTxLog
+	let dataALL = JSON.parse(fs.readFileSync("processedTxLog_ALL.json"))
+	let trimmedDataALL = dataALL[poolAddress].filter(entry => entry.unixtime >= startingPoint)
+
+	// then making vol-arr out of it
+	let data =  []
+	for(const entry of trimmedDataALL) {
+		let vol = entry.tradeDetails.valueUSD
+		if(!vol) vol = entry.tradeDetails[0].valueUSD
+		data.push({[entry.unixtime]:vol})
+	}
+	socket.emit("volume_chart", data)
+}
+
+function sendTVLData(timeFrame,socket,poolAddress){
+    let currentTime = new Date().getTime() / 1000
+
+    if (timeFrame == "day") var days = 1
+    if (timeFrame == "week") var days = 7
+    if (timeFrame == "month") var days = 31
+
+    let startingPoint = currentTime - (days * 24 * 60 * 60)
+
+    let balances = readBalancesArray(poolAddress)
+    let trimmedBalances = balances.filter(item => Object.keys(item)[0] >= startingPoint)
+
+    let data = trimmedBalances.map(obj => {
+        const key = Object.keys(obj)[0]
+        const sum = obj[key].reduce((a, b) => a + b, 0)
+        return { [key]: sum }
+    })
+
+    socket.emit("tvl_chart", data)
+}
+
+function sendBondingCurve(socket,poolAddress,price_combination){
+	let bondingCurve = getBondingCurveForPoolAndCombination(poolAddress,price_combination)
+	socket.emit("bonding_curve", bondingCurve)
 }
 
 module.exports = {
