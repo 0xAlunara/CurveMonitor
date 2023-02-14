@@ -15,16 +15,6 @@ const web3Call = web3CallUtils.web3Call;
 // to deal with compute units / s
 const MAX_RETRIES = 12;
 
-const OPTIONS = {
-  // Enable auto reconnection
-  reconnect: {
-    auto: true,
-    delay: 89, // ms
-    maxAttempts: 50,
-    onTimeout: false,
-  },
-};
-
 const web3HttpLlamarpc = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com/rpc/" + process.env.web3_llamarpc));
 
 function setLlamaRPC(abi, address) {
