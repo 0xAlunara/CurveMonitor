@@ -6,23 +6,6 @@ const ADDRESS_THREEPOOL = "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7";
 const ADDRESS_TRICRYPTO_2 = "0xD51a44d3FaE010294C616388b506AcdA1bfAAE46";
 const ADDRESS_sUSD_V2_SWAP = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD";
 
-const options = {
-  // Enable auto reconnection
-  reconnect: {
-    auto: true,
-    delay: 89, // ms
-    maxAttempts: 50,
-    onTimeout: false,
-  },
-};
-
-const Web3 = require("web3");
-const web3HTTP = new Web3(new Web3.providers.HttpProvider(process.env.web3HTTP, options));
-
-async function getContract(abi, address) {
-  return new web3HTTP.eth.Contract(abi, address);
-}
-
 function getCurvePools() {
   const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
 
@@ -66,7 +49,7 @@ function getCurrentTime() {
   return `${hours}:${minutes}:${seconds}:${milliseconds}`;
 }
 
-function getUnixtime(){
+function getUnixtime() {
   return Math.floor(new Date().getTime() / 1000);
 }
 
@@ -277,5 +260,5 @@ module.exports = {
   countUniqueTxHashes,
   getTokenName,
   buildPoolName,
-  getCleanedTokenAmount
+  getCleanedTokenAmount,
 };
