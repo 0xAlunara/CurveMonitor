@@ -1,283 +1,285 @@
-const Web3 = require("web3")
-const fs = require("fs")
+const Web3 = require("web3");
+const fs = require("fs");
 
-const apiKeys = require('./api_keys')
+require("dotenv").config();
 
-const generic_utils = require("./generic_utils.js")
-const getCurvePools = generic_utils.getCurvePools
-const getABI = generic_utils.getABI
-const errHandler = generic_utils.errHandler
+const genericUtils = require("./generic_utils.js");
+const getCurvePools = genericUtils.getCurvePools;
+const getABI = genericUtils.getABI;
+
+const web3CallUtils = require("./web3_call_utils.js");
+const errHandler = web3CallUtils.errHandler;
+const getContract = web3CallUtils.getContract;
+const web3Call = web3CallUtils.web3Call;
 
 // to deal with compute units / s
-let maxRetries = 12
+const MAX_RETRIES = 12;
 
-const options = {
-	// Enable auto reconnection
-	reconnect: {
-		auto: true,
-		delay: 89, // ms
-		maxAttempts: 50,
-		onTimeout: false
-	}
+const OPTIONS = {
+  // Enable auto reconnection
+  reconnect: {
+    auto: true,
+    delay: 89, // ms
+    maxAttempts: 50,
+    onTimeout: false,
+  },
+};
+
+const web3HttpLlamarpc = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com/rpc/" + process.env.web3_llamarpc));
+
+function setLlamaRPC(abi, address) {
+  return new web3HttpLlamarpc.eth.Contract(abi, address);
 }
 
-const web3HTTP = new Web3(new Web3.providers.HttpProvider(apiKeys.web3HTTP, options))
-const web3HTTP_llamarpc = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com/rpc/"+apiKeys.web3_llamarpc))
+function bootPriceJSON() {
+  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  let priceJSON;
+  try {
+    priceJSON = JSON.parse(fs.readFileSync("prices.json"));
+  } catch (err) {
+    priceJSON = {};
+  }
 
-function setLlamaRPC(abi,address){
-	return new web3HTTP_llamarpc.eth.Contract(abi, address)
+  const POOLS = getCurvePools();
+  for (const POOL_ADDRESS of POOLS) {
+    if (priceJSON[POOL_ADDRESS]) continue;
+    const ORIGNIAL_ARRAY = [];
+    const REVERSED_ARRAY = [];
+    const nameArray = CURVE_JSON[POOL_ADDRESS].coin_names;
+    for (let i = 0; i < nameArray.length; i++) {
+      for (let j = i + 1; j < nameArray.length; j++) {
+        ORIGNIAL_ARRAY.push({
+          type: "original",
+          priceOf: nameArray[i],
+          priceIn: nameArray[j],
+          data: [],
+        });
+        REVERSED_ARRAY.push({
+          type: "reversed",
+          priceOf: nameArray[j],
+          priceIn: nameArray[i],
+          data: [],
+        });
+      }
+    }
+    const FINAL_ARRAY = ORIGNIAL_ARRAY.concat(REVERSED_ARRAY);
+    priceJSON[POOL_ADDRESS] = FINAL_ARRAY;
+  }
+  fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4));
 }
 
-function set(abi,address) {
-	return new web3HTTP.eth.Contract(abi, address)
+function findLastStoredUnixtimeForCombination(poolAddress, combination, priceJSON) {
+  const PRICE_OF = combination.priceOf;
+  const PRICE_IN = combination.priceIn;
+  const PAIR_ID = priceJSON[poolAddress].findIndex((item) => {
+    return item.priceOf === PRICE_OF && item.priceIn === PRICE_IN;
+  });
+  const DATA = priceJSON[poolAddress][PAIR_ID].data;
+  if (DATA.length === 0) return 0;
+  return Number(Object.keys(DATA[DATA.length - 1])[0]);
 }
 
-
-function bootPriceJSON(){
-	let curveJSON = JSON.parse(fs.readFileSync("CurvePoolData.json"))
-	let priceJSON
-	try{
-		priceJSON = JSON.parse(fs.readFileSync("prices.json"))
-	} catch (err){
-		priceJSON = {}
-	}
-
-	let pools = getCurvePools()
-	for (const poolAddress of pools) {
-		if (typeof priceJSON[poolAddress] !== "undefined") continue
-		let originalArray = []
-		let reversedArray  = []
-		let nameArray = curveJSON[poolAddress].coin_names
-		for (let i = 0; i < nameArray.length; i++) {
-			for (let j = i + 1; j < nameArray.length; j++) {
-				originalArray.push({
-					type: "original",
-					priceOf: nameArray[i],
-					priceIn: nameArray[j],
-					data: []
-				})
-				reversedArray.push({
-					type: "reversed",
-					priceOf: nameArray[j],
-					priceIn: nameArray[i],
-					data: []
-				})
-			}
-		}
-		let finalArray = originalArray.concat(reversedArray)
-		priceJSON[poolAddress] = finalArray
-	}
-	fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4))
-}
-
-function findLastStoredUnixtimeForCombination(poolAddress,combination,priceJSON){
-	let priceOf = combination.priceOf
-	let priceIn = combination.priceIn
-	let pairID = priceJSON[poolAddress].findIndex(item => {
-		return item.priceOf == priceOf && item.priceIn == priceIn
-	})
-	let data = priceJSON[poolAddress][pairID].data
-	if (data.length==0) return 0
-	return Number((Object.keys(data[data.length-1]))[0])
-}
-
-function findLastStoredBlocknumberForCombination(poolAddress,combination,priceJSON){
-	let lastStoredUnixtimeForCombination = findLastStoredUnixtimeForCombination(poolAddress,combination,priceJSON)
-	if (lastStoredUnixtimeForCombination == 0) return 0
-	let dataALL = JSON.parse(fs.readFileSync("processedTxLog_ALL.json"))
-	let blockNumber = (dataALL[poolAddress].find(tx => tx.unixtime === lastStoredUnixtimeForCombination)).blockNumber
-	return blockNumber
+function findLastStoredBlocknumberForCombination(poolAddress, combination, priceJSON) {
+  const LAST_STORED_UNIXTIME_FOR_COMBINATION = findLastStoredUnixtimeForCombination(poolAddress, combination, priceJSON);
+  if (LAST_STORED_UNIXTIME_FOR_COMBINATION === 0) return 0;
+  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+  const BLOCK_NUMBER = DATA_ALL[poolAddress].find((tx) => tx.unixtime == LAST_STORED_UNIXTIME_FOR_COMBINATION).blockNumber;
+  return BLOCK_NUMBER;
 }
 
 // for one pool for one specific token-combination (eg sUSD price in USDC), fetches historical prices
 // input is the json with the processed tx-log, where the blockNumbers are used as relevant blocks to fetch the prices for
 // stores the result as a json in a file
-async function priceCollection_OneCombination(poolAddress,combination,dataALL,priceJSON){
+async function priceCollectionOneCombination(poolAddress, combination, dataALL, priceJSON) {
+  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CONTRACT = setLlamaRPC(await getABI(poolAddress), poolAddress);
+  const PRICE_OF = combination.priceOf;
+  const PRICE_IN = combination.priceIn;
 
-	let curveJSON = JSON.parse(fs.readFileSync("CurvePoolData.json"))
-	let CONTRACT = setLlamaRPC(await getABI(poolAddress),poolAddress)
-	let priceOf = combination.priceOf
-	let priceIn = combination.priceIn
+  // pairID is inside price.json, at which place the token-combination is located. example: {"priceOf": "DAI","priceIn": "USDC"},{"priceOf": "DAI","priceIn": "USDT"}
+  const PAIR_ID = priceJSON[poolAddress].findIndex((item) => {
+    return item.priceOf === PRICE_OF && item.priceIn === PRICE_IN;
+  });
 
-	// pairID is inside price.json, at which place the token-combination is located. example: {"priceOf": "DAI","priceIn": "USDC"},{"priceOf": "DAI","priceIn": "USDT"}
-	let pairID = priceJSON[poolAddress].findIndex(item => {
-		return item.priceOf == priceOf && item.priceIn == priceIn
-	})
+  const COIN_ID_PRICE_OF = CURVE_JSON[poolAddress].coin_names.indexOf(PRICE_OF);
+  const DECIMALS_PRICE_OF = CURVE_JSON[poolAddress].decimals[COIN_ID_PRICE_OF];
+  let dx = "1";
+  for (let i = 0; i < DECIMALS_PRICE_OF; i++) {
+    dx += "0";
+  }
 
-	let coinID_priceOf = curveJSON[poolAddress].coin_names.indexOf(priceOf)
-	let decimals_priceOf = curveJSON[poolAddress].decimals[coinID_priceOf]
-	let dx = "1"
-	for(var i = 0; i < decimals_priceOf; i++){dx+="0"}
+  const COIN_ID_PRICE_IN = CURVE_JSON[poolAddress].coin_names.indexOf(PRICE_IN);
 
-	let coinID_priceIn = curveJSON[poolAddress].coin_names.indexOf(priceIn)
+  // in case the prices got fetched for price coin0 in coin1, and we want the price of coin1 in coin0
+  // pairIdOriginal is the index of the coin0 in coin1 pair in the array (will get used later to invert the price on)
+  let pairIdOriginal;
+  let priceArrayOriginal;
+  if (combination.type === "reversed") {
+    pairIdOriginal = priceJSON[poolAddress].findIndex((item) => {
+      return item.priceIn === PRICE_OF && item.priceOf === PRICE_IN;
+    });
+    priceArrayOriginal = priceJSON[poolAddress][pairIdOriginal].data;
+  }
 
-	// in case the prices got fetched for price coin0 in coin1, and we want the price of coin1 in coin0
-	// pairId_Original is the index of the coin0 in coin1 pair in the array (will get used later to invert the price on)
-	let pairId_Original
-	let priceArray_Original
-	if (combination.type == "reversed"){
-		pairId_Original = priceJSON[poolAddress].findIndex(item => {
-			return item.priceIn == priceOf && item.priceOf == priceIn
-		})
-		priceArray_Original = priceJSON[poolAddress][pairId_Original].data
-	}
+  const DATA = priceJSON[poolAddress][PAIR_ID].data;
 
-	let data = priceJSON[poolAddress][pairID].data
+  // blockNumbers will be the array of missing blocks, input being the tx-logs
+  let blockNumbers = dataALL[poolAddress].map((obj) => obj.blockNumber);
+  const LAST_STORED_BLOCK_NUMBER_FOR_COMBINATION = findLastStoredBlocknumberForCombination(poolAddress, combination, priceJSON);
+  const INDEX = blockNumbers.indexOf(LAST_STORED_BLOCK_NUMBER_FOR_COMBINATION);
+  blockNumbers = blockNumbers.splice(INDEX + 1);
 
-	// blockNumbers will be the array of missing blocks, input being the tx-logs
-	let blockNumbers = dataALL[poolAddress].map(obj => obj.blockNumber)
-	let lastStoredBlocknumberForCombination = findLastStoredBlocknumberForCombination(poolAddress,combination,priceJSON)
-	let index = blockNumbers.indexOf(lastStoredBlocknumberForCombination)
-	blockNumbers = blockNumbers.splice(index+1)
+  // removing dupes caused by multiple tx in the same block
+  blockNumbers = blockNumbers.filter((num, index) => blockNumbers.indexOf(num) === index);
 
-	// removing dupes caused by multiple tx in the same block
-	blockNumbers = blockNumbers.filter((num, index) => blockNumbers.indexOf(num) === index)
+  let counter = 1;
+  for (const BLOCK_NUMBER of blockNumbers) {
+    let unixtime;
+    dataALL[poolAddress].forEach((element) => {
+      if (element.blockNumber === BLOCK_NUMBER) {
+        unixtime = element.unixtime;
+      }
+    });
 
-	let counter = 1
-	for (const blockNumber of blockNumbers) {
+    let dy;
+    if (combination.type === "original") {
+      dy = await web3Call(CONTRACT, "get_dy", [COIN_ID_PRICE_OF, COIN_ID_PRICE_IN, dx], BLOCK_NUMBER);
+      dy = dy / 10 ** CURVE_JSON[poolAddress].decimals[COIN_ID_PRICE_IN];
+      // console.log("block",BLOCK_NUMBER, " | dy",dy, " | priceOf:",PRICE_OF, "(",COIN_ID_PRICE_OF,") | priceIn:",PRICE_IN, "(",COIN_ID_PRICE_IN,") | dx:",dx)
+      DATA.push({ [unixtime]: dy });
+    }
 
-		let unixtime
-		dataALL[poolAddress].forEach(element => {
-			if (element.blockNumber === blockNumber) {
-				unixtime = element.unixtime
-			}
-		})
+    if (combination.type === "reversed") {
+      dy = priceArrayOriginal.find((item) => Object.keys(item)[0] == unixtime)[unixtime];
+      dy = 1 / dy;
+      DATA.push({ [unixtime]: dy });
+    }
 
-		let dy
-		if (combination.type == "original") {
-			dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call(blockNumber)
-			dy = dy / 10**curveJSON[poolAddress].decimals[coinID_priceIn]
-			//console.log("block",blockNumber, " | dy",dy, " | priceOf:",priceOf, "(",coinID_priceOf,") | priceIn:",priceIn, "(",coinID_priceIn,") | dx:",dx)
-			data.push({[unixtime]:dy})
-		}
+    // saving each 100 fetches
+    if (counter % 100 === 0) {
+      console.log(counter + "/" + blockNumbers.length, " | ", PRICE_OF + "/" + PRICE_IN, " | unixtime", unixtime, " | dy", dy);
+      priceJSON[poolAddress][PAIR_ID].data = DATA;
+      fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4));
+    }
+    counter += 1;
+  }
 
-		if (combination.type == "reversed") {
-			dy = (priceArray_Original.find(item => Object.keys(item)[0] == unixtime))[unixtime]
-			dy = 1/dy
-			data.push({[unixtime]:dy})
-		}
-
-		// saving each 100 fetches
-		if (counter % 100 == 0){
-			console.log(counter + "/" + blockNumbers.length, " | ", priceOf + "/" + priceIn," | unixtime",unixtime, " | dy",dy)
-			priceJSON[poolAddress][pairID].data = data
-			fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4))
-		}
-		counter +=1
-	}
-
-	// final save at end of collection for a certain combination
-	fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4))
-	return blockNumbers.length
+  // final save at end of collection for a certain combination
+  fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4));
+  return blockNumbers.length;
 }
 
-async function priceCollection_AllCombinations(poolAddress){
-	bootPriceJSON()
+async function priceCollectionAllCombinations(poolAddress) {
+  bootPriceJSON();
 
-	// the stored JSON with the processed tx-log 
-	let dataALL = JSON.parse(fs.readFileSync("processedTxLog_ALL.json"))
+  // the stored JSON with the processed tx-log
+  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
 
-	// JSON with the combinations of pool token
-	let priceJSON = JSON.parse(fs.readFileSync("prices.json"))
+  // JSON with the combinations of pool token
+  const PRICE_JSON = JSON.parse(fs.readFileSync("prices.json"));
 
-	let check = []
+  const CHECK = [];
 
-	// eg sUSD in DAI, USDT in sUSD, ...
-	for(const combination of priceJSON[poolAddress]) {
-		let state = await priceCollection_OneCombination(poolAddress,combination,dataALL,priceJSON)
-		check.push(state)
-	}
-	return check
+  // eg sUSD in DAI, USDT in sUSD, ...
+  for (const combination of PRICE_JSON[poolAddress]) {
+    const state = await priceCollectionOneCombination(poolAddress, combination, DATA_ALL, PRICE_JSON);
+    CHECK.push(state);
+  }
+  return CHECK;
 }
 
-async function savePriceEntry(poolAddress, blockNumber,unixtime){
-	bootPriceJSON()
-	let priceJSON = JSON.parse(fs.readFileSync("prices.json"))
-	for(const combination of priceJSON[poolAddress]) {
-		let hasUnixtime = combination.data.some(item => {
-			return Object.keys(item)[0] == unixtime
-		})
-		if (hasUnixtime) return
+async function savePriceEntry(poolAddress, blockNumber, unixtime) {
+  bootPriceJSON();
+  const PRICE_JSON = JSON.parse(fs.readFileSync("prices.json"));
+  for (const COMBINATION of PRICE_JSON[poolAddress]) {
+    const HAS_UNIXTIME = COMBINATION.data.some((item) => {
+      return Object.keys(item)[0] === unixtime;
+    });
+    if (HAS_UNIXTIME) return;
 
-		let curveJSON = JSON.parse(fs.readFileSync("CurvePoolData.json"))
-		let CONTRACT = set(await getABI(poolAddress),poolAddress)
-		let priceOf = combination.priceOf
-		let priceIn = combination.priceIn
-	
-		// pairID is inside price.json, and which place the token-combination is located. example: {"priceOf": "DAI","priceIn": "USDC"},{"priceOf": "DAI","priceIn": "USDT"}
-		let pairID = priceJSON[poolAddress].findIndex(item => {
-			return item.priceOf == priceOf && item.priceIn == priceIn
-		})
-	
-		let coinID_priceOf = curveJSON[poolAddress].coin_names.indexOf(priceOf)
-		let decimals_priceOf = curveJSON[poolAddress].decimals[coinID_priceOf]
-		let dx = "1"
-		for(var i = 0; i < decimals_priceOf; i++){dx+="0"}
-	
-		let coinID_priceIn = curveJSON[poolAddress].coin_names.indexOf(priceIn)
-	
-		// in case the prices got fetched for price coin0 in coin1, and we want the price of coin1 in coin0
-		// pairId_Original is the index of the coin0 in coin1 pair in the array (will get used later to invert the price on)
-		let pairId_Original
-		let priceArray_Original
-		if (combination.type == "reversed"){
-			pairId_Original = priceJSON[poolAddress].findIndex(item => {
-				return item.priceIn == priceOf && item.priceOf == priceIn
-			})
-			priceArray_Original = priceJSON[poolAddress][pairId_Original].data
-		}
-	
-		let data = priceJSON[poolAddress][pairID].data
-	
-		if (combination.type == "original") {
-			let dy
-			for (let i = 0; i < maxRetries; i++) {
-				try {
-					dy = await CONTRACT.methods.get_dy(coinID_priceOf,coinID_priceIn,dx).call(blockNumber)
-					break
-				} catch(error){await errHandler(error)}
-			}
-			dy = dy / 10**curveJSON[poolAddress].decimals[coinID_priceIn]
-			data.push({[unixtime]:dy})
-		}
+    const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+    const CONTRACT = await getContract(await getABI(poolAddress), poolAddress);
+    const PRICE_OF = COMBINATION.priceOf;
+    const PRICE_IN = COMBINATION.priceIn;
 
-		if (combination.type == "reversed") {
-			let dy = (priceArray_Original.find(item => Object.keys(item)[0] == unixtime))[unixtime]
-			dy = 1/dy
-			data.push({[unixtime]:dy})
-		}
-	
-		priceJSON[poolAddress][pairID].data = data
-		fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4))
-	}
+    // pairID is inside price.json, and which place the token-combination is located. example: {"priceOf": "DAI","priceIn": "USDC"},{"priceOf": "DAI","priceIn": "USDT"}
+    const PAIR_ID = PRICE_JSON[poolAddress].findIndex((item) => {
+      return item.priceOf === PRICE_OF && item.priceIn === PRICE_IN;
+    });
+
+    const COIN_ID_PRICE_OF = CURVE_JSON[poolAddress].coin_names.indexOf(PRICE_OF);
+    const DECIMALS_PRICE_OF = CURVE_JSON[poolAddress].decimals[COIN_ID_PRICE_OF];
+    let dx = "1";
+    for (let i = 0; i < DECIMALS_PRICE_OF; i++) {
+      dx += "0";
+    }
+
+    const COIN_ID_PRICE_IN = CURVE_JSON[poolAddress].coin_names.indexOf(PRICE_IN);
+
+    // in case the prices got fetched for price coin0 in coin1, and we want the price of coin1 in coin0
+    // pairIdOriginal is the index of the coin0 in coin1 pair in the array (will get used later to invert the price on)
+    let pairIdOriginal;
+    let priceArrayOriginal;
+    if (COMBINATION.type === "reversed") {
+      pairIdOriginal = PRICE_JSON[poolAddress].findIndex((item) => {
+        return item.priceIn === PRICE_OF && item.priceOf === PRICE_IN;
+      });
+      priceArrayOriginal = PRICE_JSON[poolAddress][pairIdOriginal].data;
+    }
+
+    const DATA = PRICE_JSON[poolAddress][PAIR_ID].data;
+
+    if (COMBINATION.type === "original") {
+      let dy;
+      for (let i = 0; i < MAX_RETRIES; i++) {
+        try {
+          dy = await web3Call(CONTRACT, "get_dy", [COIN_ID_PRICE_OF, COIN_ID_PRICE_IN, dx], blockNumber);
+          break;
+        } catch (error) {
+          await errHandler(error);
+        }
+      }
+      dy = dy / 10 ** CURVE_JSON[poolAddress].decimals[COIN_ID_PRICE_IN];
+      DATA.push({ [unixtime]: dy });
+    }
+
+    if (COMBINATION.type === "reversed") {
+      let dy = priceArrayOriginal.find((item) => Object.keys(item)[0] == unixtime)[unixtime];
+      dy = 1 / dy;
+      DATA.push({ [unixtime]: dy });
+    }
+
+    PRICE_JSON[poolAddress][PAIR_ID].data = DATA;
+    fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 4));
+  }
 }
 
-async function priceCollectionMain(poolAddress){
-	while(true){
-		let check = await priceCollection_AllCombinations(poolAddress)
-		// check is used to repeat the price collection cycle as long as the last cycle wasn't an empty fetch => up to date
-		if (check.every(element => element == 0)) break
-	}
-	console.log("collection of prices complete for pool", poolAddress)
+async function priceCollectionMain(poolAddress) {
+  while (true) {
+    const check = await priceCollectionAllCombinations(poolAddress);
+    // check is used to repeat the price collection cycle as long as the last cycle wasn't an empty fetch => up to date
+    if (check.every((element) => element === 0)) break;
+  }
+  console.log("collection of prices complete for pool", poolAddress);
 }
 
 // used to forward the correct priceOf priceIn price-array to the client
-function readPriceArray(poolAddress,priceOf,priceIn){
-	let priceJSON = JSON.parse(fs.readFileSync("prices.json"))
-	let combinationID = priceJSON[poolAddress].findIndex(item => {
-		return item.priceOf == priceOf && item.priceIn == priceIn
-	})
-	let entry = priceJSON[poolAddress][combinationID]
-	return entry.data
+function readPriceArray(poolAddress, priceOf, priceIn) {
+  const PRICE_JSON = JSON.parse(fs.readFileSync("prices.json"));
+  const COMBINATION_ID = PRICE_JSON[poolAddress].findIndex((item) => {
+    return item.priceOf === priceOf && item.priceIn === priceIn;
+  });
+  const entry = PRICE_JSON[poolAddress][COMBINATION_ID];
+  return entry.data;
 }
 
 module.exports = {
-	priceCollection_AllCombinations,
-	priceCollection_OneCombination,
-	findLastStoredBlocknumberForCombination,
-	findLastStoredUnixtimeForCombination,
-	bootPriceJSON,
-	priceCollectionMain,
-	savePriceEntry,
-	readPriceArray
-}
+  priceCollectionAllCombinations,
+  priceCollectionOneCombination,
+  findLastStoredBlocknumberForCombination,
+  findLastStoredUnixtimeForCombination,
+  bootPriceJSON,
+  priceCollectionMain,
+  savePriceEntry,
+  readPriceArray,
+};
