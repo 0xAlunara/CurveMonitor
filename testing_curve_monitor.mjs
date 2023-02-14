@@ -1326,8 +1326,8 @@ let whiteListedPoolAddress = ADDRESS_sUSD_V2_SWAP;
 // show ExchangeMultiple zoomed into target pool (for susd in mvp)
 let zoom = true;
 
-const MODE = "local";
-// let mode = "https"
+//const MODE = "local";
+let mode = "https"
 console.log(MODE + "-mode");
 
 await CurveMonitor();
