@@ -218,8 +218,7 @@ function getBondingCurveForPoolAndCombination(poolAddress, combination) {
 
   // temp. solution, sUSD/USDC = USDC/sUSD
   const BONDING_CURVE = BONDING_CURVES.curves.find(
-    (entry) =>
-      (entry.coin0 === combination[0] && entry.coin1 === combination[1]) || (entry.coin0 === combination[1] && entry.coin1 === combination[0])
+    (entry) => (entry.coin0 === combination[0] && entry.coin1 === combination[1]) || (entry.coin0 === combination[1] && entry.coin1 === combination[0])
   );
 
   // adding specific balances to print the dot
