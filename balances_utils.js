@@ -159,10 +159,10 @@ async function fetchBalancesOnce(poolAddress, blockNumber) {
   const METAREGISTRY = await getContract(await getABI(ADDRESS_METAREGISTRY), ADDRESS_METAREGISTRY);
   let balances = await web3Call(METAREGISTRY, "get_balances", [poolAddress], blockNumber);
   const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
-  try{
+  try {
     balances = balances.slice(0, -CURVE_JSON[poolAddress].n_coins);
-  }catch(err){
-    console.log("err at fetchBalancesOnce in balances_utils, poolAddress",poolAddress,"blockNumber",blockNumber,"balances",balances,err)
+  } catch (err) {
+    console.log("err at fetchBalancesOnce in balances_utils, poolAddress", poolAddress, "blockNumber", blockNumber, "balances", balances, err);
   }
   const DECIMALS = CURVE_JSON[poolAddress].decimals;
   balances = balances.map((item, index) => {
