@@ -484,22 +484,27 @@ async function buildSwapMessage(blockNumber, soldAmount, boughtAmount, tokenSold
     };
 
     saveTxEntry(poolAddress, ENTRY);
-    await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
 
+    const PRICE_ENTRY = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
     const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
     const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replaceAll(",", "")) };
     const BALANCES = Object.values(BALANCES_ENTRY)[0];
-    const TVL = BALANCES.reduce((a, b) => a + b, 0);
-    const TVL_ENTRY = { [UNIXTIME]: TVL };
+
+    let tvlEntry = [];
+    if (BALANCES_ENTRY.length !== 0) {
+      const TVL = BALANCES.reduce((a, b) => a + b, 0);
+      tvlEntry = { [UNIXTIME]: TVL };
+    }
 
     await updateBondingCurvesForPool(poolAddress);
 
     const UPDATE = {
       all: ENTRY,
       unixtime: UNIXTIME,
+      price: PRICE_ENTRY,
       balances: BALANCES_ENTRY,
       volume: VOLUME_ENTRY,
-      tvl: TVL_ENTRY,
+      tvl: tvlEntry,
     };
 
     emitter.emit("General Pool Update" + poolAddress, UPDATE);
@@ -537,23 +542,26 @@ async function buildRemovalMessage(blockNumber, coinAmount, tokenRemovedName, po
     };
 
     saveTxEntry(poolAddress, ENTRY);
-    await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
-
+    const PRICE_ENTRY = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
     const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
     const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replaceAll(",", "")) };
-
     const BALANCES = Object.values(BALANCES_ENTRY)[0];
-    const TVL = BALANCES.reduce((a, b) => a + b, 0);
-    const TVL_ENTRY = { [UNIXTIME]: TVL };
+
+    let tvlEntry = [];
+    if (BALANCES_ENTRY.length !== 0) {
+      const TVL = BALANCES.reduce((a, b) => a + b, 0);
+      tvlEntry = { [UNIXTIME]: TVL };
+    }
 
     await updateBondingCurvesForPool(poolAddress);
 
     const UPDATE = {
       all: ENTRY,
       unixtime: UNIXTIME,
+      price: PRICE_ENTRY,
       balances: BALANCES_ENTRY,
       volume: VOLUME_ENTRY,
-      tvl: TVL_ENTRY,
+      tvl: tvlEntry,
     };
 
     emitter.emit("General Pool Update" + poolAddress, UPDATE);
@@ -615,23 +623,26 @@ async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, 
     };
 
     saveTxEntry(poolAddress, ENTRY);
-    await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
-
+    const PRICE_ENTRY = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
     const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
     const VOLUME_ENTRY = { [UNIXTIME]: dollarAmountTotal };
-
     const BALANCES = Object.values(BALANCES_ENTRY)[0];
-    const TVL = BALANCES.reduce((a, b) => a + b, 0);
-    const TVL_ENTRY = { [UNIXTIME]: TVL };
+
+    let tvlEntry = [];
+    if (BALANCES_ENTRY.length !== 0) {
+      const TVL = BALANCES.reduce((a, b) => a + b, 0);
+      tvlEntry = { [UNIXTIME]: TVL };
+    }
 
     await updateBondingCurvesForPool(poolAddress);
 
     const UPDATE = {
       all: ENTRY,
       unixtime: UNIXTIME,
+      price: PRICE_ENTRY,
       balances: BALANCES_ENTRY,
       volume: VOLUME_ENTRY,
-      tvl: TVL_ENTRY,
+      tvl: tvlEntry,
     };
 
     emitter.emit("General Pool Update" + poolAddress, UPDATE);
