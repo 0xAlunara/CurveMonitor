@@ -1286,7 +1286,6 @@ async function collectionMain() {
     oldRange = NEW_RANGE;
     await collectionCycle(nextBlockToProceedProcessing, NEW_RANGE);
   }
-  console.log("all events fetched and processed");
 }
 
 async function CurveMonitor() {
@@ -1299,15 +1298,16 @@ async function CurveMonitor() {
   }
 
   let latestBlock = 0;
-  let latestBlockAfterProcessing = 1;
+  let latestBlockAfterProcessing = 10;
 
-  while (latestBlock !== latestBlockAfterProcessing) {
+  while (latestBlockAfterProcessing > latestBlock + 2) {
     latestBlock = await getCurrentBlockNumber();
     await collectionMain();
     await priceCollectionMain(whiteListedPoolAddress);
     await balancesCollectionMain(whiteListedPoolAddress);
     latestBlockAfterProcessing = await getCurrentBlockNumber();
   }
+  console.log("all events fetched and processed");
 
   await updateBondingCurvesForPool(whiteListedPoolAddress);
   await activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddress);
@@ -1326,8 +1326,8 @@ let whiteListedPoolAddress = ADDRESS_sUSD_V2_SWAP;
 // show ExchangeMultiple zoomed into target pool (for susd in mvp)
 let zoom = true;
 
-//const MODE = "local";
-let mode = "https"
+// const MODE = "local";
+const MODE = "https"
 console.log(MODE + "-mode");
 
 await CurveMonitor();
