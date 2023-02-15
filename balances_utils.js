@@ -12,20 +12,6 @@ const errHandler = web3CallUtils.errHandler;
 const getContract = web3CallUtils.getContract;
 const web3Call = web3CallUtils.web3Call;
 
-// to deal with compute units / s
-const MAX_RETRIES = 12;
-
-const options = {
-  // Enable auto reconnection
-  reconnect: {
-    auto: true,
-    delay: 89, // ms
-    maxAttempts: 50,
-    onTimeout: false,
-  },
-};
-console.clear();
-
 const web3HttpLlamarpc = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com/rpc/" + process.env.web3_llamarpc));
 
 function setLlamaRPC(abi, address) {
@@ -66,7 +52,7 @@ function getRawBlocknumbers(POOL_ADDRESS) {
 async function getPoolBalance(METAREGISTRY, POOL_ADDRESS, blockNumber) {
   // example: balances = ['18640063536133844603972293','18564920428085','17811701123312','16056764826637922459027923','0','0','0','0' ]
   let balances = await web3Call(METAREGISTRY, "get_balances", [POOL_ADDRESS], blockNumber);
-  for (let i = 0; i < MAX_RETRIES; i++) {
+  for (let i = 0; i < 12; i++) {
     try {
       balances = await web3Call(METAREGISTRY, "get_balances", [POOL_ADDRESS], blockNumber);
       break;
@@ -151,10 +137,40 @@ async function fetchBalancesForPool(POOL_ADDRESS) {
   return blockNumbers.length;
 }
 
+function hasEntryForUnixTime(DATA, unixtime) {
+  let start = 0;
+  let end = DATA.length - 1;
+
+  while (start <= end) {
+    const mid = Math.floor((start + end) / 2);
+    const midUnixtime = Object.keys(DATA[mid])[0];
+
+    if (midUnixtime == unixtime) {
+      return true;
+    } else if (Number(DATA[mid][midUnixtime][0]) < unixtime) {
+      start = mid + 1;
+    } else {
+      end = mid - 1;
+    }
+  }
+
+  return false;
+}
+
 // extra set up because it needs a different web3 provider
 async function fetchBalancesOnce(poolAddress, blockNumber) {
   const BALANCES_JSON = JSON.parse(fs.readFileSync("balances.json"));
   const DATA = BALANCES_JSON[poolAddress];
+
+  let unixtime;
+  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+  DATA_ALL[poolAddress].forEach((element) => {
+    if (element.blockNumber == blockNumber) {
+      unixtime = element.unixtime;
+    }
+  });
+  if (hasEntryForUnixTime(DATA, unixtime)) return [];
+
   const ADDRESS_METAREGISTRY = "0xF98B45FA17DE75FB1aD0e7aFD971b0ca00e379fC";
   const METAREGISTRY = await getContract(await getABI(ADDRESS_METAREGISTRY), ADDRESS_METAREGISTRY);
   let balances = await web3Call(METAREGISTRY, "get_balances", [poolAddress], blockNumber);
@@ -167,13 +183,6 @@ async function fetchBalancesOnce(poolAddress, blockNumber) {
   const DECIMALS = CURVE_JSON[poolAddress].decimals;
   balances = balances.map((item, index) => {
     return roundNumber(item / 10 ** DECIMALS[index]);
-  });
-  let unixtime;
-  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
-  DATA_ALL[poolAddress].forEach((element) => {
-    if (element.blockNumber == blockNumber) {
-      unixtime = element.unixtime;
-    }
   });
   const ENTRY = { [unixtime]: balances };
   DATA.push(ENTRY);
