@@ -123,18 +123,11 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
       // needed for when a user changes coins in the price chart, to keep track in which
       let timeFrame = "month";
 
-      socket.on("priceOf", (priceOf) => {
-        priceCombination[0] = priceOf;
-        // socket.emit("search_res", res)
-      });
-
-      socket.on("priceIn", (priceIn) => {
-        priceCombination[1] = priceIn;
-        // socket.emit("search_res", res)
-      });
-
-      socket.on("user asks new price combination", (newCombination) => {
-        sendPriceData(timeFrame, socket, POOL_ADDRESS, newCombination);
+      // example for data: ["week", "sUSD", "USDC"];
+      socket.on("new combination", (data) => {
+        [timeFrame, ...priceCombination] = data;
+        sendPriceData(timeFrame, socket, POOL_ADDRESS, priceCombination);
+        sendBondingCurve(socket, POOL_ADDRESS, priceCombination);
       });
 
       // messages on connect
@@ -147,25 +140,15 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
 
       // next block is for when a user plays with the time-span tabulator
       socket.on("day", () => {
-        timeFrame = "day";
-        sendPriceData(timeFrame, socket, POOL_ADDRESS, priceCombination);
-        sendBalanceData(timeFrame, socket, POOL_ADDRESS);
-        sendVolumeData(timeFrame, socket, POOL_ADDRESS);
-        sendTVLData(timeFrame, socket, POOL_ADDRESS);
+        sendData("day", socket, POOL_ADDRESS, priceCombination);
       });
+
       socket.on("week", () => {
-        timeFrame = "week";
-        sendPriceData(timeFrame, socket, POOL_ADDRESS, priceCombination);
-        sendBalanceData(timeFrame, socket, POOL_ADDRESS);
-        sendVolumeData(timeFrame, socket, POOL_ADDRESS);
-        sendTVLData(timeFrame, socket, POOL_ADDRESS);
+        sendData("week", socket, POOL_ADDRESS, priceCombination);
       });
+
       socket.on("month", () => {
-        timeFrame = "month";
-        sendPriceData(timeFrame, socket, POOL_ADDRESS, priceCombination);
-        sendBalanceData(timeFrame, socket, POOL_ADDRESS);
-        sendVolumeData(timeFrame, socket, POOL_ADDRESS);
-        sendTVLData(timeFrame, socket, POOL_ADDRESS);
+        sendData("month", socket, POOL_ADDRESS, priceCombination);
       });
 
       socket.on("disconnect", () => {
@@ -173,6 +156,13 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
       });
     });
   }
+}
+
+function sendData(timeFrame, socket, poolAddress, priceCombination) {
+  sendPriceData(timeFrame, socket, poolAddress, priceCombination);
+  sendBalanceData(timeFrame, socket, poolAddress);
+  sendVolumeData(timeFrame, socket, poolAddress);
+  sendTVLData(timeFrame, socket, poolAddress);
 }
 
 // sends the inital data for the table-view (tx history for a given pool)
