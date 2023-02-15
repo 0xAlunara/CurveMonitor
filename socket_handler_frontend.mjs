@@ -126,3 +126,6 @@ const timeFrame = "day";
 
 // POOL_SOCKET.emit(timeFrame) not to be used on init connection (defaults to 1 month). Only used when a user starts changing time-spans
 // POOL_SOCKET.emit(timeFrame)
+
+// example for price-combination-request
+POOL_SOCKET.emit("new combination", ["day", "sUSD", "USDC"]);
