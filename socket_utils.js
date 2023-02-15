@@ -78,11 +78,12 @@ async function startLandingSocket(io) {
 // making use of socket.io rooms
 async function manageUpdates(io, emitter, poolAddress) {
   emitter.on("General Pool Update" + poolAddress, async (data) => {
+    console.log("General Pool Update", data);
     io.in(poolAddress).emit("Update Table-ALL", data.all);
-    io.in(poolAddress).emit("Update Price-Chart", data.unixtime);
-    io.in(poolAddress).emit("Update Balance-Chart", data.balances);
-    io.in(poolAddress).emit("Update TVL-ALL", data.tvl);
     io.in(poolAddress).emit("Update Volume-Chart", data.volume);
+    if (data.price.length !== 0) io.in(poolAddress).emit("Update Price-Chart", data.price);
+    if (data.balances.length !== 0) io.in(poolAddress).emit("Update Balance-Chart", data.balances);
+    if (data.tvl.length !== 0) io.in(poolAddress).emit("Update TVL-ALL", data.tvl);
   });
 
   emitter.on("Update Table-MEV" + poolAddress, async (data) => {
@@ -130,6 +131,10 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
       socket.on("priceIn", (priceIn) => {
         priceCombination[1] = priceIn;
         // socket.emit("search_res", res)
+      });
+
+      socket.on("user asks new price combination", (newCombination) => {
+        sendPriceData(timeFrame, socket, POOL_ADDRESS, newCombination);
       });
 
       // messages on connect
