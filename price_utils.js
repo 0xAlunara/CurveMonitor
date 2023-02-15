@@ -80,14 +80,13 @@ function findLastStoredBlocknumberForCombination(poolAddress, combination, price
 // for one pool for one specific token-combination (eg sUSD price in USDC), fetches historical prices
 // input is the json with the processed tx-log, where the blockNumbers are used as relevant blocks to fetch the prices for
 // stores the result as a json in a file
-async function priceCollectionOneCombination(poolAddress, combination, dataALL, priceJSON) {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+async function priceCollectionOneCombination(poolAddress, combination, dataALL, PRICE_JSON, CURVE_JSON) {
   const CONTRACT = setLlamaRPC(await getABI(poolAddress), poolAddress);
   const PRICE_OF = combination.priceOf;
   const PRICE_IN = combination.priceIn;
 
   // pairID is inside price.json, at which place the token-combination is located. example: {"priceOf": "DAI","priceIn": "USDC"},{"priceOf": "DAI","priceIn": "USDT"}
-  const PAIR_ID = priceJSON[poolAddress].findIndex((item) => {
+  const PAIR_ID = PRICE_JSON[poolAddress].findIndex((item) => {
     return item.priceOf === PRICE_OF && item.priceIn === PRICE_IN;
   });
 
@@ -105,17 +104,17 @@ async function priceCollectionOneCombination(poolAddress, combination, dataALL, 
   let pairIdOriginal;
   let priceArrayOriginal;
   if (combination.type === "reversed") {
-    pairIdOriginal = priceJSON[poolAddress].findIndex((item) => {
+    pairIdOriginal = PRICE_JSON[poolAddress].findIndex((item) => {
       return item.priceIn === PRICE_OF && item.priceOf === PRICE_IN;
     });
-    priceArrayOriginal = priceJSON[poolAddress][pairIdOriginal].data;
+    priceArrayOriginal = PRICE_JSON[poolAddress][pairIdOriginal].data;
   }
 
-  const DATA = priceJSON[poolAddress][PAIR_ID].data;
+  const DATA = PRICE_JSON[poolAddress][PAIR_ID].data;
 
   // blockNumbers will be the array of missing blocks, input being the tx-logs
   let blockNumbers = dataALL[poolAddress].map((obj) => obj.blockNumber);
-  const LAST_STORED_BLOCK_NUMBER_FOR_COMBINATION = findLastStoredBlocknumberForCombination(poolAddress, combination, priceJSON);
+  const LAST_STORED_BLOCK_NUMBER_FOR_COMBINATION = findLastStoredBlocknumberForCombination(poolAddress, combination, PRICE_JSON);
   const INDEX = blockNumbers.indexOf(LAST_STORED_BLOCK_NUMBER_FOR_COMBINATION);
   blockNumbers = blockNumbers.splice(INDEX + 1);
 
@@ -131,31 +130,38 @@ async function priceCollectionOneCombination(poolAddress, combination, dataALL, 
       }
     });
 
+    if (!hasEntryForUnixTime(combination, unixtime)) return 0;
+
     let dy;
     if (combination.type === "original") {
       dy = await web3Call(CONTRACT, "get_dy", [COIN_ID_PRICE_OF, COIN_ID_PRICE_IN, dx], BLOCK_NUMBER);
       dy = dy / 10 ** CURVE_JSON[poolAddress].decimals[COIN_ID_PRICE_IN];
-      // console.log("block",BLOCK_NUMBER, " | dy",dy, " | priceOf:",PRICE_OF, "(",COIN_ID_PRICE_OF,") | priceIn:",PRICE_IN, "(",COIN_ID_PRICE_IN,") | dx:",dx)
-      DATA.push({ [unixtime]: dy });
+      if (dy == null) {
+        console.log("dy = null COIN_ID_PRICE_OF", COIN_ID_PRICE_OF, "COIN_ID_PRICE_IN", COIN_ID_PRICE_IN, "dx", dx, "BLOCK_NUMBER", BLOCK_NUMBER);
+      } else {
+        DATA.push({ [unixtime]: dy });
+      }
     }
 
     if (combination.type === "reversed") {
       dy = priceArrayOriginal.find((item) => Object.keys(item)[0] == unixtime)[unixtime];
-      dy = 1 / dy;
-      DATA.push({ [unixtime]: dy });
+      if (dy) {
+        dy = 1 / dy;
+        DATA.push({ [unixtime]: dy });
+      }
     }
 
     // saving each 100 fetches
     if (counter % 100 === 0) {
       console.log(counter + "/" + blockNumbers.length, " | ", PRICE_OF + "/" + PRICE_IN, " | unixtime", unixtime, " | dy", dy);
-      priceJSON[poolAddress][PAIR_ID].data = DATA;
-      fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4));
+      PRICE_JSON[poolAddress][PAIR_ID].data = DATA;
+      fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 4));
     }
     counter += 1;
   }
 
   // final save at end of collection for a certain combination
-  fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4));
+  fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 4));
   return blockNumbers.length;
 }
 
@@ -170,9 +176,11 @@ async function priceCollectionAllCombinations(poolAddress) {
 
   const CHECK = [];
 
+  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+
   // eg sUSD in DAI, USDT in sUSD, ...
   for (const combination of PRICE_JSON[poolAddress]) {
-    const state = await priceCollectionOneCombination(poolAddress, combination, DATA_ALL, PRICE_JSON);
+    const state = await priceCollectionOneCombination(poolAddress, combination, DATA_ALL, PRICE_JSON, CURVE_JSON);
     CHECK.push(state);
   }
   return CHECK;
@@ -181,16 +189,18 @@ async function priceCollectionAllCombinations(poolAddress) {
 async function savePriceEntry(poolAddress, blockNumber, unixtime) {
   bootPriceJSON();
   const PRICE_JSON = JSON.parse(fs.readFileSync("prices.json"));
+  let res = [];
   for (const COMBINATION of PRICE_JSON[poolAddress]) {
     const HAS_UNIXTIME = COMBINATION.data.some((item) => {
-      return Object.keys(item)[0] === unixtime;
+      return Object.keys(item)[0] == unixtime;
     });
-    if (HAS_UNIXTIME) return;
+    if (HAS_UNIXTIME) continue;
 
     const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
     const CONTRACT = await getContract(await getABI(poolAddress), poolAddress);
     const PRICE_OF = COMBINATION.priceOf;
     const PRICE_IN = COMBINATION.priceIn;
+    const NAME_COMBO = [PRICE_OF, PRICE_IN];
 
     // pairID is inside price.json, and which place the token-combination is located. example: {"priceOf": "DAI","priceIn": "USDC"},{"priceOf": "DAI","priceIn": "USDT"}
     const PAIR_ID = PRICE_JSON[poolAddress].findIndex((item) => {
@@ -230,18 +240,36 @@ async function savePriceEntry(poolAddress, blockNumber, unixtime) {
         }
       }
       dy = dy / 10 ** CURVE_JSON[poolAddress].decimals[COIN_ID_PRICE_IN];
-      DATA.push({ [unixtime]: dy });
+      if (dy == null) {
+        console.log("dy = null COIN_ID_PRICE_OF", COIN_ID_PRICE_OF, "COIN_ID_PRICE_IN", COIN_ID_PRICE_IN, "dx", dx, "BLOCK_NUMBER", blockNumber);
+      } else {
+        const ENTRY = { [unixtime]: dy };
+        DATA.push(ENTRY);
+        res.push({ [NAME_COMBO]: ENTRY });
+      }
     }
 
     if (COMBINATION.type === "reversed") {
-      let dy = priceArrayOriginal.find((item) => Object.keys(item)[0] == unixtime)[unixtime];
-      dy = 1 / dy;
-      DATA.push({ [unixtime]: dy });
+      let dy;
+      try {
+        dy = priceArrayOriginal.find((item) => Object.keys(item)[0] == unixtime)[unixtime];
+      } catch (err) {
+        console.log("dy not found for price of", COMBINATION.priceOf, "in", COMBINATION.priceIn, "at unixtime", unixtime);
+      }
+      if (dy == null || !dy) {
+        console.log("dy = null COIN_ID_PRICE_OF", COIN_ID_PRICE_OF, "COIN_ID_PRICE_IN", COIN_ID_PRICE_IN, "dx", dx, "BLOCK_NUMBER", blockNumber);
+      } else {
+        dy = 1 / dy;
+        const ENTRY = { [unixtime]: dy };
+        DATA.push(ENTRY);
+        res.push({ [NAME_COMBO]: ENTRY });
+      }
     }
 
     PRICE_JSON[poolAddress][PAIR_ID].data = DATA;
     fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 4));
   }
+  return res;
 }
 
 async function priceCollectionMain(poolAddress) {
@@ -261,6 +289,32 @@ function readPriceArray(poolAddress, priceOf, priceIn) {
   });
   const entry = PRICE_JSON[poolAddress][COMBINATION_ID];
   return entry.data;
+}
+
+function hasEntryForUnixTime(combination, unixtime) {
+  const priceEntries = combination.data || [];
+  if (binarySearch(priceEntries, unixtime)) {
+    return true;
+  }
+  return false;
+}
+
+function binarySearch(arr, x) {
+  let left = 0;
+  let right = arr.length - 1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid][x] === undefined) {
+      if (x < Object.keys(arr[mid])[0]) {
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    } else {
+      return true;
+    }
+  }
+  return false;
 }
 
 module.exports = {
