@@ -67,7 +67,7 @@ async function getABI(poolAddress) {
     const URL = "https://api.etherscan.io/api?module=contract&action=getabi&address=" + poolAddress + "&apikey=" + process.env.etherscanAPI_key;
     const ABI = (await axios.get(URL)).data.result;
     abiDataBase[poolAddress] = ABI;
-    fs.writeFileSync("abi_db.json", JSON.stringify(abiDataBase, null, 4));
+    fs.writeFileSync("abi_db.json", JSON.stringify(abiDataBase, null, 2));
     return JSON.parse(ABI);
   } else {
     try {
