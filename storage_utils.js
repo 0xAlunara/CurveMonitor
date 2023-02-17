@@ -70,7 +70,7 @@ function saveTxEntry(poolAddress, entry) {
   }
 
   tradeData[poolAddress].push(entry);
-  fs.writeFileSync(fileName, JSON.stringify(tradeData, null, 4));
+  fs.writeFileSync(fileName, JSON.stringify(tradeData, null, 2));
 }
 
 // finds the last event that has been processed for a given pool, so find the starting point for processing the raw event log
@@ -185,7 +185,6 @@ async function fetchEvents(collectedData, CONTRACT, eventName, eventNames, maste
           // => no events left
           fs.writeFileSync("unprocessed_event_logs.json", JSON.stringify(collectedData, null, 1));
           if (eventName === eventNames[eventNames.length - 1]) {
-            console.log("collection of raw logs complete for", poolAddress, "\n");
             finalizeCollection("IsReadyCollectingRawLogs");
           }
           return;
