@@ -76,19 +76,33 @@ async function startLandingSocket(io) {
 }
 
 // making use of socket.io rooms
-async function manageUpdates(io, emitter, poolAddress) {
-  emitter.on("General Pool Update" + poolAddress, async (data) => {
+async function manageUpdates(POOL_SOCKET, emitter, POOL_ADDRESS, timeFrame, priceCombination) {
+  emitter.on("General Pool Update" + POOL_ADDRESS, async (data) => {
     console.log("General Pool Update", data);
-    io.in(poolAddress).emit("Update Table-ALL", data.all);
-    io.in(poolAddress).emit("Update Volume-Chart", data.volume);
-    if (data.price.length !== 0) io.in(poolAddress).emit("Update Price-Chart", data.price);
-    if (data.balances.length !== 0) io.in(poolAddress).emit("Update Balance-Chart", data.balances);
-    if (data.tvl.length !== 0) io.in(poolAddress).emit("Update TVL-ALL", data.tvl);
+    POOL_SOCKET.in(POOL_ADDRESS).emit("Update Table-ALL", data.all);
+    POOL_SOCKET.in(POOL_ADDRESS).emit("Update Volume-Chart", data.volume);
+    if (data.price.length !== 0) POOL_SOCKET.in(POOL_ADDRESS).emit("Update Price-Chart", data.price);
+    if (data.balances.length !== 0) POOL_SOCKET.in(POOL_ADDRESS).emit("Update Balance-Chart", data.balances);
+    if (data.tvl.length !== 0) POOL_SOCKET.in(POOL_ADDRESS).emit("Update TVL-ALL", data.tvl);
   });
 
-  emitter.on("Update Table-MEV" + poolAddress, async (data) => {
-    io.in(poolAddress).emit("Update Table-MEV", data);
+  emitter.on("Update Table-MEV" + POOL_ADDRESS, async (data) => {
+    POOL_SOCKET.in(POOL_ADDRESS).emit("Update Table-MEV", data);
   });
+
+  // messages once all data is ready
+  emitter.on("all events fetched and processed" + POOL_ADDRESS, () => {
+    sendDefaultInitMessage(POOL_SOCKET, POOL_ADDRESS, timeFrame, priceCombination);
+  });
+}
+
+function sendDefaultInitMessage(POOL_SOCKET, POOL_ADDRESS, timeFrame, priceCombination) {
+  sendTableData(POOL_SOCKET, POOL_ADDRESS);
+  sendPriceData(timeFrame, POOL_SOCKET, POOL_ADDRESS, priceCombination);
+  sendBalanceData(timeFrame, POOL_SOCKET, POOL_ADDRESS);
+  sendVolumeData(timeFrame, POOL_SOCKET, POOL_ADDRESS);
+  sendTVLData(timeFrame, POOL_SOCKET, POOL_ADDRESS);
+  sendBondingCurve(POOL_SOCKET, POOL_ADDRESS, priceCombination);
 }
 
 /**
@@ -104,7 +118,17 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
     if (POOL_ADDRESS !== whiteListedPoolAddress) continue;
     const POOL_SOCKET = io.of("/" + POOL_ADDRESS);
 
-    await manageUpdates(POOL_SOCKET, emitter, POOL_ADDRESS);
+    const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+    const COIN_NAMES = CURVE_JSON[POOL_ADDRESS].coin_names;
+
+    // eg [ 'sUSD', 'DAI' ] => price of sUSD in DAI
+    let priceCombination = [COIN_NAMES[COIN_NAMES.length - 1], COIN_NAMES[0]];
+    if (POOL_ADDRESS === "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD") priceCombination = ["sUSD", "USDC"];
+
+    // default view is set to one month of data
+    let timeFrame = "month";
+
+    await manageUpdates(POOL_SOCKET, emitter, POOL_ADDRESS, timeFrame, priceCombination);
 
     POOL_SOCKET.on("connection", async (socket) => {
       socket.join(POOL_ADDRESS);
@@ -112,16 +136,9 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
       console.log(POOL_ADDRESS, "socket connected");
 
       // sending the array of token names, used in the price chart switch (priceOf: [...] priceIn: [...] on the UI)
-      const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
-      const COIN_NAMES = CURVE_JSON[POOL_ADDRESS].coin_names;
       socket.emit("token names inside pool", COIN_NAMES);
 
-      // eg [ 'sUSD', 'DAI' ] => price of sUSD in DAI
-      let priceCombination = [COIN_NAMES[COIN_NAMES.length - 1], COIN_NAMES[0]];
-      if (POOL_ADDRESS === "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD") priceCombination = ["sUSD", "USDC"];
-
-      // needed for when a user changes coins in the price chart, to keep track in which
-      let timeFrame = "month";
+      sendDefaultInitMessage(POOL_SOCKET, POOL_ADDRESS, timeFrame, priceCombination);
 
       // example for data: ["week", "sUSD", "USDC"];
       socket.on("new combination", (data) => {
@@ -129,14 +146,6 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
         sendPriceData(timeFrame, socket, POOL_ADDRESS, priceCombination);
         sendBondingCurve(socket, POOL_ADDRESS, priceCombination);
       });
-
-      // messages on connect
-      sendTableData(socket, POOL_ADDRESS);
-      sendPriceData(timeFrame, socket, POOL_ADDRESS, priceCombination);
-      sendBalanceData(timeFrame, socket, POOL_ADDRESS);
-      sendVolumeData(timeFrame, socket, POOL_ADDRESS);
-      sendTVLData(timeFrame, socket, POOL_ADDRESS);
-      sendBondingCurve(socket, POOL_ADDRESS, priceCombination);
 
       // next block is for when a user plays with the time-span tabulator
       socket.on("day", () => {
