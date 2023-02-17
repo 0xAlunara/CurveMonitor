@@ -36,10 +36,10 @@ function bootBalancesJSON() {
   }
   const POOLS = getCurvePools();
   for (const POOL_ADDRESS of POOLS) {
-    if (typeof balancesJSON[POOL_ADDRESS] !== "undefined") continue;
+    if (balancesJSON[POOL_ADDRESS]) continue;
     balancesJSON[POOL_ADDRESS] = [];
   }
-  fs.writeFileSync("balances.json", JSON.stringify(balancesJSON, null, 4));
+  fs.writeFileSync("balances.json", JSON.stringify(balancesJSON, null, 2));
 }
 
 // returns an arr with all blocknumbers which saw action for a given pool
@@ -92,6 +92,7 @@ function findLastStoredBlocknumberInBalances(POOL_ADDRESS) {
   return BLOCK_NUMBER;
 }
 
+// returns the number of blocks that had to be fetched. If 0, we know it is up to date. If it was more than 0, we repeat the cycle
 async function fetchBalancesForPool(POOL_ADDRESS) {
   const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
   const BALANCES_JSON = JSON.parse(fs.readFileSync("balances.json"));
@@ -125,15 +126,13 @@ async function fetchBalancesForPool(POOL_ADDRESS) {
     // saving each 100 fetches
     if (counter % 10 === 0) {
       BALANCES_JSON[POOL_ADDRESS] = data;
-      fs.writeFileSync("balances.json", JSON.stringify(BALANCES_JSON, null, 4));
+      fs.writeFileSync("balances.json", JSON.stringify(BALANCES_JSON, null, 2));
       console.log(counter + "/" + blockNumbers.length, unixtime, BALANCES, POOL_ADDRESS);
     }
     counter += 1;
   }
-  // final save at end of collection for a certain combination
-  fs.writeFileSync("balances.json", JSON.stringify(BALANCES_JSON, null, 4));
+  fs.writeFileSync("balances.json", JSON.stringify(BALANCES_JSON, null, 2));
 
-  // returns the number of blocks that had to be fetched. If 0, we know it is up to date. If it was more than 0, we repeat the cycle
   return blockNumbers.length;
 }
 
@@ -186,7 +185,7 @@ async function fetchBalancesOnce(poolAddress, blockNumber) {
   });
   const ENTRY = { [unixtime]: balances };
   DATA.push(ENTRY);
-  fs.writeFileSync("balances.json", JSON.stringify(BALANCES_JSON, null, 4));
+  fs.writeFileSync("balances.json", JSON.stringify(BALANCES_JSON, null, 2));
   return ENTRY;
 }
 
