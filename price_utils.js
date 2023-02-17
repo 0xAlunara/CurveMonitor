@@ -55,7 +55,7 @@ function bootPriceJSON() {
     const FINAL_ARRAY = ORIGNIAL_ARRAY.concat(REVERSED_ARRAY);
     priceJSON[POOL_ADDRESS] = FINAL_ARRAY;
   }
-  fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 4));
+  fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 2));
 }
 
 function findLastStoredUnixtimeForCombination(poolAddress, combination, priceJSON) {
@@ -155,13 +155,13 @@ async function priceCollectionOneCombination(poolAddress, combination, dataALL, 
     if (counter % 100 === 0) {
       console.log(counter + "/" + blockNumbers.length, " | ", PRICE_OF + "/" + PRICE_IN, " | unixtime", unixtime, " | dy", dy);
       PRICE_JSON[poolAddress][PAIR_ID].data = DATA;
-      fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 4));
+      fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 2));
     }
     counter += 1;
   }
 
   // final save at end of collection for a certain combination
-  fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 4));
+  fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 2));
   return blockNumbers.length;
 }
 
@@ -267,7 +267,7 @@ async function savePriceEntry(poolAddress, blockNumber, unixtime) {
     }
 
     PRICE_JSON[poolAddress][PAIR_ID].data = DATA;
-    fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 4));
+    fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 2));
   }
   return res;
 }
