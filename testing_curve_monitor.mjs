@@ -498,16 +498,18 @@ async function buildSwapMessage(blockNumber, soldAmount, boughtAmount, tokenSold
 
     await updateBondingCurvesForPool(poolAddress);
 
-    const UPDATE = {
-      all: ENTRY,
-      unixtime: UNIXTIME,
-      price: PRICE_ENTRY,
-      balances: BALANCES_ENTRY,
-      volume: VOLUME_ENTRY,
-      tvl: tvlEntry,
-    };
+    if (!isCollecting) {
+      const UPDATE = {
+        all: ENTRY,
+        unixtime: UNIXTIME,
+        price: PRICE_ENTRY,
+        balances: BALANCES_ENTRY,
+        volume: VOLUME_ENTRY,
+        tvl: tvlEntry,
+      };
 
-    emitter.emit("General Pool Update" + poolAddress, UPDATE);
+      emitter.emit("General Pool Update" + poolAddress, UPDATE);
+    }
     return [poolAddress, ENTRY];
   }
 }
@@ -555,16 +557,18 @@ async function buildRemovalMessage(blockNumber, coinAmount, tokenRemovedName, po
 
     await updateBondingCurvesForPool(poolAddress);
 
-    const UPDATE = {
-      all: ENTRY,
-      unixtime: UNIXTIME,
-      price: PRICE_ENTRY,
-      balances: BALANCES_ENTRY,
-      volume: VOLUME_ENTRY,
-      tvl: tvlEntry,
-    };
+    if (!isCollecting) {
+      const UPDATE = {
+        all: ENTRY,
+        unixtime: UNIXTIME,
+        price: PRICE_ENTRY,
+        balances: BALANCES_ENTRY,
+        volume: VOLUME_ENTRY,
+        tvl: tvlEntry,
+      };
 
-    emitter.emit("General Pool Update" + poolAddress, UPDATE);
+      emitter.emit("General Pool Update" + poolAddress, UPDATE);
+    }
     return [poolAddress, ENTRY];
   }
 }
@@ -636,16 +640,18 @@ async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, 
 
     await updateBondingCurvesForPool(poolAddress);
 
-    const UPDATE = {
-      all: ENTRY,
-      unixtime: UNIXTIME,
-      price: PRICE_ENTRY,
-      balances: BALANCES_ENTRY,
-      volume: VOLUME_ENTRY,
-      tvl: tvlEntry,
-    };
+    if (!isCollecting) {
+      const UPDATE = {
+        all: ENTRY,
+        unixtime: UNIXTIME,
+        price: PRICE_ENTRY,
+        balances: BALANCES_ENTRY,
+        volume: VOLUME_ENTRY,
+        tvl: tvlEntry,
+      };
 
-    emitter.emit("General Pool Update" + poolAddress, UPDATE);
+      emitter.emit("General Pool Update" + poolAddress, UPDATE);
+    }
     return [poolAddress, ENTRY];
   }
 }
@@ -1311,19 +1317,31 @@ async function CurveMonitor() {
   let latestBlock = 0;
   let latestBlockAfterProcessing = 10;
 
-  while (latestBlockAfterProcessing > latestBlock + 2) {
+  const MAX_TRIES = 12;
+  let tryCount = 0;
+
+  while (latestBlockAfterProcessing > latestBlock + 5 && tryCount < MAX_TRIES) {
     latestBlock = await getCurrentBlockNumber();
     await collectionMain();
     await priceCollectionMain(whiteListedPoolAddress);
     await balancesCollectionMain(whiteListedPoolAddress);
     latestBlockAfterProcessing = await getCurrentBlockNumber();
+    tryCount++;
   }
+
   console.log("all events fetched and processed");
 
   await updateBondingCurvesForPool(whiteListedPoolAddress);
+
+  // sending out the data
+  emitter.emit("all events fetched and processed" + whiteListedPoolAddress);
+  isCollecting = false;
+
   await activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddress);
   await subscribeToNewBlocks(); // should be active by default, unless during some tests
 }
+
+let isCollecting = true;
 
 // toggle to write the trades to the json
 let writeToFile = true;
@@ -1337,8 +1355,8 @@ let whiteListedPoolAddress = ADDRESS_sUSD_V2_SWAP;
 // show ExchangeMultiple zoomed into target pool (for susd in mvp)
 let zoom = true;
 
-// const MODE = "local";
-const MODE = "https"
+const MODE = "local";
+// const MODE = "https"
 console.log(MODE + "-mode");
 
 await CurveMonitor();
