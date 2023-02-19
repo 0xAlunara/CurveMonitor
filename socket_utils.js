@@ -142,8 +142,9 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
 
       // example for data: ["week", "sUSD", "USDC"];
       socket.on("new combination", (data) => {
-        [timeFrame, ...priceCombination] = data;
-        sendPriceData(timeFrame, socket, POOL_ADDRESS, priceCombination);
+        let _timeFrame;
+        [_timeFrame, ...priceCombination] = data;
+        sendPriceData(_timeFrame, socket, POOL_ADDRESS, priceCombination);
         sendBondingCurve(socket, POOL_ADDRESS, priceCombination);
       });
 
