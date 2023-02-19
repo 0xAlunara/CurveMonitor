@@ -143,9 +143,10 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
       // example for data: ["week", "sUSD", "USDC"];
       socket.on("new combination", (data) => {
         let _timeFrame;
+        let _priceCombination;
         [_timeFrame, ...priceCombination] = data;
-        sendPriceData(_timeFrame, socket, POOL_ADDRESS, priceCombination);
-        sendBondingCurve(socket, POOL_ADDRESS, priceCombination);
+        sendPriceData(_timeFrame, socket, POOL_ADDRESS, _priceCombination);
+        sendBondingCurve(socket, POOL_ADDRESS, _priceCombination);
       });
 
       // next block is for when a user plays with the time-span tabulator
