@@ -1226,9 +1226,7 @@ async function processTokenExchange(data, poolAddress, type) {
   }
 }
 
-async function searchEventsInBlock(blockNumber) {
-  const UNPROCESSED_EVENT_LOGS = JSON.parse(fs.readFileSync("unprocessed_event_logs.json"));
-  const EVENT_NAMES = ["RemoveLiquidity", "RemoveLiquidityOne", "RemoveLiquidityImbalance", "AddLiquidity", "TokenExchange", "TokenExchangeUnderlying"];
+async function searchEventsInBlock(blockNumber, UNPROCESSED_EVENT_LOGS, EVENT_NAMES) {
   const FOUND_EVENTS = [];
   for (const POOL_ADDRESS in UNPROCESSED_EVENT_LOGS) {
     for (const EVENT_NAME of EVENT_NAMES) {
@@ -1251,18 +1249,22 @@ async function searchEventsInBlock(blockNumber) {
 }
 
 async function searchFromLogsInRange(firstBlock, range) {
+  const UNPROCESSED_EVENT_LOGS = JSON.parse(fs.readFileSync("unprocessed_event_logs.json"));
+  const EVENT_NAMES = ["RemoveLiquidity", "RemoveLiquidityOne", "RemoveLiquidityImbalance", "AddLiquidity", "TokenExchange", "TokenExchangeUnderlying"];
+
   let lastPercentage = 0;
   let i = 0;
+
   for (let blockNumber = firstBlock; blockNumber < firstBlock + range; blockNumber++) {
     await cleanMevTxBuffer(blockNumber);
     const PERCENTAGE = Number(((i / range) * 100).toFixed(0));
 
     if (PERCENTAGE !== lastPercentage) {
-      // console.log(percentage, "%")
+      //console.log("processing",PERCENTAGE, "%");
       lastPercentage = PERCENTAGE;
     }
 
-    await searchEventsInBlock(blockNumber);
+    await searchEventsInBlock(blockNumber, UNPROCESSED_EVENT_LOGS, EVENT_NAMES);
     i += 1;
   }
 }
@@ -1355,8 +1357,8 @@ let whiteListedPoolAddress = ADDRESS_sUSD_V2_SWAP;
 // show ExchangeMultiple zoomed into target pool (for susd in mvp)
 let zoom = true;
 
-const MODE = "local";
-// const MODE = "https"
+// const MODE = "local";
+const MODE = "https"
 console.log(MODE + "-mode");
 
 await CurveMonitor();
