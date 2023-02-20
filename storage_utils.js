@@ -87,7 +87,7 @@ async function findLastProcessedEvent(poolAddress) {
 // 1: removes outdated events
 // 2: adds events in the time range of "lastly screened" and "now".
 // 3: events stored in "unprocessed_event_logs.json".json.
-async function collection(isCollecting) {
+async function collection() {
   // collectionState.IsReadycollectingRawLogs is used to give the raw log collection enough time to be processed and saved.
   // only then proceeds with processing the raw logs
   let collectionState;
@@ -166,8 +166,8 @@ async function fetchEvents(collectedData, CONTRACT, eventName, eventNames, maste
   if (!foundEvents) foundEvents = 0;
 
   let shouldContinue = true;
-  let maxRetries = 12;
-  for (let i = 0; i < maxRetries && shouldContinue; i++) {
+  let retries = 0;
+  while (shouldContinue && retries < 12) {
     await CONTRACT.getPastEvents(eventName, { fromBlock, toBlock }, async function (error, events) {
       if (error) {
         if (error.message.includes("Log response size exceeded")) {
@@ -175,12 +175,15 @@ async function fetchEvents(collectedData, CONTRACT, eventName, eventNames, maste
           blockRange = Number((blockRange / 10).toFixed(0));
           toBlock = fromBlock + blockRange;
           await fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents);
+        } else if (error.message.includes("One of the blocks specified in filter (fromBlock, toBlock or blockHash) cannot be found")) {
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+          shouldContinue = false;
+          await fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents);
         } else {
           console.log("\nerror in getPastEvents", error.message, "\nfromBlock", fromBlock, "toBlock", toBlock);
         }
       } else {
         shouldContinue = false;
-
         if (events.length === 0) {
           // => no events left
           fs.writeFileSync("unprocessed_event_logs.json", JSON.stringify(collectedData, null, 1));
@@ -201,10 +204,12 @@ async function fetchEvents(collectedData, CONTRACT, eventName, eventNames, maste
         fromBlock = LAST_STORED_BLOCK + 1;
         toBlock = masterToBlock;
 
-        // starting a next scan-cycle to slowly creep up to the present blocks
+        // starting a next scan-cycle to slowly catch up to the present blocks
         await fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents);
       }
     });
+    retries++;
+    await new Promise((resolve) => setTimeout(resolve, 280));
   }
 }
 
