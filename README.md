@@ -10,9 +10,9 @@
    ```
 3. Launch backend via
    ```sh
-   node testing_CurveMonitor.mjs
+   node CurveMonitor.mjs
    ```
 4. Launch frontend via
    ```sh
-   node socketHandlerFrontend.mjs
+   node SocketHandlerFrontend.mjs
    ```
