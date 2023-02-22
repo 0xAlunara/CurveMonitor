@@ -1,104 +1,93 @@
-import { createRequire } from "module";
-var require = createRequire(import.meta.url);
-
 import { Server } from "socket.io";
 
 /* eslint-disable no-debugger, quote-props */
 /* eslint-disable no-debugger, object-shorthand */
 
-const fs = require("fs");
-const https = require("https");
-const Web3 = require("web3");
+import fs from "fs";
+import https from "https";
+import Web3 from "web3";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const tempTxHashStorage = [];
 
-require("dotenv").config();
+import {
+  getCurrentTime,
+  getUnixtime,
+  getABI,
+  getCurvePools,
+  isNativeEthAddress,
+  isNullAddress,
+  isCurveRegistryExchange,
+  is3CrvToken,
+  isCrvRenWSBTC,
+  isCrvFrax,
+  is3PoolDepositZap,
+  isZapFor3poolMetapools,
+  isSwap,
+  isRemoval,
+  isDeposit,
+  isTokenExchangeUnderlying,
+  formatForPrint,
+  getTokenAddress,
+  countUniqueTxHashes,
+  getTokenName,
+  buildPoolName,
+  getCleanedTokenAmount,
+} from "./Utils/GenericUtils.mjs";
 
-const genericUtils = require("./generic_utils.js");
-const getCurrentTime = genericUtils.getCurrentTime;
-const getUnixtime = genericUtils.getUnixtime;
-const getABI = genericUtils.getABI;
-const getCurvePools = genericUtils.getCurvePools;
-const isNativeEthAddress = genericUtils.isNativeEthAddress;
-const isNullAddress = genericUtils.isNullAddress;
-const isCurveRegistryExchange = genericUtils.isCurveRegistryExchange;
-const is3CrvToken = genericUtils.is3CrvToken;
-const isCrvRenWSBTC = genericUtils.isCrvRenWSBTC;
-const isCrvFrax = genericUtils.isCrvFrax;
-const is3PoolDepositZap = genericUtils.is3PoolDepositZap;
-const isZapFor3poolMetapools = genericUtils.isZapFor3poolMetapools;
-const isSwap = genericUtils.isSwap;
-const isRemoval = genericUtils.isRemoval;
-const isDeposit = genericUtils.isDeposit;
-const isTokenExchangeUnderlying = genericUtils.isTokenExchangeUnderlying;
-const formatForPrint = genericUtils.formatForPrint;
-const getTokenAddress = genericUtils.getTokenAddress;
-const countUniqueTxHashes = genericUtils.countUniqueTxHashes;
-const getTokenName = genericUtils.getTokenName;
-const buildPoolName = genericUtils.buildPoolName;
-const getCleanedTokenAmount = genericUtils.getCleanedTokenAmount;
+import {
+  setProvider,
+  getContract,
+  web3Call,
+  getTx,
+  getCurrentBlockNumber,
+  getBlock,
+  getBlockUnixtime,
+  getTokenTransfers,
+  errHandler,
+  isCupsErr,
+  checkForTokenExchange,
+  checkForTokenExchangeUnderlying,
+} from "./Utils/Web3CallUtils.mjs";
 
-const web3CallUtils = require("./web3_call_utils.js");
-const setProvider = web3CallUtils.setProvider;
-const getContract = web3CallUtils.getContract;
-const web3Call = web3CallUtils.web3Call;
-const getTx = web3CallUtils.getTx;
-const getCurrentBlockNumber = web3CallUtils.getCurrentBlockNumber;
-const getBlock = web3CallUtils.getBlock;
-const getBlockUnixtime = web3CallUtils.getBlockUnixtime;
-const getTokenTransfers = web3CallUtils.getTokenTransfers;
-const errHandler = web3CallUtils.errHandler;
-const isCupsErr = web3CallUtils.isCupsErr;
-const checkForTokenExchange = web3CallUtils.checkForTokenExchange;
-const checkForTokenExchangeUnderlying = web3CallUtils.checkForTokenExchangeUnderlying;
-const getPriceFromUniswapV3 = web3CallUtils.getPriceFromUniswapV3;
+import { saveTxEntry, findLastProcessedEvent, collection, getStartBlock } from "./Utils/StorageUtils.mjs";
 
-const storageUtils = require("./storage_utils.js");
-const saveTxEntry = storageUtils.saveTxEntry;
-const findLastProcessedEvent = storageUtils.findLastProcessedEvent;
-const collection = storageUtils.collection;
-const getStartBlock = storageUtils.getStartBlock;
-
-const transactionLogicUtils = require("./transaction_logic_utils.js");
-const getDeltaMevBot = transactionLogicUtils.getDeltaMevBot;
-const tokenExchangeCaseMultiple = transactionLogicUtils.tokenExchangeCaseMultiple;
-const tokenExchangeCase3Pool = transactionLogicUtils.tokenExchangeCase3Pool;
-const tokenExchangeCase3BtcMetapool = transactionLogicUtils.tokenExchangeCase3BtcMetapool;
-const tokenExchangeCaseFraxbp = transactionLogicUtils.tokenExchangeCaseFraxbp;
-const tokenExchangeCaseSingle = transactionLogicUtils.tokenExchangeCaseSingle;
-const victimTxCaseExchangeUnderlying = transactionLogicUtils.victimTxCaseExchangeUnderlying;
-const victimTxCaseTokenExchangeUnderlying = transactionLogicUtils.victimTxCaseTokenExchangeUnderlying;
-const victimTxCaseDeposit = transactionLogicUtils.victimTxCaseDeposit;
-const victimTxCaseRemoval = transactionLogicUtils.victimTxCaseRemoval;
-const victimTxCaseSwap = transactionLogicUtils.victimTxCaseSwap;
+import {
+  getDeltaMevBot,
+  tokenExchangeCaseMultiple,
+  tokenExchangeCase3Pool,
+  tokenExchangeCase3BtcMetapool,
+  tokenExchangeCaseFraxbp,
+  tokenExchangeCaseSingle,
+  victimTxCaseExchangeUnderlying,
+  victimTxCaseTokenExchangeUnderlying,
+  victimTxCaseDeposit,
+  victimTxCaseRemoval,
+  victimTxCaseSwap,
+} from "./Utils/TransactionLogicUtils.mjs";
 
 // utils for price-data
-const priceUtils = require("./price_utils.js");
-const priceCollectionMain = priceUtils.priceCollectionMain;
-const savePriceEntry = priceUtils.savePriceEntry;
+import { priceCollectionMain, savePriceEntry, convertToUSD } from "./Utils/PriceUtils.mjs";
 
 // utils for pool-balances
-const balancesUtils = require("./balances_utils.js");
-const fetchBalancesOnce = balancesUtils.fetchBalancesOnce;
-const balancesCollectionMain = balancesUtils.balancesCollectionMain;
+import { fetchBalancesOnce, balancesCollectionMain } from "./Utils/BalancesUtils.mjs";
 
 // utils to create messages for the socket
-const socketUtils = require("./socket_utils");
-const httpSocketSetup = socketUtils.httpSocketSetup;
-const httpsSocketSetup = socketUtils.httpsSocketSetup;
+import { httpSocketSetup, httpsSocketSetup } from "./Utils/SocketUtils.mjs";
 
 // utils to fetch and store bonding curves
-const bondingCurveUtils = require("./bonding_curve_utils.js");
-const updateBondingCurvesForPool = bondingCurveUtils.updateBondingCurvesForPool;
+import { updateBondingCurvesForPool } from "./Utils/BondingCurveUtils.mjs";
 
-const ABI_DECODER = require("abi-decoder");
+import ABI_DECODER from "abi-decoder";
 ABI_DECODER.addABI(await getABI("ABI_REGISTRY_EXCHANGE"));
 ABI_DECODER.addABI(await getABI("ABI_METAPOOL"));
 ABI_DECODER.addABI(await getABI("ABI_THREEPOOL_ZAP"));
 ABI_DECODER.addABI(await getABI("ABI_3POOL_DEPOSIT_ZAP"));
 ABI_DECODER.addABI(await getABI("ABI_ZAP_FOR_3POOL_METAPOOLS"));
 
-const EventEmitter = require("events");
+import EventEmitter from "events";
 const emitter = new EventEmitter();
 
 const options = {
@@ -141,32 +130,8 @@ if (keySet === 2) {
 const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.web3, options));
 
 const ADDRESS_THREEPOOL = "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7";
-const ADDRESS_TRICRYPTO_2 = "0xD51a44d3FaE010294C616388b506AcdA1bfAAE46";
 const ADDRESS_sUSD_V2_SWAP = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD";
 const ADDRESS_ETH = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-
-const TRICRYPTO_2 = await getContract(await getABI("ABI_TRICRYPTO"), ADDRESS_TRICRYPTO_2);
-const CHAINLINK_EUR_USD_PRICE_FEED = await getContract(await getABI("ABI_Chainlink_EUR_USD_Price_Feed"), "0xb49f677943BC038e9857d61E7d053CaA2C1734C1");
-
-async function get3CrvPrice() {
-  const ABI_FRAX_3CRV = await getABI("ABI_FRAX_3CRV");
-  const FRAX_3CRV = await getContract(ABI_FRAX_3CRV, "0xd632f22692FaC7611d2AA1C0D552930D43CAEd3B");
-  return Number((await web3Call(FRAX_3CRV, "get_dy", [1, 0, "1000000000000000000"])) / 1e18);
-}
-
-// updating prices
-let eurPrice = Number((await web3Call(CHAINLINK_EUR_USD_PRICE_FEED, "latestAnswer", [])) / 1e8);
-let btcPrice = Number((await web3Call(TRICRYPTO_2, "price_oracle", [0])) / 1e18);
-let ethPrice = Number((await web3Call(TRICRYPTO_2, "price_oracle", [1])) / 1e18);
-let crvPrice = ethPrice / (await getPriceFromUniswapV3("0x4c83a7f819a5c37d64b4c5a2f8238ea082fa1f4e"));
-
-async function updatePrices() {
-  eurPrice = Number((await web3Call(CHAINLINK_EUR_USD_PRICE_FEED, "latestAnswer", [])) / 1e8);
-  ethPrice = Number((await web3Call(TRICRYPTO_2, "price_oracle", [1])) / 1e18);
-  btcPrice = Number((await web3Call(TRICRYPTO_2, "price_oracle", [0])) / 1e18);
-  crvPrice = ethPrice / (await getPriceFromUniswapV3("0x4c83a7f819a5c37d64b4c5a2f8238ea082fa1f4e"));
-}
-setInterval(updatePrices, 1 * 60 * 1000);
 
 // runs through the stored txHashes once a minute, and removes the ones that are older than 15 seconds
 // reason for this is to not confuse swap_underlyings with deposits or withdrawals
@@ -181,43 +146,6 @@ function cleanTxHashStorage() {
   }
 }
 setInterval(cleanTxHashStorage, 60000);
-
-async function convertToUSD(name, amount) {
-  const conversionRates = {
-    sUSD: 1,
-    USDC: 1,
-    USDT: 1,
-    DAI: 1,
-    BUSD: 1,
-    FRAX: 1,
-    USDP: 1,
-    crvFRAX: 1,
-    BTC: btcPrice,
-    WBTC: btcPrice,
-    sBTC: btcPrice,
-    ETH: ethPrice,
-    WETH: ethPrice,
-    stETH: ethPrice,
-    wstETH: ethPrice,
-    iDA: 0.01,
-    iUSDC: 0.01,
-    iUSDT: 0.01,
-    "3Crv": async () => await get3CrvPrice(),
-    CRV: crvPrice,
-    agEUR: eurPrice,
-    ibEUR: eurPrice,
-    sEUR: eurPrice,
-    EURS: eurPrice,
-    EURN: eurPrice,
-    EURT: eurPrice,
-  };
-
-  let conversionRate = conversionRates[name];
-  if (typeof conversionRate === "function") {
-    conversionRate = await conversionRate();
-  }
-  return conversionRate ? amount * conversionRate : "unknown dollar amount";
-}
 
 // the Buffer consists of tx, which might be part of a sandwich, since they show up one by one, we need to store them for a bit.
 async function buildMessageFromBuffer(i) {
@@ -946,7 +874,7 @@ async function processRemoveLiquidityOne(data, poolAddress) {
 async function processRemoveLiquidityImbalance(data, poolAddress) {
   console.log("\npool", poolAddress, " | txHash", data.transactionHash, " | RemoveLiquidityImbalance");
 
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
 
   let type;
 
@@ -1249,7 +1177,7 @@ async function searchEventsInBlock(blockNumber, UNPROCESSED_EVENT_LOGS, EVENT_NA
 }
 
 async function searchFromLogsInRange(firstBlock, range) {
-  const UNPROCESSED_EVENT_LOGS = JSON.parse(fs.readFileSync("unprocessed_event_logs.json"));
+  const UNPROCESSED_EVENT_LOGS = JSON.parse(fs.readFileSync("./JSON/UnprocessedEventLogs.json"));
   const EVENT_NAMES = ["RemoveLiquidity", "RemoveLiquidityOne", "RemoveLiquidityImbalance", "AddLiquidity", "TokenExchange", "TokenExchangeUnderlying"];
 
   let lastPercentage = 0;
@@ -1274,7 +1202,7 @@ async function collectionCycle(nextBlockToProceedProcessing, range) {
 
   //  this loop is used to give the raw log collection enough time to be processed and saved.
   while (true) {
-    const IS_COLLECTING = JSON.parse(fs.readFileSync("collector_state.json"));
+    const IS_COLLECTING = JSON.parse(fs.readFileSync("./JSON/CollectorState.json"));
     if (!IS_COLLECTING.collectingRawLog) break;
     await new Promise((resolve) => setTimeout(resolve, 10));
   }
@@ -1284,9 +1212,9 @@ async function collectionCycle(nextBlockToProceedProcessing, range) {
 
 /**
  * goal: up to date json with sorted and processed transaction-lists
- * 1: removes entries older than x days (31 for mvp) from the file which stores the raw, unprocessed events (unprocessed_event_logs.json)
+ * 1: removes entries older than x days (31 for mvp) from the file which stores the raw, unprocessed events (UnprocessedEventLogs.json)
  * 2: adds raw log entries to the file
- * 3: processes the newly added events and stores the processed data in processed_tx_log_all.json & processed_tx_log_mev.json
+ * 3: processes the newly added events and stores the processed data in ProcessedTxLogAll.json & ProcessedTxLogMEV.json
  * 4: repeats the cycle until it is truely up do date
  */
 async function collectionMain() {
