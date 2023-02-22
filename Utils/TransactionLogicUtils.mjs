@@ -1,23 +1,17 @@
-const genericUtils = require("./generic_utils.js");
-const getABI = genericUtils.getABI;
-const isNativeEthAddress = genericUtils.isNativeEthAddress;
-const isCurveRegistryExchange = genericUtils.isCurveRegistryExchange;
-const formatForPrint = genericUtils.formatForPrint;
-const getTokenAddress = genericUtils.getTokenAddress;
-const findCoinId = genericUtils.findCoinId;
-const getLpToken = genericUtils.getLpToken;
-const getBasePool = genericUtils.getBasePool;
-const getTokenName = genericUtils.getTokenName;
-const getCleanedTokenAmount = genericUtils.getCleanedTokenAmount;
+import {
+  getABI,
+  isNativeEthAddress,
+  isCurveRegistryExchange,
+  formatForPrint,
+  getTokenAddress,
+  findCoinId,
+  getLpToken,
+  getBasePool,
+  getTokenName,
+  getCleanedTokenAmount,
+} from "./GenericUtils.mjs";
 
-const web3CallUtils = require("./web3_call_utils.js");
-const web3Call = web3CallUtils.web3Call;
-const getContract = web3CallUtils.getContract;
-const getLpTokenTranferAmount = web3CallUtils.getLpTokenTranferAmount;
-const getTokenTransfers = web3CallUtils.getTokenTransfers;
-const getDyUnderlying = web3CallUtils.getDyUnderlying;
-const getDy = web3CallUtils.getDy;
-const calcTokenAmount = web3CallUtils.calcTokenAmount;
+import { web3Call, getContract, getLpTokenTranferAmount, getTokenTransfers, getDyUnderlying, getDy, calcTokenAmount } from "./Web3CallUtils.mjs";
 
 const ADDRESS_THREEPOOL = "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7";
 const ADDRESS_DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
@@ -354,7 +348,7 @@ function getDeltaMevBot(mevTxBuffer, outID) {
   return DELTA_MEV_BOT;
 }
 
-module.exports = {
+export {
   tokenExchangeCaseMultiple,
   tokenExchangeCase3Pool,
   tokenExchangeCase3BtcMetapool,
