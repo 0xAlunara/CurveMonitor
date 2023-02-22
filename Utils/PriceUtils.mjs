@@ -1,16 +1,11 @@
-const Web3 = require("web3");
-const fs = require("fs");
+import Web3 from "web3";
+import fs from "fs";
+import dotenv from "dotenv";
 
-require("dotenv").config();
+dotenv.config();
 
-const genericUtils = require("./generic_utils.js");
-const getCurvePools = genericUtils.getCurvePools;
-const getABI = genericUtils.getABI;
-
-const web3CallUtils = require("./web3_call_utils.js");
-const errHandler = web3CallUtils.errHandler;
-const getContract = web3CallUtils.getContract;
-const web3Call = web3CallUtils.web3Call;
+import { getCurvePools, getABI } from "./GenericUtils.mjs";
+import { errHandler, getContract, web3Call } from "./Web3CallUtils.mjs";
 
 // to deal with compute units / s
 const MAX_RETRIES = 12;
@@ -22,10 +17,10 @@ function setLlamaRPC(abi, address) {
 }
 
 function bootPriceJSON() {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   let priceJSON;
   try {
-    priceJSON = JSON.parse(fs.readFileSync("prices.json"));
+    priceJSON = JSON.parse(fs.readFileSync("./JSON/Prices.json"));
   } catch (err) {
     priceJSON = {};
   }
@@ -55,7 +50,7 @@ function bootPriceJSON() {
     const FINAL_ARRAY = ORIGNIAL_ARRAY.concat(REVERSED_ARRAY);
     priceJSON[POOL_ADDRESS] = FINAL_ARRAY;
   }
-  fs.writeFileSync("prices.json", JSON.stringify(priceJSON, null, 2));
+  fs.writeFileSync("./JSON/Prices.json", JSON.stringify(priceJSON, null, 2));
 }
 
 function findLastStoredUnixtimeForCombination(poolAddress, combination, priceJSON) {
@@ -72,7 +67,7 @@ function findLastStoredUnixtimeForCombination(poolAddress, combination, priceJSO
 function findLastStoredBlocknumberForCombination(poolAddress, combination, priceJSON) {
   const LAST_STORED_UNIXTIME_FOR_COMBINATION = findLastStoredUnixtimeForCombination(poolAddress, combination, priceJSON);
   if (LAST_STORED_UNIXTIME_FOR_COMBINATION === 0) return 0;
-  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+  const DATA_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
   const BLOCK_NUMBER = DATA_ALL[poolAddress].find((tx) => tx.unixtime == LAST_STORED_UNIXTIME_FOR_COMBINATION).blockNumber;
   return BLOCK_NUMBER;
 }
@@ -155,13 +150,13 @@ async function priceCollectionOneCombination(poolAddress, combination, dataALL, 
     if (counter % 100 === 0) {
       console.log(counter + "/" + blockNumbers.length, " | ", PRICE_OF + "/" + PRICE_IN, " | unixtime", unixtime, " | dy", dy);
       PRICE_JSON[poolAddress][PAIR_ID].data = DATA;
-      fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 2));
+      fs.writeFileSync("./JSON/Prices.json", JSON.stringify(PRICE_JSON, null, 2));
     }
     counter += 1;
   }
 
   // final save at end of collection for a certain combination
-  fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 2));
+  fs.writeFileSync("./JSON/Prices.json", JSON.stringify(PRICE_JSON, null, 2));
   return blockNumbers.length;
 }
 
@@ -169,14 +164,14 @@ async function priceCollectionAllCombinations(poolAddress) {
   bootPriceJSON();
 
   // the stored JSON with the processed tx-log
-  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+  const DATA_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
 
   // JSON with the combinations of pool token
-  const PRICE_JSON = JSON.parse(fs.readFileSync("prices.json"));
+  const PRICE_JSON = JSON.parse(fs.readFileSync("./JSON/Prices.json"));
 
   const CHECK = [];
 
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
 
   // eg sUSD in DAI, USDT in sUSD, ...
   for (const combination of PRICE_JSON[poolAddress]) {
@@ -188,7 +183,7 @@ async function priceCollectionAllCombinations(poolAddress) {
 
 async function savePriceEntry(poolAddress, blockNumber, unixtime) {
   bootPriceJSON();
-  const PRICE_JSON = JSON.parse(fs.readFileSync("prices.json"));
+  const PRICE_JSON = JSON.parse(fs.readFileSync("./JSON/Prices.json"));
   let res = [];
   for (const COMBINATION of PRICE_JSON[poolAddress]) {
     const HAS_UNIXTIME = COMBINATION.data.some((item) => {
@@ -196,7 +191,7 @@ async function savePriceEntry(poolAddress, blockNumber, unixtime) {
     });
     if (HAS_UNIXTIME) continue;
 
-    const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+    const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
     const CONTRACT = await getContract(await getABI(poolAddress), poolAddress);
     const PRICE_OF = COMBINATION.priceOf;
     const PRICE_IN = COMBINATION.priceIn;
@@ -267,7 +262,7 @@ async function savePriceEntry(poolAddress, blockNumber, unixtime) {
     }
 
     PRICE_JSON[poolAddress][PAIR_ID].data = DATA;
-    fs.writeFileSync("prices.json", JSON.stringify(PRICE_JSON, null, 2));
+    fs.writeFileSync("./JSON/Prices.json", JSON.stringify(PRICE_JSON, null, 2));
   }
   return res;
 }
@@ -283,7 +278,7 @@ async function priceCollectionMain(poolAddress) {
 
 // used to forward the correct priceOf priceIn price-array to the client
 function readPriceArray(poolAddress, priceOf, priceIn) {
-  const PRICE_JSON = JSON.parse(fs.readFileSync("prices.json"));
+  const PRICE_JSON = JSON.parse(fs.readFileSync("./JSON/Prices.json"));
   const COMBINATION_ID = PRICE_JSON[poolAddress].findIndex((item) => {
     return item.priceOf === priceOf && item.priceIn === priceIn;
   });
@@ -317,7 +312,80 @@ function binarySearch(arr, x) {
   return false;
 }
 
-module.exports = {
+async function convertToUSD(name, amount) {
+  const conversionRates = {
+    sUSD: 1,
+    USDC: 1,
+    USDT: 1,
+    DAI: 1,
+    BUSD: 1,
+    FRAX: 1,
+    USDP: 1,
+    crvFRAX: 1,
+    BTC: btcPrice,
+    WBTC: btcPrice,
+    sBTC: btcPrice,
+    ETH: ethPrice,
+    WETH: ethPrice,
+    stETH: ethPrice,
+    wstETH: ethPrice,
+    iDA: 0.01,
+    iUSDC: 0.01,
+    iUSDT: 0.01,
+    "3Crv": async () => await get3CrvPrice(),
+    CRV: crvPrice,
+    agEUR: eurPrice,
+    ibEUR: eurPrice,
+    sEUR: eurPrice,
+    EURS: eurPrice,
+    EURN: eurPrice,
+    EURT: eurPrice,
+  };
+
+  let conversionRate = conversionRates[name];
+  if (typeof conversionRate === "function") {
+    conversionRate = await conversionRate();
+  }
+  return conversionRate ? amount * conversionRate : "unknown dollar amount";
+}
+
+async function get3CrvPrice() {
+  const ABI_FRAX_3CRV = await getABI("ABI_FRAX_3CRV");
+  const FRAX_3CRV = await getContract(ABI_FRAX_3CRV, "0xd632f22692FaC7611d2AA1C0D552930D43CAEd3B");
+  return Number((await web3Call(FRAX_3CRV, "get_dy", [1, 0, "1000000000000000000"])) / 1e18);
+}
+
+const ADDRESS_TRICRYPTO_2 = "0xD51a44d3FaE010294C616388b506AcdA1bfAAE46";
+const TRICRYPTO_2 = await getContract(await getABI("ABI_TRICRYPTO"), ADDRESS_TRICRYPTO_2);
+const CHAINLINK_EUR_USD_PRICE_FEED = await getContract(await getABI("ABI_Chainlink_EUR_USD_Price_Feed"), "0xb49f677943BC038e9857d61E7d053CaA2C1734C1");
+
+// updating prices
+let eurPrice = Number((await web3Call(CHAINLINK_EUR_USD_PRICE_FEED, "latestAnswer", [])) / 1e8);
+let btcPrice = Number((await web3Call(TRICRYPTO_2, "price_oracle", [0])) / 1e18);
+let ethPrice = Number((await web3Call(TRICRYPTO_2, "price_oracle", [1])) / 1e18);
+let crvPrice = ethPrice / (await getPriceFromUniswapV3("0x4c83a7f819a5c37d64b4c5a2f8238ea082fa1f4e"));
+
+async function updatePrices() {
+  eurPrice = Number((await web3Call(CHAINLINK_EUR_USD_PRICE_FEED, "latestAnswer", [])) / 1e8);
+  ethPrice = Number((await web3Call(TRICRYPTO_2, "price_oracle", [1])) / 1e18);
+  btcPrice = Number((await web3Call(TRICRYPTO_2, "price_oracle", [0])) / 1e18);
+  crvPrice = ethPrice / (await getPriceFromUniswapV3("0x4c83a7f819a5c37d64b4c5a2f8238ea082fa1f4e"));
+}
+setInterval(updatePrices, 1 * 60 * 1000);
+
+async function getPriceFromUniswapV3(poolAddress) {
+  const ABI_UNISWAP_V3 = await getABI("ABI_UNISWAP_V3");
+  const CONTRACT = await getContract(ABI_UNISWAP_V3, poolAddress);
+  const slot0 = await web3Call(CONTRACT, "slot0", []);
+  try {
+    const sqrtPriceX96 = slot0.sqrtPriceX96;
+    return sqrtPriceX96 ** 2 / 2 ** 192;
+  } catch (error) {
+    console.log(error.message, poolAddress, slot0);
+  }
+}
+
+export {
   priceCollectionAllCombinations,
   priceCollectionOneCombination,
   findLastStoredBlocknumberForCombination,
@@ -326,4 +394,5 @@ module.exports = {
   priceCollectionMain,
   savePriceEntry,
   readPriceArray,
+  convertToUSD,
 };
