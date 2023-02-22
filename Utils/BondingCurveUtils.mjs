@@ -1,12 +1,12 @@
-const https = require("https");
-const fs = require("fs");
+import https from "https";
+import fs from "fs";
 
 function loadData() {
   try {
-    return JSON.parse(fs.readFileSync("bonding_curve.json"));
+    return JSON.parse(fs.readFileSync("./JSON/BondingCurve.json"));
   } catch (err) {
     const data = {};
-    fs.writeFileSync("bonding_curve.json", JSON.stringify(data));
+    fs.writeFileSync("./JSON/BondingCurve.json", JSON.stringify(data));
     return data;
   }
 }
@@ -14,13 +14,13 @@ function loadData() {
 function save(poolAddress, bondingCurveData) {
   const BONDING_CURVE_JSON = loadData();
   BONDING_CURVE_JSON[poolAddress] = bondingCurveData;
-  fs.writeFileSync("bonding_curve.json", JSON.stringify(BONDING_CURVE_JSON));
+  fs.writeFileSync("./JSON/BondingCurve.json", JSON.stringify(BONDING_CURVE_JSON));
 }
 
 // normalizes all balances to 18 digits
 function getNormalizedBalances(poolAddress) {
-  // goes into balances.json, and finds the arr for the pool, then picks the last entry
-  const BALANCES_JSON = JSON.parse(fs.readFileSync("balances.json"));
+  // goes into Balances.json, and finds the arr for the pool, then picks the last entry
+  const BALANCES_JSON = JSON.parse(fs.readFileSync("./JSON/Balances.json"));
   let balances = BALANCES_JSON[poolAddress];
   balances = balances[balances.length - 1];
   balances = Object.values(balances)[0];
@@ -36,7 +36,7 @@ function getNormalizedBalances(poolAddress) {
 
 // builds the data for the request to api-py.llama.airforce/curve/v1
 function buildDataForApiRequest(poolAddress) {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
 
   const A = CURVE_JSON[poolAddress].pool_params[0];
   const GAMMA = CURVE_JSON[poolAddress].gamma;
@@ -119,7 +119,7 @@ function divideBy1e18(bondingCurveData) {
 
 function scaleDown(bondingCurveData, poolAddress) {
   const CURVES = bondingCurveData.curves;
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   const PRICE_SCALE = CURVE_JSON[poolAddress].price_scale;
 
   const VERSION = CURVE_JSON[poolAddress].version;
@@ -192,14 +192,14 @@ async function updateBondingCurvesForPool(poolAddress) {
 */
 
 function getBalances(poolAddress, name0, name1) {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   const POOL_DETAILS = CURVE_JSON[poolAddress];
   const COIN_NAMES = POOL_DETAILS.coin_names;
 
   const NAME_0_INDEX = COIN_NAMES.indexOf(name0);
   const NAME_1_INDEX = COIN_NAMES.indexOf(name1);
 
-  const BALANCES_JSON = JSON.parse(fs.readFileSync("balances.json"));
+  const BALANCES_JSON = JSON.parse(fs.readFileSync("./JSON/Balances.json"));
   const POOL_BALANCES = BALANCES_JSON[poolAddress];
   let lastEntry = POOL_BALANCES[POOL_BALANCES.length - 1];
   lastEntry = Object.values(lastEntry)[0];
@@ -229,7 +229,4 @@ function getBondingCurveForPoolAndCombination(poolAddress, combination) {
   return BONDING_CURVE;
 }
 
-module.exports = {
-  updateBondingCurvesForPool,
-  getBondingCurveForPoolAndCombination,
-};
+export { updateBondingCurvesForPool, getBondingCurveForPoolAndCombination };
