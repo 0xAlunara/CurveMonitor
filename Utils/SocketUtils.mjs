@@ -1,24 +1,17 @@
-const fs = require("fs");
+import fs from "fs";
+import https from "https";
 
-const https = require("https");
-
-const genericUtils = require("./generic_utils.js");
-const getCurvePools = genericUtils.getCurvePools;
-
-const balancesUtils = require("./balances_utils.js");
-const readBalancesArray = balancesUtils.readBalancesArray;
+import { getCurvePools } from "./GenericUtils.mjs";
+import { readBalancesArray } from "./BalancesUtils.mjs";
 
 // utils for price-data
-const priceUtils = require("./price_utils.js");
-const readPriceArray = priceUtils.readPriceArray;
+import { readPriceArray } from "./PriceUtils.mjs";
 
 // for the search bar on the landing page
-const searchUtils = require("./search_utils.js");
-const search = searchUtils.search;
+import { search } from "./SearchUtils.mjs";
 
 // utils to fetch and store bonding curves
-const bondingCurveUtils = require("./bonding_curve_utils.js");
-const getBondingCurveForPoolAndCombination = bondingCurveUtils.getBondingCurveForPoolAndCombination;
+import { getBondingCurveForPoolAndCombination } from "./BondingCurveUtils.mjs";
 
 async function httpSocketSetup(Server, emitter, whiteListedPoolAddress) {
   const io = new Server(2424, {
@@ -118,7 +111,7 @@ async function initSocketMessages(io, emitter, whiteListedPoolAddress) {
     if (POOL_ADDRESS !== whiteListedPoolAddress) continue;
     const POOL_SOCKET = io.of("/" + POOL_ADDRESS);
 
-    const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+    const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
     const COIN_NAMES = CURVE_JSON[POOL_ADDRESS].coin_names;
 
     // eg [ 'sUSD', 'DAI' ] => price of sUSD in DAI
@@ -182,8 +175,8 @@ function sendTableData(socket, poolAddress) {
   const DAYS = 31;
   const STARTING_POINT = CURRENT_TIME - DAYS * 24 * 60 * 60;
 
-  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
-  const DATA_MEV = JSON.parse(fs.readFileSync("processed_tx_log_mev.json"));
+  const DATA_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
+  const DATA_MEV = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogMEV.json"));
 
   const TRIMMED_DATA_ALL = DATA_ALL[poolAddress].filter((entry) => entry.unixtime >= STARTING_POINT);
   const TRIMMED_DATA_MEV = DATA_MEV[poolAddress].filter((entry) => entry.unixtime >= STARTING_POINT);
@@ -227,7 +220,7 @@ function sendVolumeData(timeFrame, socket, poolAddress) {
   const STARTING_POINT = getStartingPoint(timeFrame);
 
   // first getting trimmed processedTxLog
-  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+  const DATA_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
   const TRIMMED_DATA_ALL = DATA_ALL[poolAddress].filter((entry) => entry.unixtime >= STARTING_POINT);
 
   // then making vol-arr out of it
@@ -260,7 +253,4 @@ function sendBondingCurve(socket, poolAddress, priceCombination) {
   socket.emit("bonding_curve", BONDING_CURVE);
 }
 
-module.exports = {
-  httpSocketSetup,
-  httpsSocketSetup,
-};
+export { httpSocketSetup, httpsSocketSetup };
