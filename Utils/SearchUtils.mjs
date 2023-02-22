@@ -1,6 +1,6 @@
-const fs = require("fs");
+import fs from "fs";
 
-// using search.json to find matching entries for the users input
+// using Search.json to find matching entries for the users input
 // returns an array of pools together with their names, sorted by coin balances
 function findPoolAddress(userInput, searchJSON) {
   let matchingPools = [];
@@ -70,7 +70,7 @@ function search(userInput) {
     return {};
   }
   if (typeof userInput === "number") userInput = userInput.toString();
-  const SEARCH_JSON = JSON.parse(fs.readFileSync("search.json"));
+  const SEARCH_JSON = JSON.parse(fs.readFileSync("./JSON/Search.json"));
   userInput = userInput.toLowerCase();
 
   const PARTS = userInput.split(/[ ]+/);
@@ -103,8 +103,4 @@ function search(userInput) {
   return res;
 }
 
-module.exports = {
-  findPoolAddress,
-  search2ndName,
-  search,
-};
+export { findPoolAddress, search2ndName, search };
