@@ -1,16 +1,11 @@
-const Web3 = require("web3");
-const fs = require("fs");
+import Web3 from "web3";
+import fs from "fs";
+import dotenv from "dotenv";
 
-require("dotenv").config();
+dotenv.config();
 
-const genericUtils = require("./generic_utils.js");
-const getCurvePools = genericUtils.getCurvePools;
-const getABI = genericUtils.getABI;
-
-const web3CallUtils = require("./web3_call_utils.js");
-const errHandler = web3CallUtils.errHandler;
-const getContract = web3CallUtils.getContract;
-const web3Call = web3CallUtils.web3Call;
+import { getCurvePools, getABI } from "./GenericUtils.mjs";
+import { errHandler, getContract, web3Call } from "./Web3CallUtils.mjs";
 
 const web3HttpLlamarpc = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com/rpc/" + process.env.web3_llamarpc));
 
@@ -18,7 +13,7 @@ function setLlamaRPC(abi, address) {
   return new web3HttpLlamarpc.eth.Contract(abi, address);
 }
 
-const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
 
 function roundNumber(num) {
   if (num >= 1000) return Number(num.toFixed(0));
@@ -30,7 +25,7 @@ function roundNumber(num) {
 function bootBalancesJSON() {
   let balancesJSON;
   try {
-    balancesJSON = JSON.parse(fs.readFileSync("balances.json"));
+    balancesJSON = JSON.parse(fs.readFileSync("./JSON/Balances.json"));
   } catch (err) {
     balancesJSON = {};
   }
@@ -39,12 +34,12 @@ function bootBalancesJSON() {
     if (balancesJSON[POOL_ADDRESS]) continue;
     balancesJSON[POOL_ADDRESS] = [];
   }
-  fs.writeFileSync("balances.json", JSON.stringify(balancesJSON, null, 2));
+  fs.writeFileSync("./JSON/Balances.json", JSON.stringify(balancesJSON, null, 2));
 }
 
 // returns an arr with all blocknumbers which saw action for a given pool
 function getRawBlocknumbers(POOL_ADDRESS) {
-  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+  const DATA_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
   const BLOCK_NUMBERS = DATA_ALL[POOL_ADDRESS].map((obj) => obj.blockNumber);
   return BLOCK_NUMBERS;
 }
@@ -75,7 +70,7 @@ async function getPoolBalance(METAREGISTRY, POOL_ADDRESS, blockNumber) {
 
 function findLastStoredUnixtimeInBalances(POOL_ADDRESS) {
   let lastStoredUnixtime;
-  const BALANCES_JSON = JSON.parse(fs.readFileSync("balances.json"));
+  const BALANCES_JSON = JSON.parse(fs.readFileSync("./JSON/Balances.json"));
   try {
     lastStoredUnixtime = Number(Object.keys(BALANCES_JSON[POOL_ADDRESS][BALANCES_JSON[POOL_ADDRESS].length - 1])[0]);
   } catch (err) {
@@ -87,15 +82,15 @@ function findLastStoredUnixtimeInBalances(POOL_ADDRESS) {
 function findLastStoredBlocknumberInBalances(POOL_ADDRESS) {
   const LAST_STORED_UNIXTIME = findLastStoredUnixtimeInBalances(POOL_ADDRESS);
   if (LAST_STORED_UNIXTIME === 0) return 0;
-  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+  const DATA_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
   const BLOCK_NUMBER = DATA_ALL[POOL_ADDRESS].find((tx) => tx.unixtime == LAST_STORED_UNIXTIME).blockNumber;
   return BLOCK_NUMBER;
 }
 
 // returns the number of blocks that had to be fetched. If 0, we know it is up to date. If it was more than 0, we repeat the cycle
 async function fetchBalancesForPool(POOL_ADDRESS) {
-  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
-  const BALANCES_JSON = JSON.parse(fs.readFileSync("balances.json"));
+  const DATA_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
+  const BALANCES_JSON = JSON.parse(fs.readFileSync("./JSON/Balances.json"));
 
   const ADDRESS_METAREGISTRY = "0xF98B45FA17DE75FB1aD0e7aFD971b0ca00e379fC";
   const ABI_METAREGISTRY = await getABI(ADDRESS_METAREGISTRY);
@@ -126,12 +121,12 @@ async function fetchBalancesForPool(POOL_ADDRESS) {
     // saving each 100 fetches
     if (counter % 10 === 0) {
       BALANCES_JSON[POOL_ADDRESS] = data;
-      fs.writeFileSync("balances.json", JSON.stringify(BALANCES_JSON, null, 2));
+      fs.writeFileSync("./JSON/Balances.json", JSON.stringify(BALANCES_JSON, null, 2));
       console.log(counter + "/" + blockNumbers.length, unixtime, BALANCES, POOL_ADDRESS);
     }
     counter += 1;
   }
-  fs.writeFileSync("balances.json", JSON.stringify(BALANCES_JSON, null, 2));
+  fs.writeFileSync("./JSON/Balances.json", JSON.stringify(BALANCES_JSON, null, 2));
 
   return blockNumbers.length;
 }
@@ -158,11 +153,11 @@ function hasEntryForUnixTime(DATA, unixtime) {
 
 // extra set up because it needs a different web3 provider
 async function fetchBalancesOnce(poolAddress, blockNumber) {
-  const BALANCES_JSON = JSON.parse(fs.readFileSync("balances.json"));
+  const BALANCES_JSON = JSON.parse(fs.readFileSync("./JSON/Balances.json"));
   const DATA = BALANCES_JSON[poolAddress];
 
   let unixtime;
-  const DATA_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+  const DATA_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
   DATA_ALL[poolAddress].forEach((element) => {
     if (element.blockNumber == blockNumber) {
       unixtime = element.unixtime;
@@ -173,7 +168,7 @@ async function fetchBalancesOnce(poolAddress, blockNumber) {
   const ADDRESS_METAREGISTRY = "0xF98B45FA17DE75FB1aD0e7aFD971b0ca00e379fC";
   const METAREGISTRY = await getContract(await getABI(ADDRESS_METAREGISTRY), ADDRESS_METAREGISTRY);
   let balances = await web3Call(METAREGISTRY, "get_balances", [poolAddress], blockNumber);
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   try {
     balances = balances.slice(0, -CURVE_JSON[poolAddress].n_coins);
   } catch (err) {
@@ -185,7 +180,7 @@ async function fetchBalancesOnce(poolAddress, blockNumber) {
   });
   const ENTRY = { [unixtime]: balances };
   DATA.push(ENTRY);
-  fs.writeFileSync("balances.json", JSON.stringify(BALANCES_JSON, null, 2));
+  fs.writeFileSync("./JSON/Balances.json", JSON.stringify(BALANCES_JSON, null, 2));
   return ENTRY;
 }
 
@@ -201,11 +196,11 @@ async function balancesCollectionMain(poolAddress) {
 
 // used to forward balances-array to the client
 function readBalancesArray(poolAddress) {
-  const BALANCES_JSON = JSON.parse(fs.readFileSync("balances.json"));
+  const BALANCES_JSON = JSON.parse(fs.readFileSync("./JSON/Balances.json"));
   return BALANCES_JSON[poolAddress];
 }
 
-module.exports = {
+export {
   fetchBalancesForPool,
   fetchBalancesOnce,
   findLastStoredBlocknumberInBalances,
