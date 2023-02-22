@@ -1,13 +1,15 @@
-const fs = require("fs");
-const axios = require("axios");
-require("dotenv").config();
+import fs from "fs";
+import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const ADDRESS_THREEPOOL = "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7";
 const ADDRESS_TRICRYPTO_2 = "0xD51a44d3FaE010294C616388b506AcdA1bfAAE46";
 const ADDRESS_sUSD_V2_SWAP = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD";
 
 function getCurvePools() {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
 
   const CURVE_POOLS = [];
 
@@ -18,7 +20,7 @@ function getCurvePools() {
 }
 
 function getPoolVersion(poolAddress) {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   return CURVE_JSON[poolAddress].version;
 }
 
@@ -56,9 +58,9 @@ function getUnixtime() {
 async function getABI(poolAddress) {
   let abiDataBase;
   try {
-    abiDataBase = JSON.parse(fs.readFileSync("abi_db.json"));
+    abiDataBase = JSON.parse(fs.readFileSync("./JSON/ABI.json"));
   } catch (err) {
-    console.log("err reading abi_db.json in utils.js", err);
+    console.log("err reading ABI.json in GenericUtils.js", err);
   }
 
   const ABI = abiDataBase[poolAddress];
@@ -67,7 +69,7 @@ async function getABI(poolAddress) {
     const URL = "https://api.etherscan.io/api?module=contract&action=getabi&address=" + poolAddress + "&apikey=" + process.env.etherscanAPI_key;
     const ABI = (await axios.get(URL)).data.result;
     abiDataBase[poolAddress] = ABI;
-    fs.writeFileSync("abi_db.json", JSON.stringify(abiDataBase, null, 2));
+    fs.writeFileSync("./JSON/ABI.json", JSON.stringify(abiDataBase, null, 2));
     return JSON.parse(ABI);
   } else {
     try {
@@ -128,7 +130,7 @@ function isTokenExchangeUnderlying(tx) {
 
 // using the metaregistry to get the array which holds the tokenAddresses of the Tokens of the Pool
 async function getCoins(poolAddress) {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   if (CURVE_JSON[poolAddress]) {
     return CURVE_JSON[poolAddress].coins;
   } else {
@@ -159,7 +161,7 @@ async function getTokenDecimals(tokenAddress) {
   if (isNativeEthAddress(tokenAddress)) return 18;
 
   tokenAddress = tokenAddress.toLowerCase();
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   for (const [key, value] of Object.entries(CURVE_JSON)) {
     const INDEX = value.coins.map((str) => str.toLowerCase()).indexOf(tokenAddress);
     if (INDEX !== -1) {
@@ -171,12 +173,12 @@ async function getTokenDecimals(tokenAddress) {
 
 // using the metaregistry to get the LP Token Address from the Pool (used to spot transfer- "mint" -events)
 async function getLpToken(poolAddress) {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   return CURVE_JSON[poolAddress].lp_token;
 }
 
 async function getBasePool(poolAddress) {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   return CURVE_JSON[poolAddress].base_pool;
 }
 
@@ -192,7 +194,7 @@ async function getTokenName(tokenAddress) {
 
   // local storage check up
   tokenAddress = tokenAddress.toLowerCase();
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   for (const [key, value] of Object.entries(CURVE_JSON)) {
     const INDEX = value.coins.map((str) => str.toLowerCase()).indexOf(tokenAddress.toLowerCase());
     if (INDEX !== -1) {
@@ -232,7 +234,7 @@ async function getCleanedTokenAmount(address, amount) {
   return Number(CLEANED_TOKENS_SOLD);
 }
 
-module.exports = {
+export {
   getCurrentTime,
   getUnixtime,
   getABI,
