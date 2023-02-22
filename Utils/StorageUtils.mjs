@@ -1,12 +1,11 @@
-const fs = require("fs");
+import fs from "fs";
+import Web3 from "web3";
 
-const Web3 = require("web3");
+import { getABI } from "./GenericUtils.mjs";
+import { getCurrentBlockNumber } from "./Web3CallUtils.mjs";
 
-const genericUtils = require("./generic_utils.js");
-const getABI = genericUtils.getABI;
-
-const web3CallUtils = require("./web3_call_utils.js");
-const getCurrentBlockNumber = web3CallUtils.getCurrentBlockNumber;
+import { config } from "dotenv";
+config();
 
 const options = {
   // Enable auto reconnection
@@ -17,7 +16,7 @@ const options = {
     onTimeout: false,
   },
 };
-require("dotenv").config();
+
 const web3HTTP = new Web3(new Web3.providers.HttpProvider(process.env.web3HTTP, options));
 
 function getContract(abi, address) {
@@ -25,7 +24,7 @@ function getContract(abi, address) {
 }
 
 function getCurvePools() {
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
 
   const CURVE_POOLS = [];
 
@@ -38,16 +37,16 @@ function getCurvePools() {
 // takes the raw, unprocessed event logs
 // sorts the events, adds or removes information, and stores the data for both the generic table and the mev table
 function saveTxEntry(poolAddress, entry) {
-  let fileName;
+  let path;
   if (entry.type === "sandwich") {
-    fileName = "processed_tx_log_mev.json";
+    path = "./JSON/ProcessedTxLogMEV.json";
   } else {
-    fileName = "processed_tx_log_all.json";
+    path = "./JSON/ProcessedTxLogAll.json";
   }
 
   let tradeData;
   try {
-    tradeData = JSON.parse(fs.readFileSync(fileName));
+    tradeData = JSON.parse(fs.readFileSync(path));
   } catch (err) {
     tradeData = {};
   }
@@ -70,12 +69,12 @@ function saveTxEntry(poolAddress, entry) {
   }
 
   tradeData[poolAddress].push(entry);
-  fs.writeFileSync(fileName, JSON.stringify(tradeData, null, 2));
+  fs.writeFileSync(path, JSON.stringify(tradeData, null, 2));
 }
 
 // finds the last event that has been processed for a given pool, so find the starting point for processing the raw event log
 async function findLastProcessedEvent(poolAddress) {
-  const PROCESSED_TX_LOG_ALL = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+  const PROCESSED_TX_LOG_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
   const TX_ARRAY = PROCESSED_TX_LOG_ALL[poolAddress];
   const BIGGEST_BLOCK_NUMBER = TX_ARRAY.reduce((max, current) => {
     return Math.max(max, current.blockNumber);
@@ -86,27 +85,27 @@ async function findLastProcessedEvent(poolAddress) {
 
 // 1: removes outdated events
 // 2: adds events in the time range of "lastly screened" and "now".
-// 3: events stored in "unprocessed_event_logs.json".json.
+// 3: events stored in "UnprocessedEventLogs.json".json.
 async function collection() {
   // collectionState.IsReadycollectingRawLogs is used to give the raw log collection enough time to be processed and saved.
   // only then proceeds with processing the raw logs
   let collectionState;
   try {
-    collectionState = JSON.parse(fs.readFileSync("collector_state.json"));
+    collectionState = JSON.parse(fs.readFileSync("./JSON/CollectorState.json"));
   } catch (err) {
-    console.log("can't find file collector_state.json");
+    console.log("can't find file CollectorState.json");
   }
 
   collectionState.IsReadycollectingRawLogs = false;
   collectionState.rawLogsUpToDate = false;
-  fs.writeFileSync("collector_state.json", JSON.stringify(collectionState));
+  fs.writeFileSync("./JSON/CollectorState.json", JSON.stringify(collectionState));
 
   // loading the file with the stored events, or creating it
   let collectedData;
   try {
-    collectedData = JSON.parse(fs.readFileSync("unprocessed_event_logs.json"));
+    collectedData = JSON.parse(fs.readFileSync("./JSON/UnprocessedEventLogs.json"));
   } catch (err) {
-    console.log("no file found called unprocessed_event_logs.json");
+    console.log("no file found called UnprocessedEventLogs.json");
   }
 
   const EVENT_NAMES = ["RemoveLiquidity", "RemoveLiquidityOne", "RemoveLiquidityImbalance", "AddLiquidity", "TokenExchange", "TokenExchangeUnderlying"];
@@ -115,7 +114,7 @@ async function collection() {
   await removeOutdatedBlocksProcessedLogALL();
   await removeOutdatedBlocksProcessedLogMEV();
 
-  collectedData = JSON.parse(fs.readFileSync("unprocessed_event_logs.json"));
+  collectedData = JSON.parse(fs.readFileSync("./JSON/UnprocessedEventLogs.json"));
 
   const CURVE_POOLS = getCurvePools();
 
@@ -130,7 +129,7 @@ async function collection() {
     }
   }
 
-  fs.writeFileSync("unprocessed_event_logs.json", JSON.stringify(collectedData, null, 1));
+  fs.writeFileSync("./JSON/UnprocessedEventLogs.json", JSON.stringify(collectedData, null, 1));
 
   let i = 0;
   for (const POOL_ADDRESS of CURVE_POOLS) {
@@ -186,7 +185,7 @@ async function fetchEvents(collectedData, CONTRACT, eventName, eventNames, maste
         shouldContinue = false;
         if (events.length === 0) {
           // => no events left
-          fs.writeFileSync("unprocessed_event_logs.json", JSON.stringify(collectedData, null, 1));
+          fs.writeFileSync("./JSON/UnprocessedEventLogs.json", JSON.stringify(collectedData, null, 1));
           if (eventName === eventNames[eventNames.length - 1]) {
             finalizeCollection("IsReadyCollectingRawLogs");
           }
@@ -231,10 +230,10 @@ async function getStartBlock() {
 async function removeOutdatedBlocksRawLog(eventNames) {
   let collectedData;
   try {
-    collectedData = JSON.parse(fs.readFileSync("unprocessed_event_logs.json"));
+    collectedData = JSON.parse(fs.readFileSync("./JSON/UnprocessedEventLogs.json"));
   } catch (err) {
     collectedData = {};
-    fs.writeFileSync("unprocessed_event_logs.json", "{}");
+    fs.writeFileSync("./JSON/UnprocessedEventLogs.json", "{}");
   }
 
   let total = 0;
@@ -255,7 +254,7 @@ async function removeOutdatedBlocksRawLog(eventNames) {
       }
     }
   }
-  fs.writeFileSync("unprocessed_event_logs.json", JSON.stringify(collectedData, null, 1));
+  fs.writeFileSync("./JSON/UnprocessedEventLogs.json", JSON.stringify(collectedData, null, 1));
   console.log(total, "entries for unprocessedEventLogs");
 }
 
@@ -264,10 +263,10 @@ async function removeOutdatedBlocksRawLog(eventNames) {
 async function removeOutdatedBlocksProcessedLogALL() {
   let collectedData;
   try {
-    collectedData = JSON.parse(fs.readFileSync("processed_tx_log_all.json"));
+    collectedData = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
   } catch (err) {
     collectedData = {};
-    fs.writeFileSync("processed_tx_log_all.json", "{}");
+    fs.writeFileSync("./JSON/ProcessedTxLogAll.json", "{}");
   }
 
   let total = 0;
@@ -286,7 +285,7 @@ async function removeOutdatedBlocksProcessedLogALL() {
       total += 1;
     }
   }
-  fs.writeFileSync("processed_tx_log_all.json", JSON.stringify(collectedData, null, 1));
+  fs.writeFileSync("./JSON/ProcessedTxLogAll.json", JSON.stringify(collectedData, null, 1));
   console.log(total, "entries for processedTxLog_ALL");
 }
 
@@ -295,10 +294,10 @@ async function removeOutdatedBlocksProcessedLogALL() {
 async function removeOutdatedBlocksProcessedLogMEV() {
   let collectedData;
   try {
-    collectedData = JSON.parse(fs.readFileSync("processed_tx_log_mev.json"));
+    collectedData = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogMEV.json"));
   } catch (err) {
     collectedData = {};
-    fs.writeFileSync("processed_tx_log_mev.json", "{}");
+    fs.writeFileSync("./JSON/ProcessedTxLogMEV.json", "{}");
   }
 
   let total = 0;
@@ -317,7 +316,7 @@ async function removeOutdatedBlocksProcessedLogMEV() {
       total += 1;
     }
   }
-  fs.writeFileSync("processed_tx_log_mev.json", JSON.stringify(collectedData, null, 1));
+  fs.writeFileSync("./JSON/ProcessedTxLogMEV.json", JSON.stringify(collectedData, null, 1));
   console.log(total, "entries for processedTxLog_MEV");
 }
 
@@ -325,7 +324,7 @@ async function removeOutdatedBlocksProcessedLogMEV() {
 // used to find the spot in time for which the data-collection should get resumed.
 function findLatestCapturedBlockInRawEventLog(poolAddress, eventNames) {
   let latestCapturedBlock = 0;
-  const COLLECTED_DATA = JSON.parse(fs.readFileSync("unprocessed_event_logs.json"));
+  const COLLECTED_DATA = JSON.parse(fs.readFileSync("./JSON/UnprocessedEventLogs.json"));
   for (const EVENT_NAME of eventNames) {
     const EVENT_SPECIFIC_LOG = COLLECTED_DATA[poolAddress][EVENT_NAME];
     for (let i = 0; i < EVENT_SPECIFIC_LOG.length; i++) {
@@ -346,7 +345,7 @@ async function getTokenBalancesInsidePool(provider, poolAddress, blockNumber) {
   let balances = await web3Call(METAREGISTRY, "get_balances", [poolAddress], blockNumber);
 
   // removing 0,0,0 from the end
-  const CURVE_JSON = JSON.parse(fs.readFileSync("curve_pool_data.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   const NUMBER_COINS = CURVE_JSON[poolAddress].n_coins;
   const NUMBER_OF_O_ENTRIES = balances.length - NUMBER_COINS;
   balances = balances.filter((balances, i) => i + NUMBER_OF_O_ENTRIES < balances.length);
@@ -363,12 +362,12 @@ async function getTokenBalancesInsidePool(provider, poolAddress, blockNumber) {
 }
 
 function finalizeCollection(process) {
-  let collectionState = JSON.parse(fs.readFileSync("collector_state.json"));
+  let collectionState = JSON.parse(fs.readFileSync("./JSON/CollectorState.json"));
   collectionState[process] = true;
-  fs.writeFileSync("collector_state.json", JSON.stringify(collectionState));
+  fs.writeFileSync("./JSON/CollectorState.json", JSON.stringify(collectionState));
 }
 
-module.exports = {
+export {
   saveTxEntry,
   findLastProcessedEvent,
   collection,
