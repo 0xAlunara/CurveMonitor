@@ -20,7 +20,7 @@
       "nameIn": "DAI",
       "amountOut": 1514639,
       "nameOut": "USDT",
-      "feeUSD": 606,
+      "feeUSD": 303,
       "valueUSD": 1515527
      },
      "unixtime": 1675987307
@@ -51,7 +51,7 @@
       "nameIn": "USDT",
       "amountOut": 1515828,
       "nameOut": "DAI",
-      "feeUSD": 606,
+      "feeUSD": 303,
       "valueUSD": 1514639
      },
      "unixtime": 1675987307
@@ -78,7 +78,7 @@
       "nameIn": "USDC",
       "amountOut": 7554500,
       "nameOut": "USDT",
-      "feeUSD": 3042,
+      "feeUSD": 1521,
       "valueUSD": 7605880
      },
      "unixtime": 1676285795
@@ -94,7 +94,7 @@
       "nameIn": "USDC",
       "amountOut": 378594,
       "nameOut": "USDT",
-      "feeUSD": 154,
+      "feeUSD": 77,
       "valueUSD": 384615
      },
      "unixtime": 1676285795
@@ -110,7 +110,7 @@
       "nameIn": "USDT",
       "amountOut": 7607829,
       "nameOut": "USDC",
-      "feeUSD": 3022,
+      "feeUSD": 1511,
       "valueUSD": 7554500
      },
      "unixtime": 1676285795
@@ -137,7 +137,7 @@
       "nameIn": "USDC",
       "amountOut": 2772842,
       "nameOut": "sUSD",
-      "feeUSD": 1113,
+      "feeUSD": 556.5,
       "valueUSD": 2781677
      },
      "unixtime": 1676844251
@@ -153,7 +153,7 @@
       "nameIn": "USDC",
       "amountOut": 470859,
       "nameOut": "sUSD",
-      "feeUSD": 189,
+      "feeUSD": 94.5,
       "valueUSD": 473080
      },
      "unixtime": 1676844251
@@ -169,7 +169,7 @@
       "nameIn": "sUSD",
       "amountOut": 2781709,
       "nameOut": "USDC",
-      "feeUSD": 1109,
+      "feeUSD": 554.5,
       "valueUSD": 2772842
      },
      "unixtime": 1676844251
@@ -196,7 +196,7 @@
       "nameIn": "DAI",
       "amountOut": 15229616,
       "nameOut": "USDC",
-      "feeUSD": 6125,
+      "feeUSD": 3062.5,
       "valueUSD": 15313541
      },
      "unixtime": 1677136499
@@ -227,7 +227,7 @@
       "nameIn": "USDC",
       "amountOut": 15316972,
       "nameOut": "DAI",
-      "feeUSD": 6092,
+      "feeUSD": 3046,
       "valueUSD": 15229616
      },
      "unixtime": 1677136499
@@ -254,7 +254,7 @@
       "nameIn": "DAI",
       "amountOut": 14704221,
       "nameOut": "USDC",
-      "feeUSD": 5915,
+      "feeUSD": 2957.5,
       "valueUSD": 14787096
      },
      "unixtime": 1677136871
@@ -285,7 +285,7 @@
       "nameIn": "USDC",
       "amountOut": 14790766,
       "nameOut": "DAI",
-      "feeUSD": 5882,
+      "feeUSD": 2941,
       "valueUSD": 14704221
      },
      "unixtime": 1677136871
