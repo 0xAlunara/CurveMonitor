@@ -52,7 +52,7 @@ import {
   checkForTokenExchangeUnderlying,
 } from "./Utils/Web3CallUtils.mjs";
 
-import { saveTxEntry, findLastProcessedEvent, collection, getStartBlock } from "./Utils/StorageUtils.mjs";
+import { saveTxEntry, findLastProcessedEvent, collection, getStartBlock, getHolderFee } from "./Utils/StorageUtils.mjs";
 
 import {
   getDeltaMevBot,
@@ -370,7 +370,6 @@ let prevTxHash;
 async function buildSwapMessage(blockNumber, soldAmount, boughtAmount, tokenSoldName, tokenBoughtName, poolAddress, txHash, buyer, position, poolName) {
   if (txHash === prevTxHash) return;
   prevTxHash = txHash;
-  let holderFee = "-";
 
   let dollarAmount = await convertToUSD(tokenSoldName, soldAmount);
   if (!dollarAmount) dollarAmount = await convertToUSD(tokenBoughtName, boughtAmount);
@@ -381,8 +380,7 @@ async function buildSwapMessage(blockNumber, soldAmount, boughtAmount, tokenSold
   }
 
   // adding fee
-  holderFee = (dollarAmount / 100) * 0.04;
-  if (poolAddress === ADDRESS_THREEPOOL) holderFee /= 4;
+  let holderFee = getHolderFee(dollarAmount, poolAddress);
 
   dollarAmount = formatForPrint(dollarAmount);
   holderFee = formatForPrint(holderFee);
