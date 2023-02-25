@@ -2,1504 +2,6 @@
  "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD": [
   {
    "type": "swap",
-   "txHash": "0x592b27863408d1c84b889619061a24f079c3387cf388b69e57760a72539a3bae",
-   "blockNumber": 16462891,
-   "position": 75,
-   "trader": "0xe5C0157c35c3a1746F62E0146745Bf03e8413cdC",
-   "tradeDetails": {
-    "amountIn": 113,
-    "nameIn": "USDT",
-    "amountOut": 113,
-    "nameOut": "USDC",
-    "feeUSD": 0.045,
-    "valueUSD": 113
-   },
-   "unixtime": 1674397115
-  },
-  {
-   "type": "swap",
-   "txHash": "0xf6c87270787cabaaa59aace2e144bf708a7915e3be74f2d44ac6d062104da878",
-   "blockNumber": 16462950,
-   "position": 2,
-   "trader": "0x0458F166769EC917DD5f4214976752eaa7cBA19D",
-   "tradeDetails": {
-    "amountIn": 1926,
-    "nameIn": "USDT",
-    "amountOut": 1926,
-    "nameOut": "USDC",
-    "feeUSD": 0.77,
-    "valueUSD": 1926
-   },
-   "unixtime": 1674397823
-  },
-  {
-   "type": "swap",
-   "txHash": "0xef44877e499270a4fbbb22acee7b1c96f8d4cf0689fe6c3e82608a21fb0f8f45",
-   "blockNumber": 16462953,
-   "position": 29,
-   "trader": "0x5cfC1e580Bd80336e1474A804Dd5b56444c9EAa6",
-   "tradeDetails": {
-    "amountIn": 3235,
-    "nameIn": "sUSD",
-    "amountOut": 3235,
-    "nameOut": "USDT",
-    "feeUSD": 1.294,
-    "valueUSD": 3235
-   },
-   "unixtime": 1674397859
-  },
-  {
-   "type": "swap",
-   "txHash": "0xd78e396a6a08e6e95d0575dfadcd724de188e4620bfe0725a68f268de1083d44",
-   "blockNumber": 16463139,
-   "position": 8,
-   "trader": "0xE874946c5876E5e6a9Fbc1e17DB759e06E3B3ffe",
-   "tradeDetails": {
-    "amountIn": 3000,
-    "nameIn": "USDC",
-    "amountOut": 2998,
-    "nameOut": "sUSD",
-    "feeUSD": 1.2,
-    "valueUSD": 3000
-   },
-   "unixtime": 1674400103
-  },
-  {
-   "type": "swap",
-   "txHash": "0xc6c71b4ab4525b357cf79c660bfb6a3361aca2d48de62ce7e467bd9a40914b84",
-   "blockNumber": 16463162,
-   "position": 0,
-   "trader": "0xD120Cf3e0408DD794f856e8CA2A23E3396A9B687",
-   "tradeDetails": {
-    "amountIn": 32724,
-    "nameIn": "sUSD",
-    "amountOut": 32726,
-    "nameOut": "USDT",
-    "feeUSD": 13.09,
-    "valueUSD": 32724
-   },
-   "unixtime": 1674400379
-  },
-  {
-   "type": "swap",
-   "txHash": "0x4763204d19abef24c0ff5ea79b5987a99a588248499ac7f9588105025c208788",
-   "blockNumber": 16463344,
-   "position": 19,
-   "trader": "0x52CBA35123EDeb68cf549Ef0efb4CFc5854C0Df4",
-   "tradeDetails": {
-    "amountIn": 2122,
-    "nameIn": "USDT",
-    "amountOut": 2122,
-    "nameOut": "USDC",
-    "feeUSD": 0.849,
-    "valueUSD": 2122
-   },
-   "unixtime": 1674402563
-  },
-  {
-   "type": "swap",
-   "txHash": "0x111c09bd287f5d1c29e2b044da0df471ce502655415a16c43af08b66f0cf1833",
-   "blockNumber": 16463464,
-   "position": 36,
-   "trader": "0xD7aA4D2E9bBd9F65C7A3dfAFe3c715429AAd1640",
-   "tradeDetails": {
-    "amountIn": 4193,
-    "nameIn": "USDT",
-    "amountOut": 4194,
-    "nameOut": "USDC",
-    "feeUSD": 1.677,
-    "valueUSD": 4193
-   },
-   "unixtime": 1674404003
-  },
-  {
-   "type": "swap",
-   "txHash": "0x3e6ef8c1bcc6b3e42274adf21209de064b6a1440b1795efee482fe6955116571",
-   "blockNumber": 16464171,
-   "position": 131,
-   "trader": "0xF2EBCB2a0B919BC6ad6Fd84da61bed23C207CF89",
-   "tradeDetails": {
-    "amountIn": 1695,
-    "nameIn": "USDT",
-    "amountOut": 1694,
-    "nameOut": "sUSD",
-    "feeUSD": 0.678,
-    "valueUSD": 1695
-   },
-   "unixtime": 1674412535
-  },
-  {
-   "type": "swap",
-   "txHash": "0x73efc8536f73d17dd39c9b04cd94d1e7373a0d4e0904225e743264391a5138a3",
-   "blockNumber": 16464516,
-   "position": 202,
-   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
-   "tradeDetails": {
-    "amountIn": 16049,
-    "nameIn": "sUSD",
-    "amountOut": 16056,
-    "nameOut": "USDC",
-    "feeUSD": 6.42,
-    "valueUSD": 16049
-   },
-   "unixtime": 1674416711
-  },
-  {
-   "type": "swap",
-   "txHash": "0xd4be31ffe6c09d2fcd31c72327a5e71b9267e9328f28bc6de2aba714f5b90a72",
-   "blockNumber": 16464628,
-   "position": 125,
-   "trader": "0xe33062a24149f7801a48B2675Ed5111d3278F0f5",
-   "tradeDetails": {
-    "amountIn": 2495,
-    "nameIn": "USDT",
-    "amountOut": 2493,
-    "nameOut": "sUSD",
-    "feeUSD": 0.998,
-    "valueUSD": 2495
-   },
-   "unixtime": 1674418055
-  },
-  {
-   "type": "remove",
-   "txHash": "0x62e5135492e5e9dce91640cf325e1c06425fa8080cecfeaf29c1bfe25e1a2a4a",
-   "blockNumber": 16464802,
-   "position": 111,
-   "trader": "0xA3ae519321A48D5D62F05bd45A88f71d412009D1",
-   "tradeDetails": [
-    {
-     "amountOut": 3505,
-     "nameOut": "USDC",
-     "valueUSD": 3505
-    }
-   ],
-   "unixtime": 1674420155
-  },
-  {
-   "type": "swap",
-   "txHash": "0x750f5b7b55c142a08da7d0060635c32d70a8c6eaa3c7ffde8dcbf4cf5ec87d86",
-   "blockNumber": 16465669,
-   "position": 7,
-   "trader": "0x1d89307EC7C8D4f280e2564EFee6AaBc927e9AE2",
-   "tradeDetails": {
-    "amountIn": 5502,
-    "nameIn": "sUSD",
-    "amountOut": 5503,
-    "nameOut": "DAI",
-    "feeUSD": 2.201,
-    "valueUSD": 5502
-   },
-   "unixtime": 1674430667
-  },
-  {
-   "type": "swap",
-   "txHash": "0x5acb2f2e1bb50811c4484d892c73fe270d85f0652db565bfe5a25543b36cb273",
-   "blockNumber": 16466282,
-   "position": 15,
-   "trader": "0x1FDaB0d048530057Ee8027B0D4AA34Fcb3523196",
-   "tradeDetails": {
-    "amountIn": 115,
-    "nameIn": "USDT",
-    "amountOut": 115,
-    "nameOut": "USDC",
-    "feeUSD": 0.046,
-    "valueUSD": 115
-   },
-   "unixtime": 1674438083
-  },
-  {
-   "type": "deposit",
-   "txHash": "0x54e6e7be8f7492707917f3f49488333371c5eceb3aed0496b9f5884f6af0540a",
-   "blockNumber": 16467317,
-   "position": 76,
-   "trader": "0x9De143F6a73aEb4e8E351434EBbeb80F5b195583",
-   "tradeDetails": [
-    {
-     "amountIn": 24908,
-     "nameIn": "USDC",
-     "valueUSD": 24908.423225
-    }
-   ],
-   "unixtime": 1674450563
-  },
-  {
-   "type": "swap",
-   "txHash": "0x95608957b1af6e7904114a4e24acffeead8ca0e0cb3ffede1181ec6413a74671",
-   "blockNumber": 16467410,
-   "position": 9,
-   "trader": "0x1bD85A44399b3C4E02EcAe6078a5FaB458943d93",
-   "tradeDetails": {
-    "amountIn": 251,
-    "nameIn": "USDT",
-    "amountOut": 251,
-    "nameOut": "USDC",
-    "feeUSD": 0.1,
-    "valueUSD": 251
-   },
-   "unixtime": 1674451679
-  },
-  {
-   "type": "swap",
-   "txHash": "0x12519ce50f6d21865f21d4cfae337ea291fd85b0839dc70a5c09db9a1ec26501",
-   "blockNumber": 16467786,
-   "position": 89,
-   "trader": "0xf6d58331279fb931B562068e6309Ac63E0308eDF",
-   "tradeDetails": {
-    "amountIn": 34695,
-    "nameIn": "USDT",
-    "amountOut": 34680,
-    "nameOut": "sUSD",
-    "feeUSD": 13.88,
-    "valueUSD": 34695
-   },
-   "unixtime": 1674456227
-  },
-  {
-   "type": "swap",
-   "txHash": "0x35b1618bafdf8bffab3730b546f7719d48b9d0d0efb3ef91071eb039ae46025c",
-   "blockNumber": 16467787,
-   "position": 70,
-   "trader": "0x2E8d4ef87F45Fab04Fa6966c2Dd172514Bb4d753",
-   "tradeDetails": {
-    "amountIn": 222,
-    "nameIn": "USDT",
-    "amountOut": 222,
-    "nameOut": "USDC",
-    "feeUSD": 0.089,
-    "valueUSD": 222
-   },
-   "unixtime": 1674456239
-  },
-  {
-   "type": "swap",
-   "txHash": "0x0ecbb0485a39eeb0ef5e070ab69e1f9c407e3d0228c03a53653b6f678be52306",
-   "blockNumber": 16468121,
-   "position": 9,
-   "trader": "0x99d997F722672547D9192a4829ccbf2358636c9c",
-   "tradeDetails": {
-    "amountIn": 6835,
-    "nameIn": "USDT",
-    "amountOut": 6837,
-    "nameOut": "USDC",
-    "feeUSD": 2.734,
-    "valueUSD": 6835
-   },
-   "unixtime": 1674460247
-  },
-  {
-   "type": "swap",
-   "txHash": "0x6aa5bb93b367f9e0ef9f2c7fe1af136a1c34749c28c8b3092e77866bd6db95e2",
-   "blockNumber": 16468182,
-   "position": 20,
-   "trader": "0xCae6334E9a5186D58E746588AAea8614476d3232",
-   "tradeDetails": {
-    "amountIn": 588,
-    "nameIn": "USDT",
-    "amountOut": 588,
-    "nameOut": "USDC",
-    "feeUSD": 0.235,
-    "valueUSD": 588
-   },
-   "unixtime": 1674460979
-  },
-  {
-   "type": "swap",
-   "txHash": "0xba53c6be3d5ec38bfe8e9fe30a0eccea98d5a29e18221a861e16ca3d52aa97c9",
-   "blockNumber": 16468360,
-   "position": 38,
-   "trader": "0xa86271026a587C4BEB528F46452f5c8375E2E95B",
-   "tradeDetails": {
-    "amountIn": 4535,
-    "nameIn": "USDT",
-    "amountOut": 4536,
-    "nameOut": "USDC",
-    "feeUSD": 1.814,
-    "valueUSD": 4535
-   },
-   "unixtime": 1674463127
-  },
-  {
-   "type": "deposit",
-   "txHash": "0x85bb3bdac9073542b27ff1285105cc9b2a36e320b5d2a17b8d878a654b3b5812",
-   "blockNumber": 16468387,
-   "position": 56,
-   "trader": "0xa59e113fbef3B4129bAef6b5355dFf683851aFA7",
-   "tradeDetails": [
-    {
-     "amountIn": 543,
-     "nameIn": "USDC",
-     "valueUSD": 542.612008
-    }
-   ],
-   "unixtime": 1674463451
-  },
-  {
-   "type": "swap",
-   "txHash": "0xc8a3c38df5444791be67ab87fe319feafc845b259d28287eacb3989dd1b62ba3",
-   "blockNumber": 16468663,
-   "position": 15,
-   "trader": "0xf0236558934a2A9C3cD0eA66Cb3dC084AD58F997",
-   "tradeDetails": {
-    "amountIn": 12596,
-    "nameIn": "USDT",
-    "amountOut": 12598,
-    "nameOut": "USDC",
-    "feeUSD": 5.04,
-    "valueUSD": 12596
-   },
-   "unixtime": 1674466763
-  },
-  {
-   "type": "swap",
-   "txHash": "0xfa418d77988b19b36221e52e588cb078327051f4ca9490a3a8c9c5b3e4edce46",
-   "blockNumber": 16468825,
-   "position": 8,
-   "trader": "0xEbE8416999e7095Af04f6df883d52ECCf915721a",
-   "tradeDetails": {
-    "amountIn": 2400,
-    "nameIn": "USDT",
-    "amountOut": 2400,
-    "nameOut": "USDC",
-    "feeUSD": 0.96,
-    "valueUSD": 2400
-   },
-   "unixtime": 1674468707
-  },
-  {
-   "type": "swap",
-   "txHash": "0x90f479413165781256ffefb29b8e8522631b9d4f2ccf49a5bda58eb3d7ef7406",
-   "blockNumber": 16468893,
-   "position": 68,
-   "trader": "0x748C8D2a3656C3F37154c462994Fc9505d62CA75",
-   "tradeDetails": {
-    "amountIn": 3588,
-    "nameIn": "USDT",
-    "amountOut": 3588,
-    "nameOut": "USDC",
-    "feeUSD": 1.435,
-    "valueUSD": 3588
-   },
-   "unixtime": 1674469523
-  },
-  {
-   "type": "swap",
-   "txHash": "0x813f5dadff791db5a2e461ddc402a6b3122d83ac5c7b1c3434e0db8716c64b12",
-   "blockNumber": 16468918,
-   "position": 0,
-   "trader": "0x971aC48e6F904406edBC22687ED92Bc8966fe551",
-   "tradeDetails": {
-    "amountIn": 1302378,
-    "nameIn": "USDT",
-    "amountOut": 1302227,
-    "nameOut": "USDC",
-    "feeUSD": 521,
-    "valueUSD": 1302378
-   },
-   "unixtime": 1674469823
-  },
-  {
-   "type": "remove",
-   "txHash": "0x181a286097b44406efad284f303bdc73d7f0afc8456c1d9170bcdb62e478c9da",
-   "blockNumber": 16468918,
-   "position": 1,
-   "trader": "0xE5c6F4ED7124073bC5317be6e8D5bEA617Ce0e35",
-   "tradeDetails": [
-    {
-     "amountOut": 2496269,
-     "nameOut": "USDC",
-     "valueUSD": 2496269
-    }
-   ],
-   "unixtime": 1674469823
-  },
-  {
-   "type": "swap",
-   "txHash": "0x7adc10b91cdeaaa65e79af6af3085317789a1f2f38a584e61c3bf1aec27d7a3d",
-   "blockNumber": 16468918,
-   "position": 2,
-   "trader": "0x971aC48e6F904406edBC22687ED92Bc8966fe551",
-   "tradeDetails": {
-    "amountIn": 1302227,
-    "nameIn": "USDC",
-    "amountOut": 1302603,
-    "nameOut": "USDT",
-    "feeUSD": 521,
-    "valueUSD": 1302227
-   },
-   "unixtime": 1674469823
-  },
-  {
-   "type": "swap",
-   "txHash": "0x90dbc0c3b238f905319edb5c6a3747974e7fd1de8eaf98e797bdbdc0cad9a576",
-   "blockNumber": 16468918,
-   "position": 3,
-   "trader": "0xE011b77EC41Cd5D792Ae8952E7bAB47D232f2594",
-   "tradeDetails": {
-    "amountIn": 603871,
-    "nameIn": "USDC",
-    "amountOut": 603949,
-    "nameOut": "DAI",
-    "feeUSD": 242,
-    "valueUSD": 603871
-   },
-   "unixtime": 1674469823
-  },
-  {
-   "type": "deposit",
-   "txHash": "0x911a2afa763da1f0f4874ce886d70376ae50cd3e7e0510483295008609a8602b",
-   "blockNumber": 16468921,
-   "position": 117,
-   "trader": "0x5a9B4b4CFFA2F9a679fC7fE84EE1c3C455ec0064",
-   "tradeDetails": [
-    {
-     "amountIn": 0,
-     "nameIn": "DAI",
-     "valueUSD": 1e-9
-    }
-   ],
-   "unixtime": 1674469859
-  },
-  {
-   "type": "swap",
-   "txHash": "0xe8a39095873a718c67f6e5bb576a799f078219ae23768d30000bc3477d818f30",
-   "blockNumber": 16468998,
-   "position": 78,
-   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
-   "tradeDetails": {
-    "amountIn": 28199,
-    "nameIn": "USDC",
-    "amountOut": 28194,
-    "nameOut": "USDT",
-    "feeUSD": 11.28,
-    "valueUSD": 28199
-   },
-   "unixtime": 1674470783
-  },
-  {
-   "type": "swap",
-   "txHash": "0x160fc9d6545dcf79cc5f219322dcc6531cf7f78884ebe0783c089c2eb4a14ccc",
-   "blockNumber": 16469123,
-   "position": 21,
-   "trader": "0x16609a7da1fB457c3B7222e579d906db0da97F21",
-   "tradeDetails": {
-    "amountIn": 10000,
-    "nameIn": "USDC",
-    "amountOut": 9998,
-    "nameOut": "USDT",
-    "feeUSD": 4,
-    "valueUSD": 10000
-   },
-   "unixtime": 1674472283
-  },
-  {
-   "type": "swap",
-   "txHash": "0xaf45da3758a19bc9854ec1b97ee4bb8b8147a321287bb01a2dc29b34d899c999",
-   "blockNumber": 16469132,
-   "position": 8,
-   "trader": "0xb38544cCf295D78B7AE7b2baE5dbEbDB1f09910D",
-   "tradeDetails": {
-    "amountIn": 7000,
-    "nameIn": "USDC",
-    "amountOut": 6999,
-    "nameOut": "USDT",
-    "feeUSD": 2.8,
-    "valueUSD": 7000
-   },
-   "unixtime": 1674472391
-  },
-  {
-   "type": "swap",
-   "txHash": "0xc9b2e82280d5c42baa852fae543f8c833ac4af00a7d027ca696a55555d6c5af3",
-   "blockNumber": 16469151,
-   "position": 0,
-   "trader": "0x97483B9A34e71b555373AA46e97450351eddFdBb",
-   "tradeDetails": {
-    "amountIn": 275000,
-    "nameIn": "USDC",
-    "amountOut": 274934,
-    "nameOut": "USDT",
-    "feeUSD": 110,
-    "valueUSD": 275000
-   },
-   "unixtime": 1674472619
-  },
-  {
-   "type": "swap",
-   "txHash": "0xfe249a2f70456475ccac4836bc54ccb08a2898941428e5fb6e0ff3d37b401421",
-   "blockNumber": 16469210,
-   "position": 1,
-   "trader": "0x7bcFf2B7c86003ecdCD1c6cf4F7b2376704Cc8e0",
-   "tradeDetails": {
-    "amountIn": 457,
-    "nameIn": "USDC",
-    "amountOut": 457,
-    "nameOut": "USDT",
-    "feeUSD": 0.183,
-    "valueUSD": 457
-   },
-   "unixtime": 1674473351
-  },
-  {
-   "type": "swap",
-   "txHash": "0x54f6906e8993c3338dc2f2fe5c52a7f5e533db5345bbd5ddc6ca073df8f00f99",
-   "blockNumber": 16469212,
-   "position": 95,
-   "trader": "0x3F3646528EfcD96849823EC0652ad7e4C1Fff812",
-   "tradeDetails": {
-    "amountIn": 50000,
-    "nameIn": "USDC",
-    "amountOut": 49984,
-    "nameOut": "USDT",
-    "feeUSD": 20,
-    "valueUSD": 50000
-   },
-   "unixtime": 1674473375
-  },
-  {
-   "type": "swap",
-   "txHash": "0xcbf5254947a5a71905776125cf4ae1523710b4a7b4b2d30831e6a67e91573090",
-   "blockNumber": 16469213,
-   "position": 9,
-   "trader": "0xDb297880B302666a2fE835441592b96b3f3D0408",
-   "tradeDetails": {
-    "amountIn": 150223,
-    "nameIn": "USDC",
-    "amountOut": 150144,
-    "nameOut": "sUSD",
-    "feeUSD": 60.09,
-    "valueUSD": 150223
-   },
-   "unixtime": 1674473387
-  },
-  {
-   "type": "swap",
-   "txHash": "0x7871c266385c50421b5fbba352cab375d14a974cf85540423fc06ef79b851ac3",
-   "blockNumber": 16469351,
-   "position": 99,
-   "trader": "0xDb297880B302666a2fE835441592b96b3f3D0408",
-   "tradeDetails": {
-    "amountIn": 200000,
-    "nameIn": "USDC",
-    "amountOut": 199879,
-    "nameOut": "sUSD",
-    "feeUSD": 80,
-    "valueUSD": 200000
-   },
-   "unixtime": 1674475055
-  },
-  {
-   "type": "swap",
-   "txHash": "0xb5e1ab4635240fcc12ec06d654c97f0be42d9314eb3bc5814b54ea4655862979",
-   "blockNumber": 16469451,
-   "position": 32,
-   "trader": "0x1022Daf31b0Ed04E939a17fE4dE41f63BAB73d9D",
-   "tradeDetails": {
-    "amountIn": 10000,
-    "nameIn": "USDC",
-    "amountOut": 9996,
-    "nameOut": "USDT",
-    "feeUSD": 4,
-    "valueUSD": 10000
-   },
-   "unixtime": 1674476267
-  },
-  {
-   "type": "swap",
-   "txHash": "0x679c04ed5df1d35c77b776315bdb36d6b8dcbe20e3a500bebeb3ce989f79ec01",
-   "blockNumber": 16470259,
-   "position": 37,
-   "trader": "0xE8FB27B448726AA39bdb3322aac31B6a3D583cFA",
-   "tradeDetails": {
-    "amountIn": 13057,
-    "nameIn": "USDC",
-    "amountOut": 13055,
-    "nameOut": "DAI",
-    "feeUSD": 5.22,
-    "valueUSD": 13057
-   },
-   "unixtime": 1674485987
-  },
-  {
-   "type": "deposit",
-   "txHash": "0x3a11d0d08d5a07ecd203477f5b2d9a64a71cb230183b863a9bb3f5212265c6a4",
-   "blockNumber": 16470317,
-   "position": 120,
-   "trader": "0x5a34897A6c1607811Ae763350839720c02107682",
-   "tradeDetails": [
-    {
-     "amountIn": 162000,
-     "nameIn": "USDC",
-     "valueUSD": 161999.678178
-    }
-   ],
-   "unixtime": 1674486683
-  },
-  {
-   "type": "deposit",
-   "txHash": "0x1e4c948aee50f481b143e96507c719d1ab761e005f0f89ab51f6c317cb568880",
-   "blockNumber": 16470417,
-   "position": 43,
-   "trader": "0x1F5eeB6Fd0a8Deeed618a6df02600cb2CA9Cf66c",
-   "tradeDetails": [
-    {
-     "amountIn": 990,
-     "nameIn": "USDC",
-     "valueUSD": 990
-    }
-   ],
-   "unixtime": 1674487895
-  },
-  {
-   "type": "swap",
-   "txHash": "0x2e7f4b4d64aa6a3279d28c56b09603990378527bd53294cebc1533168346ee35",
-   "blockNumber": 16470794,
-   "position": 72,
-   "trader": "0x55DCad916750C19C4Ec69D65Ff0317767B36cE90",
-   "tradeDetails": {
-    "amountIn": 1273,
-    "nameIn": "sUSD",
-    "amountOut": 1273,
-    "nameOut": "USDT",
-    "feeUSD": 0.509,
-    "valueUSD": 1273
-   },
-   "unixtime": 1674492431
-  },
-  {
-   "type": "swap",
-   "txHash": "0xb24ef590ecdc5787c521b2504222923e03d5eba4606e674db2e864f8149f3f3b",
-   "blockNumber": 16471409,
-   "position": 139,
-   "trader": "0xd007058e9b58E74C33c6bF6fbCd38BaAB813cBB6",
-   "tradeDetails": {
-    "amountIn": 17672,
-    "nameIn": "sUSD",
-    "amountOut": 17677,
-    "nameOut": "USDC",
-    "feeUSD": 7.07,
-    "valueUSD": 17672
-   },
-   "unixtime": 1674499835
-  },
-  {
-   "type": "swap",
-   "txHash": "0x653956d2460dab3aadf64903bf25334bb61a2773352795304cbcff2fc1f6139d",
-   "blockNumber": 16472153,
-   "position": 26,
-   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
-   "tradeDetails": {
-    "amountIn": 68718,
-    "nameIn": "USDT",
-    "amountOut": 68686,
-    "nameOut": "sUSD",
-    "feeUSD": 27.49,
-    "valueUSD": 68718
-   },
-   "unixtime": 1674508823
-  },
-  {
-   "type": "swap",
-   "txHash": "0xe8d994b1f54af7024e9876ee44268ba8ba72c872dd0a57d127fb73c3fb34a8ba",
-   "blockNumber": 16472187,
-   "position": 4,
-   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
-   "tradeDetails": {
-    "amountIn": 154602,
-    "nameIn": "USDC",
-    "amountOut": 154488,
-    "nameOut": "sUSD",
-    "feeUSD": 61.84,
-    "valueUSD": 154602
-   },
-   "unixtime": 1674509243
-  },
-  {
-   "type": "swap",
-   "txHash": "0x0b04bc108d7840feaf4d400877be4e9fe5734b53f13b9a8532c730d40dd067bc",
-   "blockNumber": 16472487,
-   "position": 28,
-   "trader": "0xBADB55a9783AAc0046353d01f7888DB51fc9F42c",
-   "tradeDetails": {
-    "amountIn": 16.32,
-    "nameIn": "USDT",
-    "amountOut": 16.32,
-    "nameOut": "USDC",
-    "feeUSD": 0.007,
-    "valueUSD": 16.32
-   },
-   "unixtime": 1674512855
-  },
-  {
-   "type": "deposit",
-   "txHash": "0x9e65cc4a0485ceff756ba9d52fab357268db686f120158ec89df322d8148fb17",
-   "blockNumber": 16472948,
-   "position": 44,
-   "trader": "0x510B0068C0756bBEFCBaffB6567e467d661291FE",
-   "tradeDetails": [
-    {
-     "amountIn": 14569,
-     "nameIn": "sUSD",
-     "valueUSD": 14568.740981325001
-    }
-   ],
-   "unixtime": 1674518435
-  },
-  {
-   "type": "deposit",
-   "txHash": "0xb11f03f576ed486d4b466bb1c99b53429192950e583d2355273aee0cc17d54a9",
-   "blockNumber": 16473057,
-   "position": 4,
-   "trader": "0x510B0068C0756bBEFCBaffB6567e467d661291FE",
-   "tradeDetails": [
-    {
-     "amountIn": 19408,
-     "nameIn": "sUSD",
-     "valueUSD": 19408.413460120002
-    }
-   ],
-   "unixtime": 1674519743
-  },
-  {
-   "type": "deposit",
-   "txHash": "0xa5b9aa3e78306af20676b72e2223782e4bc92976a66f700832bf061c41b41c34",
-   "blockNumber": 16473091,
-   "position": 19,
-   "trader": "0x510B0068C0756bBEFCBaffB6567e467d661291FE",
-   "tradeDetails": [
-    {
-     "amountIn": 46.37,
-     "nameIn": "DAI",
-     "valueUSD": 46.368935094644485
-    },
-    {
-     "amountIn": 50.12,
-     "nameIn": "USDC",
-     "valueUSD": 50.120567
-    },
-    {
-     "amountIn": 29.01,
-     "nameIn": "USDT",
-     "valueUSD": 29.006768
-    }
-   ],
-   "unixtime": 1674520151
-  },
-  {
-   "type": "swap",
-   "txHash": "0x3f577443dbe6d79babed8ee3c8b53a5fc421dabb41f306a8c300848befb326c7",
-   "blockNumber": 16473154,
-   "position": 13,
-   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
-   "tradeDetails": {
-    "amountIn": 131666,
-    "nameIn": "sUSD",
-    "amountOut": 131711,
-    "nameOut": "USDC",
-    "feeUSD": 52.67,
-    "valueUSD": 131666
-   },
-   "unixtime": 1674520907
-  },
-  {
-   "type": "deposit",
-   "txHash": "0xd09e7bef9bbcdb6e9e54ec7effaccd0f64086434c0450d1d252e058c5ee7d757",
-   "blockNumber": 16473241,
-   "position": 112,
-   "trader": "0x39f66125b377516f05A4B3Ceb516695199f0a41B",
-   "tradeDetails": [
-    {
-     "amountIn": 998526,
-     "nameIn": "DAI",
-     "valueUSD": 998526.1618281453
-    }
-   ],
-   "unixtime": 1674521963
-  },
-  {
-   "type": "swap",
-   "txHash": "0xb225a912f1c51e09d6b826d5020662e2da88805dd22872d4fb822f57f3f2a6fe",
-   "blockNumber": 16473295,
-   "position": 52,
-   "trader": "0xead0e51B3D3Cf4893B5E0Ac22a93F5549056550F",
-   "tradeDetails": {
-    "amountIn": 36771,
-    "nameIn": "USDC",
-    "amountOut": 36771,
-    "nameOut": "DAI",
-    "feeUSD": 14.71,
-    "valueUSD": 36771
-   },
-   "unixtime": 1674522611
-  },
-  {
-   "type": "swap",
-   "txHash": "0x5b81e83cfffbd429fa5adec8998f648900ff8f2592e6a828a04fad5bce9421f9",
-   "blockNumber": 16473381,
-   "position": 198,
-   "trader": "0xC44fD102415FF62769A4e37C70deA27033a5291F",
-   "tradeDetails": {
-    "amountIn": 115000,
-    "nameIn": "USDT",
-    "amountOut": 115023,
-    "nameOut": "DAI",
-    "feeUSD": 46,
-    "valueUSD": 115000
-   },
-   "unixtime": 1674523643
-  },
-  {
-   "type": "swap",
-   "txHash": "0x772fd02d6dc50e65e0d2fb335bd58008264467e4d682e1d78060cda8787e04e9",
-   "blockNumber": 16473384,
-   "position": 30,
-   "trader": "0xF8C227781a967F33B7859c31D8a97Eac68Ac520e",
-   "tradeDetails": {
-    "amountIn": 114,
-    "nameIn": "USDT",
-    "amountOut": 114,
-    "nameOut": "USDC",
-    "feeUSD": 0.046,
-    "valueUSD": 114
-   },
-   "unixtime": 1674523679
-  },
-  {
-   "type": "deposit",
-   "txHash": "0x821851f33b7a9abc7b8483b203f3c8055eb8a5239f6cb31577fef620c63b3c81",
-   "blockNumber": 16473428,
-   "position": 84,
-   "trader": "0x661ADD1f34784C14E71575765f86F9087bdD936b",
-   "tradeDetails": [
-    {
-     "amountIn": 501,
-     "nameIn": "DAI",
-     "valueUSD": 500.542245714622
-    }
-   ],
-   "unixtime": 1674524207
-  },
-  {
-   "type": "swap",
-   "txHash": "0xed890a8db1ff3177599b6afb7c83a434151d2f43f0c7bb117d657b60d1e1eb99",
-   "blockNumber": 16473606,
-   "position": 8,
-   "trader": "0x94b3c5Fc67b0c63beFCC74D7Afcd333baa697B2A",
-   "tradeDetails": {
-    "amountIn": 4310,
-    "nameIn": "USDC",
-    "amountOut": 4310,
-    "nameOut": "DAI",
-    "feeUSD": 1.724,
-    "valueUSD": 4310
-   },
-   "unixtime": 1674526343
-  },
-  {
-   "type": "swap",
-   "txHash": "0xdc874a8878aa0be20e0a65ab51bacc986b2fc2781582733f811ed30b773f11cc",
-   "blockNumber": 16473731,
-   "position": 126,
-   "trader": "0xFb2b859131e5c9a5A06B4ACFD7ED643f3625FFc6",
-   "tradeDetails": {
-    "amountIn": 67.55,
-    "nameIn": "USDT",
-    "amountOut": 67.56,
-    "nameOut": "DAI",
-    "feeUSD": 0.027,
-    "valueUSD": 67.55
-   },
-   "unixtime": 1674527867
-  },
-  {
-   "type": "swap",
-   "txHash": "0x7f7cc286c9056471afff8a41ef238bebee812f993a5a47b229131abca7917e24",
-   "blockNumber": 16474139,
-   "position": 103,
-   "trader": "0xf8a659a5C7f843Bd927668343F9AA2bFb2905ce8",
-   "tradeDetails": {
-    "amountIn": 10,
-    "nameIn": "USDC",
-    "amountOut": 10,
-    "nameOut": "DAI",
-    "feeUSD": 0.004,
-    "valueUSD": 10
-   },
-   "unixtime": 1674532787
-  },
-  {
-   "type": "swap",
-   "txHash": "0xcc02d462ffadb059fd84cd004a3259cf96984b5967a5ec5b9e5cc434266a9528",
-   "blockNumber": 16474265,
-   "position": 94,
-   "trader": "0x9cF40873A427dFFd9b4f6A04ACA59cA1d60ce6c6",
-   "tradeDetails": {
-    "amountIn": 1586,
-    "nameIn": "USDC",
-    "amountOut": 1585,
-    "nameOut": "USDT",
-    "feeUSD": 0.634,
-    "valueUSD": 1586
-   },
-   "unixtime": 1674534299
-  },
-  {
-   "type": "swap",
-   "txHash": "0xe50f149da15e937c9c9051fc44d7e2d4e9586c7fd5e147e5aba7f82b4413bdfe",
-   "blockNumber": 16474287,
-   "position": 1,
-   "trader": "0x1d4ACBC9F70Cadd4E6Eb215731B8a20BB848D042",
-   "tradeDetails": {
-    "amountIn": 20825,
-    "nameIn": "sUSD",
-    "amountOut": 20832,
-    "nameOut": "USDC",
-    "feeUSD": 8.33,
-    "valueUSD": 20825
-   },
-   "unixtime": 1674534563
-  },
-  {
-   "type": "deposit",
-   "txHash": "0xc2fa0111668c85536d6787d40432472735a57ea41d2df294366c6f8b1070afd3",
-   "blockNumber": 16474362,
-   "position": 97,
-   "trader": "0x4bB9A1E3bA4AEe6F6bb76De1384E7417fd2C9Dc2",
-   "tradeDetails": [
-    {
-     "amountIn": 51104,
-     "nameIn": "DAI",
-     "valueUSD": 51103.84371495947
-    }
-   ],
-   "unixtime": 1674535463
-  },
-  {
-   "type": "swap",
-   "txHash": "0x5e4387ae323fae8c8210e8c85e194965aa0e5b3dc4a7ec24e78032e12e7f1801",
-   "blockNumber": 16474487,
-   "position": 22,
-   "trader": "0xbad19B2235319DF3c6A9549b8e1044312A274441",
-   "tradeDetails": {
-    "amountIn": 154,
-    "nameIn": "USDC",
-    "amountOut": 154,
-    "nameOut": "DAI",
-    "feeUSD": 0.062,
-    "valueUSD": 154
-   },
-   "unixtime": 1674536975
-  },
-  {
-   "type": "swap",
-   "txHash": "0x387f7293b895465f65a43a750969c7c569776c2670462933eb40e6abd25ee7e5",
-   "blockNumber": 16474588,
-   "position": 14,
-   "trader": "0x9073B943c749b85E83390c18cd45Df85dCd2E9Cc",
-   "tradeDetails": {
-    "amountIn": 3001,
-    "nameIn": "USDC",
-    "amountOut": 3001,
-    "nameOut": "DAI",
-    "feeUSD": 1.2,
-    "valueUSD": 3001
-   },
-   "unixtime": 1674538187
-  },
-  {
-   "type": "swap",
-   "txHash": "0xd54271dc543822d6b432d9b9de40834a448aa53520d8ca9dd739276b16cc8857",
-   "blockNumber": 16474829,
-   "position": 59,
-   "trader": "0x53f44Ef518dF82bdc4dEA2D678af848A295d9C43",
-   "tradeDetails": {
-    "amountIn": 56000,
-    "nameIn": "USDC",
-    "amountOut": 55998,
-    "nameOut": "DAI",
-    "feeUSD": 22.4,
-    "valueUSD": 56000
-   },
-   "unixtime": 1674541091
-  },
-  {
-   "type": "deposit",
-   "txHash": "0x5d5b2539177c033dc30f485b6e5922deb67c1a6baa400738e93d161d337404da",
-   "blockNumber": 16475324,
-   "position": 9,
-   "trader": "0xCaE617c08bb445af1089dd34431a23A483c4Ce04",
-   "tradeDetails": [
-    {
-     "amountIn": 4753,
-     "nameIn": "USDC",
-     "valueUSD": 4753
-    }
-   ],
-   "unixtime": 1674547043
-  },
-  {
-   "type": "swap",
-   "txHash": "0x29c1611d2cb6eb15e992df66d382524d6e8756d50bfd0d1cc2160afc34329881",
-   "blockNumber": 16475846,
-   "position": 25,
-   "trader": "0x57a18C4dFC24E4e345fb9dD5D60812731F1c8Dab",
-   "tradeDetails": {
-    "amountIn": 1057,
-    "nameIn": "sUSD",
-    "amountOut": 1057,
-    "nameOut": "USDC",
-    "feeUSD": 0.423,
-    "valueUSD": 1057
-   },
-   "unixtime": 1674553367
-  },
-  {
-   "type": "swap",
-   "txHash": "0x80b66f4b36d0e46cf6fa8c5331698366d013825d28422974a36771b908c49fe9",
-   "blockNumber": 16476218,
-   "position": 8,
-   "trader": "0x3a42c57E85564C792729F551A77236b6a7e41F58",
-   "tradeDetails": {
-    "amountIn": 4986,
-    "nameIn": "USDC",
-    "amountOut": 4984,
-    "nameOut": "USDT",
-    "feeUSD": 1.994,
-    "valueUSD": 4986
-   },
-   "unixtime": 1674557843
-  },
-  {
-   "type": "swap",
-   "txHash": "0xed3042f81e1bcc10b59181b960bf3b005c3fc4def5b372ce884745bbdfdb09a8",
-   "blockNumber": 16476300,
-   "position": 16,
-   "trader": "0x6e868846b2182235C16FD122FCD44739E55A58e4",
-   "tradeDetails": {
-    "amountIn": 5225,
-    "nameIn": "DAI",
-    "amountOut": 5220,
-    "nameOut": "sUSD",
-    "feeUSD": 2.09,
-    "valueUSD": 5225
-   },
-   "unixtime": 1674558827
-  },
-  {
-   "type": "swap",
-   "txHash": "0xd43ae7ce8cb335d2c1f8ddd1daa134c1722985ab6f8d005c9cdac0f1b67bd740",
-   "blockNumber": 16476331,
-   "position": 86,
-   "trader": "0x78fcA58F1E54A00e44f7D6c40b771A8ED97C2296",
-   "tradeDetails": {
-    "amountIn": 2145,
-    "nameIn": "USDC",
-    "amountOut": 2144,
-    "nameOut": "USDT",
-    "feeUSD": 0.858,
-    "valueUSD": 2145
-   },
-   "unixtime": 1674559211
-  },
-  {
-   "type": "swap",
-   "txHash": "0x3a5de6d23a8dde06be05586afb76cc6579d7cef90a7e6cf92298961e9ec20870",
-   "blockNumber": 16476332,
-   "position": 192,
-   "trader": "0xF1F957595dc117128BF7d3AC5f71042a889b826a",
-   "tradeDetails": {
-    "amountIn": 120,
-    "nameIn": "USDC",
-    "amountOut": 120,
-    "nameOut": "DAI",
-    "feeUSD": 0.048,
-    "valueUSD": 120
-   },
-   "unixtime": 1674559223
-  },
-  {
-   "type": "swap",
-   "txHash": "0x43757715cd424199e85279dd603d6c08607b47df9a28c0506f8b641fd347de69",
-   "blockNumber": 16476377,
-   "position": 22,
-   "trader": "0x1368D138b757FED88D313a96BB2a20d556a4c3DE",
-   "tradeDetails": {
-    "amountIn": 1956,
-    "nameIn": "USDC",
-    "amountOut": 1955,
-    "nameOut": "USDT",
-    "feeUSD": 0.782,
-    "valueUSD": 1956
-   },
-   "unixtime": 1674559763
-  },
-  {
-   "type": "swap",
-   "txHash": "0xee35d1eb0632514529e8d8f393f814c391916682178283b27615287363158c21",
-   "blockNumber": 16476599,
-   "position": 4,
-   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
-   "tradeDetails": {
-    "amountIn": 25000,
-    "nameIn": "USDC",
-    "amountOut": 24999,
-    "nameOut": "DAI",
-    "feeUSD": 10,
-    "valueUSD": 25000
-   },
-   "unixtime": 1674562487
-  },
-  {
-   "type": "swap",
-   "txHash": "0xa47155bc88163a308823524b8bac1c2f0abeb51f20343fa1917f5d4e1e0afaee",
-   "blockNumber": 16476803,
-   "position": 29,
-   "trader": "0x31d71C9F00C4cE70aE78069a3306ac38E263Cbe0",
-   "tradeDetails": {
-    "amountIn": 685,
-    "nameIn": "USDC",
-    "amountOut": 684,
-    "nameOut": "sUSD",
-    "feeUSD": 0.274,
-    "valueUSD": 685
-   },
-   "unixtime": 1674564935
-  },
-  {
-   "type": "swap",
-   "txHash": "0x392b69a2f378c9a86384582408bafbe0acaacc98ebee970b2d17185a9480ff85",
-   "blockNumber": 16476964,
-   "position": 3,
-   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
-   "tradeDetails": {
-    "amountIn": 22500,
-    "nameIn": "USDC",
-    "amountOut": 22499,
-    "nameOut": "DAI",
-    "feeUSD": 9,
-    "valueUSD": 22500
-   },
-   "unixtime": 1674566879
-  },
-  {
-   "type": "swap",
-   "txHash": "0x1eee56a5612a3b73f3da8bb757dd945b62c62304611413b1cb788a334cea3120",
-   "blockNumber": 16477075,
-   "position": 32,
-   "trader": "0x1EC83F24F016E6b455002f15e5a6933e9F199fcD",
-   "tradeDetails": {
-    "amountIn": 1647,
-    "nameIn": "USDC",
-    "amountOut": 1646,
-    "nameOut": "USDT",
-    "feeUSD": 0.659,
-    "valueUSD": 1647
-   },
-   "unixtime": 1674568211
-  },
-  {
-   "type": "swap",
-   "txHash": "0x935f82f0155789007f9fdfb25a0c9696d2f16160a42ce0556f05e8fb30cba620",
-   "blockNumber": 16477186,
-   "position": 6,
-   "trader": "0x5606611d0ea8C848AbCAcD493556b2d56cB5A7c6",
-   "tradeDetails": {
-    "amountIn": 649,
-    "nameIn": "sUSD",
-    "amountOut": 649,
-    "nameOut": "USDC",
-    "feeUSD": 0.259,
-    "valueUSD": 649
-   },
-   "unixtime": 1674569543
-  },
-  {
-   "type": "swap",
-   "txHash": "0xbe230f614bb253fc4b0faf32de740fa430092785a8ddb8e23fca84eef8ac2d16",
-   "blockNumber": 16477280,
-   "position": 19,
-   "trader": "0x5e3D1448A0365C3B1cD08908d410BfcCCa449C45",
-   "tradeDetails": {
-    "amountIn": 7225,
-    "nameIn": "USDT",
-    "amountOut": 7226,
-    "nameOut": "DAI",
-    "feeUSD": 2.89,
-    "valueUSD": 7225
-   },
-   "unixtime": 1674570683
-  },
-  {
-   "type": "swap",
-   "txHash": "0x4ce5bde35e4dd8c49cdba331f44bf6964d0fecd1c678bb03f5d0dbb095f0438a",
-   "blockNumber": 16477574,
-   "position": 215,
-   "trader": "0x42d02f4cd48BDAC116b7E3A4895f586777948FaE",
-   "tradeDetails": {
-    "amountIn": 50000,
-    "nameIn": "USDC",
-    "amountOut": 49996,
-    "nameOut": "DAI",
-    "feeUSD": 20,
-    "valueUSD": 50000
-   },
-   "unixtime": 1674574223
-  },
-  {
-   "type": "swap",
-   "txHash": "0xdde8371d51a5a350277f450dffac8b278cc1359b640b9c5fdbef4ecc65357367",
-   "blockNumber": 16478687,
-   "position": 57,
-   "trader": "0x28A5eC068ae7500cbf21B989D62C7a81e2665B18",
-   "tradeDetails": {
-    "amountIn": 16000,
-    "nameIn": "sUSD",
-    "amountOut": 16006,
-    "nameOut": "USDC",
-    "feeUSD": 6.4,
-    "valueUSD": 16000
-   },
-   "unixtime": 1674587639
-  },
-  {
-   "type": "swap",
-   "txHash": "0x0b7308a4afaea9d55939198702f8d419e828d3df0e451a2ce133773bf5284141",
-   "blockNumber": 16478825,
-   "position": 67,
-   "trader": "0x649f69CCd077Da03dFb11f4b1daAb4B625f5E9A3",
-   "tradeDetails": {
-    "amountIn": 203,
-    "nameIn": "USDT",
-    "amountOut": 203,
-    "nameOut": "USDC",
-    "feeUSD": 0.081,
-    "valueUSD": 203
-   },
-   "unixtime": 1674589319
-  },
-  {
-   "type": "swap",
-   "txHash": "0xe91cfd63ec439e0aa41ddc1a4b770f266299f1c54ee633f99011258b82dbd969",
-   "blockNumber": 16478952,
-   "position": 6,
-   "trader": "0xCeDddf3207913CeF2aE8348e1ab2893f053590fB",
-   "tradeDetails": {
-    "amountIn": 4001,
-    "nameIn": "USDC",
-    "amountOut": 4001,
-    "nameOut": "DAI",
-    "feeUSD": 1.6,
-    "valueUSD": 4001
-   },
-   "unixtime": 1674590855
-  },
-  {
-   "type": "swap",
-   "txHash": "0xbc17007cbbd2a4e943eaffe1861125d97b7d5cfdc1f411da52d2c735f8250d09",
-   "blockNumber": 16479220,
-   "position": 34,
-   "trader": "0x1d89307EC7C8D4f280e2564EFee6AaBc927e9AE2",
-   "tradeDetails": {
-    "amountIn": 12909,
-    "nameIn": "USDT",
-    "amountOut": 12902,
-    "nameOut": "sUSD",
-    "feeUSD": 5.16,
-    "valueUSD": 12909
-   },
-   "unixtime": 1674594083
-  },
-  {
-   "type": "swap",
-   "txHash": "0xd299aa883cd9a2423119997b0f0a1e8ec4873499452881f0e8a42286379b0a2f",
-   "blockNumber": 16479459,
-   "position": 4,
-   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
-   "tradeDetails": {
-    "amountIn": 50114,
-    "nameIn": "USDT",
-    "amountOut": 50088,
-    "nameOut": "sUSD",
-    "feeUSD": 20.05,
-    "valueUSD": 50114
-   },
-   "unixtime": 1674596963
-  },
-  {
-   "type": "remove",
-   "txHash": "0x0e457d800c84fe449130f2265f885f46d22e5c78985de020b90ca97025085650",
-   "blockNumber": 16479501,
-   "position": 26,
-   "trader": "0xf1beA24376329E01c7c10A00a6A7329591168CF9",
-   "tradeDetails": [
-    {
-     "amountOut": 34.66,
-     "nameOut": "USDC",
-     "valueUSD": 34.66
-    }
-   ],
-   "unixtime": 1674597467
-  },
-  {
-   "type": "swap",
-   "txHash": "0xc0a9bfa6019a3adf58cdf67dcc9b1de429b35e9f774327d6021d38077957b5bf",
-   "blockNumber": 16479655,
-   "position": 152,
-   "trader": "0x6F7869a321442659b9c5D2463600c40De73C84A9",
-   "tradeDetails": {
-    "amountIn": 3587,
-    "nameIn": "sUSD",
-    "amountOut": 3588,
-    "nameOut": "USDC",
-    "feeUSD": 1.435,
-    "valueUSD": 3587
-   },
-   "unixtime": 1674599315
-  },
-  {
-   "type": "swap",
-   "txHash": "0x658701acf2c1fee9a01663921b98f732046e4dab9b7115ffdedbb0609569b219",
-   "blockNumber": 16479659,
-   "position": 1,
-   "trader": "0xa51b24e54BFC91F2fa4aC125e97Cf0da526e1716",
-   "tradeDetails": {
-    "amountIn": 74179,
-    "nameIn": "USDC",
-    "amountOut": 74171,
-    "nameOut": "DAI",
-    "feeUSD": 29.67,
-    "valueUSD": 74179
-   },
-   "unixtime": 1674599363
-  },
-  {
-   "type": "remove",
-   "txHash": "0x070b54cf45afb7e052d927f7ae29ef48d3dd5762a1ef37769a59800fae4dba5d",
-   "blockNumber": 16480247,
-   "position": 29,
-   "trader": "0x32118e0E825e0292a5bAffbec7d874e3Eb749E0C",
-   "tradeDetails": [
-    {
-     "amountOut": 28.82,
-     "nameOut": "USDC",
-     "valueUSD": 28.82
-    }
-   ],
-   "unixtime": 1674606431
-  },
-  {
-   "type": "swap",
-   "txHash": "0xb830a35e37a65281d37213e008dea76c1233514692cb96a221d3dbf92c840e9b",
-   "blockNumber": 16480619,
-   "position": 19,
-   "trader": "0x176578bF964b1C41bF715ff296065F113ce99298",
-   "tradeDetails": {
-    "amountIn": 7.67,
-    "nameIn": "USDT",
-    "amountOut": 7.67,
-    "nameOut": "DAI",
-    "feeUSD": 0.003,
-    "valueUSD": 7.67
-   },
-   "unixtime": 1674610895
-  },
-  {
-   "type": "swap",
-   "txHash": "0x94fdaea7ee8d289eb60b77046602306612c470d56b4ebdbc1d1e5c4fb99f1f95",
-   "blockNumber": 16480857,
-   "position": 6,
-   "trader": "0x8aA3E4603B231875Ff9339BC3993Ba735690915d",
-   "tradeDetails": {
-    "amountIn": 716,
-    "nameIn": "USDC",
-    "amountOut": 716,
-    "nameOut": "DAI",
-    "feeUSD": 0.286,
-    "valueUSD": 716
-   },
-   "unixtime": 1674613763
-  },
-  {
-   "type": "swap",
-   "txHash": "0x0b4922591851f7c308a104d555c46375c00d09a55825d21735bbff2732d19d6e",
-   "blockNumber": 16480934,
-   "position": 7,
-   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
-   "tradeDetails": {
-    "amountIn": 39993,
-    "nameIn": "USDT",
-    "amountOut": 39971,
-    "nameOut": "sUSD",
-    "feeUSD": 16,
-    "valueUSD": 39993
-   },
-   "unixtime": 1674614687
-  },
-  {
-   "type": "swap",
-   "txHash": "0x14585594a3e24d190bedf3461e734267f067406f70b1ee56533bcfb6486528a2",
-   "blockNumber": 16480970,
-   "position": 175,
-   "trader": "0xBf891E7eFCC98A8239385D3172bA10AD593c7886",
-   "tradeDetails": {
-    "amountIn": 47920,
-    "nameIn": "USDT",
-    "amountOut": 47893,
-    "nameOut": "sUSD",
-    "feeUSD": 19.17,
-    "valueUSD": 47920
-   },
-   "unixtime": 1674615119
-  },
-  {
-   "type": "swap",
-   "txHash": "0xc57fc1caa9646a73993acc7c7cb6ab287c2a0e3c565c65ab157d49391d91dc24",
-   "blockNumber": 16480981,
-   "position": 107,
-   "trader": "0xBf891E7eFCC98A8239385D3172bA10AD593c7886",
-   "tradeDetails": {
-    "amountIn": 25806,
-    "nameIn": "DAI",
-    "amountOut": 25783,
-    "nameOut": "sUSD",
-    "feeUSD": 10.32,
-    "valueUSD": 25806
-   },
-   "unixtime": 1674615251
-  },
-  {
-   "type": "swap",
-   "txHash": "0x67f2d5aa868a68444212fb815fc5f85b45d9cc08dc06479132b6feee7b742714",
-   "blockNumber": 16481445,
-   "position": 32,
-   "trader": "0x47C30Dab2797D79b9e2d768c3F1DcF564343E792",
-   "tradeDetails": {
-    "amountIn": 6.41,
-    "nameIn": "USDT",
-    "amountOut": 6.41,
-    "nameOut": "sUSD",
-    "feeUSD": 0.003,
-    "valueUSD": 6.41
-   },
-   "unixtime": 1674620831
-  },
-  {
-   "type": "swap",
-   "txHash": "0xd9a94d8dce19f219711facb003bd7934b675f2cd23b6696bfd86aeb103a57131",
-   "blockNumber": 16481453,
-   "position": 17,
-   "trader": "0x47C30Dab2797D79b9e2d768c3F1DcF564343E792",
-   "tradeDetails": {
-    "amountIn": 217,
-    "nameIn": "USDT",
-    "amountOut": 216,
-    "nameOut": "sUSD",
-    "feeUSD": 0.087,
-    "valueUSD": 217
-   },
-   "unixtime": 1674620927
-  },
-  {
-   "type": "swap",
    "txHash": "0x41a38c74e490e809786ac01f589a25ba6e18de03291168d6393a81033f9d51e3",
    "blockNumber": 16481817,
    "position": 9,
@@ -17888,6 +16390,909 @@
     "valueUSD": 24000
    },
    "unixtime": 1677087851
+  },
+  {
+   "type": "swap",
+   "txHash": "0xcfb0962027d28cf26c475e8cc12f49672c34656459a12b823cc260c23d29270a",
+   "blockNumber": 16686167,
+   "position": 107,
+   "trader": "0x27D998A81b5510Ed61D94aFDAA747e9719b45d0B",
+   "tradeDetails": {
+    "amountIn": 30784,
+    "nameIn": "DAI",
+    "amountOut": 30782,
+    "nameOut": "USDC",
+    "feeUSD": 12.31,
+    "valueUSD": 30784
+   },
+   "unixtime": 1677095507
+  },
+  {
+   "type": "swap",
+   "txHash": "0xdd148fe07ab07c8d5c86c6fe775ef10566d302b63dd4254f19270f227edc0309",
+   "blockNumber": 16686559,
+   "position": 20,
+   "trader": "0x8Fc80Ea799e65Acd70D4FA17E6a92a6EC393e71a",
+   "tradeDetails": {
+    "amountIn": 10348,
+    "nameIn": "DAI",
+    "amountOut": 10347,
+    "nameOut": "USDC",
+    "feeUSD": 4.139,
+    "valueUSD": 10348
+   },
+   "unixtime": 1677100271
+  },
+  {
+   "type": "remove",
+   "txHash": "0x76a8a1a166ae24af530d7d7444a79a838833f4e98b04557a51037090fb848d6d",
+   "blockNumber": 16686646,
+   "position": 87,
+   "trader": "0xba944AbD6Ad261B220dcc8ba6b53410Cb024FCB1",
+   "tradeDetails": [
+    {
+     "amountOut": 206,
+     "nameOut": "USDC",
+     "valueUSD": 206
+    }
+   ],
+   "unixtime": 1677101327
+  },
+  {
+   "type": "swap",
+   "txHash": "0xf0bdccef0f5b62d568e5eada6f14b3ed7096872c23de0c79a04b22c3fe310f0a",
+   "blockNumber": 16686747,
+   "position": 64,
+   "trader": "0xD120Cf3e0408DD794f856e8CA2A23E3396A9B687",
+   "tradeDetails": {
+    "amountIn": 44000,
+    "nameIn": "USDC",
+    "amountOut": 43928,
+    "nameOut": "sUSD",
+    "feeUSD": 17.6,
+    "valueUSD": 44000
+   },
+   "unixtime": 1677102539
+  },
+  {
+   "type": "swap",
+   "txHash": "0x4d5562778e63fa2eaffdb41a3b208aaa90b9a19e23c5e4224cb32c24b67341f5",
+   "blockNumber": 16686917,
+   "position": 75,
+   "trader": "0x90cEeaffB3Da888D32b02CF359F9e6a44aC8FA29",
+   "tradeDetails": {
+    "amountIn": 4093,
+    "nameIn": "sUSD",
+    "amountOut": 4098,
+    "nameOut": "USDC",
+    "feeUSD": 1.637,
+    "valueUSD": 4093
+   },
+   "unixtime": 1677104603
+  },
+  {
+   "type": "swap",
+   "txHash": "0x59a486fbff3b1b26a50b57816cf79011c1bd767fcb75e8181a6d49bd21ad50f1",
+   "blockNumber": 16687215,
+   "position": 3,
+   "trader": "0x3AB1532160487E11d7C19b8492fb01b7b895Db43",
+   "tradeDetails": {
+    "amountIn": 116964,
+    "nameIn": "sUSD",
+    "amountOut": 117106,
+    "nameOut": "USDC",
+    "feeUSD": 46.79,
+    "valueUSD": 116964
+   },
+   "unixtime": 1677108203
+  },
+  {
+   "type": "swap",
+   "txHash": "0x08d6d3880de6e1c653d2cab23eb6390090d124ab262eef60181019e061b933d9",
+   "blockNumber": 16687352,
+   "position": 131,
+   "trader": "0xc9ec550BEA1C64D779124b23A26292cc223327b6",
+   "tradeDetails": {
+    "amountIn": 99841,
+    "nameIn": "USDC",
+    "amountOut": 99680,
+    "nameOut": "sUSD",
+    "feeUSD": 39.94,
+    "valueUSD": 99841
+   },
+   "unixtime": 1677109871
+  },
+  {
+   "type": "swap",
+   "txHash": "0x2cded4f6ec784549137aff5efeb0fb9759d8cddb6ff0d7dd79aeb2a089c09dfc",
+   "blockNumber": 16687379,
+   "position": 7,
+   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
+   "tradeDetails": {
+    "amountIn": 100000,
+    "nameIn": "USDC",
+    "amountOut": 99833,
+    "nameOut": "sUSD",
+    "feeUSD": 40,
+    "valueUSD": 100000
+   },
+   "unixtime": 1677110207
+  },
+  {
+   "type": "swap",
+   "txHash": "0x9ae27a829da35fcc1a28991d3b8d6692ca81d877951be008f1d12d1e51b03625",
+   "blockNumber": 16687385,
+   "position": 104,
+   "trader": "0xBFF9a1B539516F9e20c7b621163e676949959a66",
+   "tradeDetails": {
+    "amountIn": 84965,
+    "nameIn": "DAI",
+    "amountOut": 84831,
+    "nameOut": "sUSD",
+    "feeUSD": 33.99,
+    "valueUSD": 84965
+   },
+   "unixtime": 1677110279
+  },
+  {
+   "type": "swap",
+   "txHash": "0xad1e5f1586dbb7749cb6d4727a136ac013630a9ed3a39a543b7cc93f655936c3",
+   "blockNumber": 16687976,
+   "position": 40,
+   "trader": "0x8c73d39B2DA2dd1a10CC16502BC7C8D768EC74C9",
+   "tradeDetails": {
+    "amountIn": 43.15,
+    "nameIn": "sUSD",
+    "amountOut": 43.21,
+    "nameOut": "USDC",
+    "feeUSD": 0.017,
+    "valueUSD": 43.15
+   },
+   "unixtime": 1677117431
+  },
+  {
+   "type": "swap",
+   "txHash": "0x1c3407474595ca6d234f0365af6e2f2281778f4d3bf28de578e89b7608549b08",
+   "blockNumber": 16688411,
+   "position": 136,
+   "trader": "0x5bA820775c0FF2ef2e291C7b1A0f6eF1EF18d04B",
+   "tradeDetails": {
+    "amountIn": 1000,
+    "nameIn": "USDT",
+    "amountOut": 998,
+    "nameOut": "sUSD",
+    "feeUSD": 0.4,
+    "valueUSD": 1000
+   },
+   "unixtime": 1677122735
+  },
+  {
+   "type": "swap",
+   "txHash": "0x59fb7b09d030282c4b04ac625f8efe866badcb333d1e3db425f36dcb2c408d80",
+   "blockNumber": 16688573,
+   "position": 24,
+   "trader": "0xDB611d682cb1ad72fcBACd944a8a6e2606a6d158",
+   "tradeDetails": {
+    "amountIn": 53811,
+    "nameIn": "DAI",
+    "amountOut": 53807,
+    "nameOut": "USDC",
+    "feeUSD": 21.52,
+    "valueUSD": 53811
+   },
+   "unixtime": 1677124691
+  },
+  {
+   "type": "swap",
+   "txHash": "0x80d078d423bb64828b26482415ebe5289b90d3da2c15ccf70f2b2a769a2a1663",
+   "blockNumber": 16689014,
+   "position": 8,
+   "trader": "0x2Ee36E41387f87B7e6f678A86D1e575b23b996F5",
+   "tradeDetails": {
+    "amountIn": 1743,
+    "nameIn": "USDC",
+    "amountOut": 1740,
+    "nameOut": "sUSD",
+    "feeUSD": 0.697,
+    "valueUSD": 1743
+   },
+   "unixtime": 1677130031
+  },
+  {
+   "type": "swap",
+   "txHash": "0xd09817e962c0a9061c196934b9cc65ff350a4d9fa56e80291770184b04564004",
+   "blockNumber": 16689246,
+   "position": 79,
+   "trader": "0xA3b6e1577b003c8b176BA321432920E6072aBD5e",
+   "tradeDetails": {
+    "amountIn": 17000,
+    "nameIn": "sUSD",
+    "amountOut": 17022,
+    "nameOut": "USDC",
+    "feeUSD": 6.8,
+    "valueUSD": 17000
+   },
+   "unixtime": 1677132839
+  },
+  {
+   "type": "swap",
+   "txHash": "0xfb2151d8275a1035545c1bb34447d8c82fd5fb2c4ceea2bf000d4a61fbbf73a6",
+   "blockNumber": 16689494,
+   "position": 79,
+   "trader": "0xC42c23C8287050c6D0cDa3146B89EFBb8ab7c748",
+   "tradeDetails": {
+    "amountIn": 22717,
+    "nameIn": "sUSD",
+    "amountOut": 22747,
+    "nameOut": "USDC",
+    "feeUSD": 9.09,
+    "valueUSD": 22717
+   },
+   "unixtime": 1677135827
+  },
+  {
+   "type": "swap",
+   "txHash": "0x5a04e6354ad7df44ee71c52757654e94384e3cfe82fd04777e0207929ad71e0e",
+   "blockNumber": 16689550,
+   "position": 0,
+   "trader": "0xf480fAb87c07EC2dDd68A83eC0319BB466B1Afa2",
+   "tradeDetails": {
+    "amountIn": 15313541,
+    "nameIn": "DAI",
+    "amountOut": 15229616,
+    "nameOut": "USDC",
+    "feeUSD": 6125,
+    "valueUSD": 15313541
+   },
+   "unixtime": 1677136499
+  },
+  {
+   "type": "remove",
+   "txHash": "0x9d1fed428cc0643a62ba50780ece3f4c748033718cfeb2930eaf2307bcace269",
+   "blockNumber": 16689550,
+   "position": 1,
+   "trader": "0xbDfA4f4492dD7b7Cf211209C4791AF8d52BF5c50",
+   "tradeDetails": [
+    {
+     "amountOut": 879316,
+     "nameOut": "USDC",
+     "valueUSD": 879316
+    }
+   ],
+   "unixtime": 1677136499
+  },
+  {
+   "type": "swap",
+   "txHash": "0x25fc8618daddc979a70c3de4cf7d3c75c40c050a99fed6dde1a62f28cf20009d",
+   "blockNumber": 16689550,
+   "position": 2,
+   "trader": "0xf480fAb87c07EC2dDd68A83eC0319BB466B1Afa2",
+   "tradeDetails": {
+    "amountIn": 15229616,
+    "nameIn": "USDC",
+    "amountOut": 15316972,
+    "nameOut": "DAI",
+    "feeUSD": 6092,
+    "valueUSD": 15229616
+   },
+   "unixtime": 1677136499
+  },
+  {
+   "type": "remove",
+   "txHash": "0xd483b562490ab9007313098fa60e6ded8607e8fb43e7308f9475cb3f03c0db72",
+   "blockNumber": 16689557,
+   "position": 103,
+   "trader": "0xbDfA4f4492dD7b7Cf211209C4791AF8d52BF5c50",
+   "tradeDetails": [
+    {
+     "amountOut": 106133,
+     "nameOut": "USDC",
+     "valueUSD": 106133
+    }
+   ],
+   "unixtime": 1677136583
+  },
+  {
+   "type": "swap",
+   "txHash": "0x220ca13d4c6d7285238a070c554445ae6e0c4a4167f0f6301ba630ae9a70488c",
+   "blockNumber": 16689580,
+   "position": 0,
+   "trader": "0xf480fAb87c07EC2dDd68A83eC0319BB466B1Afa2",
+   "tradeDetails": {
+    "amountIn": 14787096,
+    "nameIn": "DAI",
+    "amountOut": 14704221,
+    "nameOut": "USDC",
+    "feeUSD": 5915,
+    "valueUSD": 14787096
+   },
+   "unixtime": 1677136871
+  },
+  {
+   "type": "remove",
+   "txHash": "0x7d47854542699d3f1b4122afb059ee11831403188489c91406fdd69e889fa942",
+   "blockNumber": 16689580,
+   "position": 1,
+   "trader": "0xbDfA4f4492dD7b7Cf211209C4791AF8d52BF5c50",
+   "tradeDetails": [
+    {
+     "amountOut": 841307,
+     "nameOut": "USDC",
+     "valueUSD": 841307
+    }
+   ],
+   "unixtime": 1677136871
+  },
+  {
+   "type": "swap",
+   "txHash": "0xd1abdaedec5006545626c0bf6a547a6ed326f9e2e969a05d9e31eece0d7ba3fa",
+   "blockNumber": 16689580,
+   "position": 2,
+   "trader": "0xf480fAb87c07EC2dDd68A83eC0319BB466B1Afa2",
+   "tradeDetails": {
+    "amountIn": 14704221,
+    "nameIn": "USDC",
+    "amountOut": 14790766,
+    "nameOut": "DAI",
+    "feeUSD": 5882,
+    "valueUSD": 14704221
+   },
+   "unixtime": 1677136871
+  },
+  {
+   "type": "remove",
+   "txHash": "0x0192359250159881c242255000b9c288e1e913e7c8336181958df401c2887aa3",
+   "blockNumber": 16689585,
+   "position": 96,
+   "trader": "0xbDfA4f4492dD7b7Cf211209C4791AF8d52BF5c50",
+   "tradeDetails": [
+    {
+     "amountOut": 501411,
+     "nameOut": "USDC",
+     "valueUSD": 501411
+    }
+   ],
+   "unixtime": 1677136931
+  },
+  {
+   "type": "remove",
+   "txHash": "0xe2da566816e8f8587918fe04a2d971fa655e3c9f6245224a5c047f50e7a05815",
+   "blockNumber": 16689589,
+   "position": 35,
+   "trader": "0xbDfA4f4492dD7b7Cf211209C4791AF8d52BF5c50",
+   "tradeDetails": [
+    {
+     "amountOut": 159186,
+     "nameOut": "USDC",
+     "valueUSD": 159186
+    }
+   ],
+   "unixtime": 1677136979
+  },
+  {
+   "type": "swap",
+   "txHash": "0x8fee89dbdaa6784e4e623c471e31154aef454c944108f17e4a4a4d964dcfe140",
+   "blockNumber": 16689765,
+   "position": 4,
+   "trader": "0x1739B308d2232f9987975298c4459b5e51Fa272E",
+   "tradeDetails": {
+    "amountIn": 170483,
+    "nameIn": "USDC",
+    "amountOut": 170452,
+    "nameOut": "USDT",
+    "feeUSD": 68.19,
+    "valueUSD": 170483
+   },
+   "unixtime": 1677139151
+  },
+  {
+   "type": "swap",
+   "txHash": "0x6f41929648838f672bb6a37258eec363ddbee159e7af1fac14b881df9d3c6d01",
+   "blockNumber": 16689833,
+   "position": 142,
+   "trader": "0xc9ec550BEA1C64D779124b23A26292cc223327b6",
+   "tradeDetails": {
+    "amountIn": 24967,
+    "nameIn": "DAI",
+    "amountOut": 24928,
+    "nameOut": "sUSD",
+    "feeUSD": 9.99,
+    "valueUSD": 24967
+   },
+   "unixtime": 1677139967
+  },
+  {
+   "type": "swap",
+   "txHash": "0x3ef72bd9f1aed1079b0a4fd0ae0df937c9594021c53c440f2e04322470862819",
+   "blockNumber": 16690012,
+   "position": 33,
+   "trader": "0x8E8b45bfd592EE172486f79Bb8278FEa2eAbD8ce",
+   "tradeDetails": {
+    "amountIn": 12111,
+    "nameIn": "USDC",
+    "amountOut": 12109,
+    "nameOut": "USDT",
+    "feeUSD": 4.844,
+    "valueUSD": 12111
+   },
+   "unixtime": 1677142115
+  },
+  {
+   "type": "deposit",
+   "txHash": "0x687c09f38895f8fe528808673f5340d32a6d3f6bb45944252c1e0fafc371ad08",
+   "blockNumber": 16690076,
+   "position": 114,
+   "trader": "0xAE75B29ADe678372D77A8B41225654138a7E6ff1",
+   "tradeDetails": [
+    {
+     "amountIn": 138861,
+     "nameIn": "USDC",
+     "valueUSD": 138860.700705
+    }
+   ],
+   "unixtime": 1677142919
+  },
+  {
+   "type": "swap",
+   "txHash": "0x37ad09da02c4688a06cd2bddaf8ab14e8e9c899f954f27bd4e6e4553eb41e8fe",
+   "blockNumber": 16690552,
+   "position": 116,
+   "trader": "0x0eE68E7A7851B88c55a2DE0f5c051200779EFa1e",
+   "tradeDetails": {
+    "amountIn": 30008,
+    "nameIn": "USDC",
+    "amountOut": 30001,
+    "nameOut": "USDT",
+    "feeUSD": 12,
+    "valueUSD": 30008
+   },
+   "unixtime": 1677148691
+  },
+  {
+   "type": "swap",
+   "txHash": "0x4dc29958e2c1e9f6f582adb7927a98bbcbb8b09ebf6eb1d312ce89f9855d758a",
+   "blockNumber": 16690882,
+   "position": 218,
+   "trader": "0xc9ec550BEA1C64D779124b23A26292cc223327b6",
+   "tradeDetails": {
+    "amountIn": 23587,
+    "nameIn": "USDC",
+    "amountOut": 23552,
+    "nameOut": "sUSD",
+    "feeUSD": 9.43,
+    "valueUSD": 23587
+   },
+   "unixtime": 1677152699
+  },
+  {
+   "type": "swap",
+   "txHash": "0xb064c269a03114451985366a0508ae33233d8c41e5e95c8104a6cb5d998cfca2",
+   "blockNumber": 16691065,
+   "position": 91,
+   "trader": "0xe693bA16A3eDa70B314F30D552AA5a9395d5783A",
+   "tradeDetails": {
+    "amountIn": 5060,
+    "nameIn": "sUSD",
+    "amountOut": 5065,
+    "nameOut": "USDT",
+    "feeUSD": 2.024,
+    "valueUSD": 5060
+   },
+   "unixtime": 1677154907
+  },
+  {
+   "type": "swap",
+   "txHash": "0x7fdb6886f845f4e8d1fdfe020f1da8df134207c0a7eab6fe4affbdee3ae7847d",
+   "blockNumber": 16691638,
+   "position": 5,
+   "trader": "0x346C802df3404BEC2f265603db28B815321251Ee",
+   "tradeDetails": {
+    "amountIn": 4368,
+    "nameIn": "USDC",
+    "amountOut": 4361,
+    "nameOut": "sUSD",
+    "feeUSD": 1.747,
+    "valueUSD": 4368
+   },
+   "unixtime": 1677161867
+  },
+  {
+   "type": "deposit",
+   "txHash": "0xbb44047f08a02ccb87a2b2115124c4f8c0772b3ca8c24d8424e2af0b951967b9",
+   "blockNumber": 16691644,
+   "position": 58,
+   "trader": "0xA16dDC8BB94978Df95360f7d491A634EBcb4B796",
+   "tradeDetails": [
+    {
+     "amountIn": 500000,
+     "nameIn": "USDC",
+     "valueUSD": 500000
+    },
+    {
+     "amountIn": 125000,
+     "nameIn": "USDT",
+     "valueUSD": 125000
+    }
+   ],
+   "unixtime": 1677161939
+  },
+  {
+   "type": "swap",
+   "txHash": "0x92fb9aef89a63d47ba7e854b6106219a39182832330d32aab364731e727383bc",
+   "blockNumber": 16691657,
+   "position": 27,
+   "trader": "0xfD0169aC61763adC2168237757DC7e4a792b2A43",
+   "tradeDetails": {
+    "amountIn": 4078,
+    "nameIn": "USDC",
+    "amountOut": 4072,
+    "nameOut": "sUSD",
+    "feeUSD": 1.631,
+    "valueUSD": 4078
+   },
+   "unixtime": 1677162107
+  },
+  {
+   "type": "swap",
+   "txHash": "0xe07ea8dcf1feb4adeb67403e49a76fdb6eab332a7c26f816928714fdf0312d76",
+   "blockNumber": 16692269,
+   "position": 118,
+   "trader": "0xD120Cf3e0408DD794f856e8CA2A23E3396A9B687",
+   "tradeDetails": {
+    "amountIn": 41490,
+    "nameIn": "sUSD",
+    "amountOut": 41539,
+    "nameOut": "USDC",
+    "feeUSD": 16.6,
+    "valueUSD": 41490
+   },
+   "unixtime": 1677169523
+  },
+  {
+   "type": "swap",
+   "txHash": "0x198597db2faf2bef46240038cef87cec1b5d8aa578ca598455880b69a1c3f91b",
+   "blockNumber": 16693135,
+   "position": 151,
+   "trader": "0xc9ec550BEA1C64D779124b23A26292cc223327b6",
+   "tradeDetails": {
+    "amountIn": 99960,
+    "nameIn": "USDC",
+    "amountOut": 99801,
+    "nameOut": "sUSD",
+    "feeUSD": 39.98,
+    "valueUSD": 99960
+   },
+   "unixtime": 1677179999
+  },
+  {
+   "type": "remove",
+   "txHash": "0xefb27d57ee0a18d6b6833ddcd364787285119c6cc11564b5f2a34f20382cb0c6",
+   "blockNumber": 16694080,
+   "position": 8,
+   "trader": "0xA2b15ce187165bC1723Df411d9887d738FabE5f7",
+   "tradeDetails": [
+    {
+     "amountOut": 507,
+     "nameOut": "USDC",
+     "valueUSD": 507
+    }
+   ],
+   "unixtime": 1677191555
+  },
+  {
+   "type": "swap",
+   "txHash": "0xc1d9318d2b6eedca72bef1ba1cf867a9a48bdf153904c9fa400a8558ce0e0e01",
+   "blockNumber": 16695037,
+   "position": 150,
+   "trader": "0x9F6E465B94fC2CCB507d39AF953e8a503afB2ddd",
+   "tradeDetails": {
+    "amountIn": 125029,
+    "nameIn": "DAI",
+    "amountOut": 125001,
+    "nameOut": "USDC",
+    "feeUSD": 50.01,
+    "valueUSD": 125029
+   },
+   "unixtime": 1677203171
+  },
+  {
+   "type": "swap",
+   "txHash": "0xe3656bada51d1216f1a836a804212339540e21fd0a71d0b05540137f41883944",
+   "blockNumber": 16695433,
+   "position": 7,
+   "trader": "0x52efD8924D17b87B5F8b5e5c8661Fd66AFC30Ace",
+   "tradeDetails": {
+    "amountIn": 9447,
+    "nameIn": "sUSD",
+    "amountOut": 9458,
+    "nameOut": "USDC",
+    "feeUSD": 3.779,
+    "valueUSD": 9447
+   },
+   "unixtime": 1677207959
+  },
+  {
+   "type": "swap",
+   "txHash": "0x2e69233540c22330d8cddcaa8e08bf2610b3361e4519aad67a5aa050c409d798",
+   "blockNumber": 16696960,
+   "position": 88,
+   "trader": "0xB169a7AB071d574275c5086f8A1f2b16a2E5676F",
+   "tradeDetails": {
+    "amountIn": 3547,
+    "nameIn": "sUSD",
+    "amountOut": 3552,
+    "nameOut": "DAI",
+    "feeUSD": 1.419,
+    "valueUSD": 3547
+   },
+   "unixtime": 1677226571
+  },
+  {
+   "type": "swap",
+   "txHash": "0x67383dff2757ea052a957f6e63a163758c47294db4897a61ea10c1fb61dbcb44",
+   "blockNumber": 16697089,
+   "position": 3,
+   "trader": "0xC6c7565644EA1893ad29182F7B6961AAb7EDFeD0",
+   "tradeDetails": {
+    "amountIn": 15000,
+    "nameIn": "sUSD",
+    "amountOut": 15016,
+    "nameOut": "USDT",
+    "feeUSD": 6,
+    "valueUSD": 15000
+   },
+   "unixtime": 1677228167
+  },
+  {
+   "type": "swap",
+   "txHash": "0xe0855dabf0e9ce8df6aea02bcecf187d4af7789d16ee7b0d91a607cd847eb71a",
+   "blockNumber": 16697863,
+   "position": 105,
+   "trader": "0x8f5e97E1E3d47A2f223a67e06de21F067B7779Db",
+   "tradeDetails": {
+    "amountIn": 2893,
+    "nameIn": "USDC",
+    "amountOut": 2889,
+    "nameOut": "sUSD",
+    "feeUSD": 1.157,
+    "valueUSD": 2893
+   },
+   "unixtime": 1677237695
+  },
+  {
+   "type": "deposit",
+   "txHash": "0xb12621b103dd1fb4d7ccb40fc7467ed61025aac53367b2388a70efdecd81f5f6",
+   "blockNumber": 16698534,
+   "position": 71,
+   "trader": "0xa59e113fbef3B4129bAef6b5355dFf683851aFA7",
+   "tradeDetails": [
+    {
+     "amountIn": 486900,
+     "nameIn": "USDC",
+     "valueUSD": 486899.999999
+    }
+   ],
+   "unixtime": 1677245879
+  },
+  {
+   "type": "deposit",
+   "txHash": "0x8f27efc8c82507cf2c237b9751148f50b4c11b669a01dc6b062d614f8f817230",
+   "blockNumber": 16698583,
+   "position": 100,
+   "trader": "0x354D6F97482C3e533bbdd3AdF65570B3D172C9aD",
+   "tradeDetails": [
+    {
+     "amountIn": 119680,
+     "nameIn": "USDC",
+     "valueUSD": 119679.813744
+    }
+   ],
+   "unixtime": 1677246467
+  },
+  {
+   "type": "swap",
+   "txHash": "0x0b03e075817606de171ff095708052c4b066373df69d5ca0993047df89abcbfb",
+   "blockNumber": 16698912,
+   "position": 45,
+   "trader": "0x03FE6b597FC954a81A88CFeA3D448dE8A0C03DC2",
+   "tradeDetails": {
+    "amountIn": 9400,
+    "nameIn": "DAI",
+    "amountOut": 9399,
+    "nameOut": "USDC",
+    "feeUSD": 3.76,
+    "valueUSD": 9400
+   },
+   "unixtime": 1677250451
+  },
+  {
+   "type": "deposit",
+   "txHash": "0x977672189ecdc4245e9ca390e78cf3832993417973c30a42e5b33b6dc89e1c72",
+   "blockNumber": 16698913,
+   "position": 12,
+   "trader": "0x99422bA6714DdF2210f4ddE38f0cA882cAf757d3",
+   "tradeDetails": [
+    {
+     "amountIn": 79336,
+     "nameIn": "USDT",
+     "valueUSD": 79335.724155
+    }
+   ],
+   "unixtime": 1677250463
+  },
+  {
+   "type": "swap",
+   "txHash": "0x51c8039b86563dfd14f339f4439db3391fc73eb4936df767dc35d4fac3cc91ed",
+   "blockNumber": 16699227,
+   "position": 2,
+   "trader": "0xc9ec550BEA1C64D779124b23A26292cc223327b6",
+   "tradeDetails": {
+    "amountIn": 19959,
+    "nameIn": "USDC",
+    "amountOut": 19925,
+    "nameOut": "sUSD",
+    "feeUSD": 7.98,
+    "valueUSD": 19959
+   },
+   "unixtime": 1677254243
+  },
+  {
+   "type": "swap",
+   "txHash": "0xe6a3c02e3df2c1e2ea048c40d5945a96d138694832910f3c398409be41a1b79f",
+   "blockNumber": 16699566,
+   "position": 44,
+   "trader": "0xA91531E2b92265d071D60BbDc369612999b4DC2A",
+   "tradeDetails": {
+    "amountIn": 1756,
+    "nameIn": "USDT",
+    "amountOut": 1756,
+    "nameOut": "USDC",
+    "feeUSD": 0.702,
+    "valueUSD": 1756
+   },
+   "unixtime": 1677258395
+  },
+  {
+   "type": "swap",
+   "txHash": "0xd4f37fcce4c6be7e89b1244aba717b366004a12f59c9fc5f45d60438a67c732b",
+   "blockNumber": 16699577,
+   "position": 36,
+   "trader": "0x3a9d207657f3514E9f71480Ab36e0B7F6CF5E670",
+   "tradeDetails": {
+    "amountIn": 8839,
+    "nameIn": "USDT",
+    "amountOut": 8840,
+    "nameOut": "USDC",
+    "feeUSD": 3.536,
+    "valueUSD": 8839
+   },
+   "unixtime": 1677258527
+  },
+  {
+   "type": "deposit",
+   "txHash": "0xcf0c9e0801044e5e68139b18948543a949f141eee223d0d8b598be09c0b8055d",
+   "blockNumber": 16699855,
+   "position": 30,
+   "trader": "0xCaE617c08bb445af1089dd34431a23A483c4Ce04",
+   "tradeDetails": [
+    {
+     "amountIn": 206,
+     "nameIn": "USDC",
+     "valueUSD": 205.640758
+    }
+   ],
+   "unixtime": 1677261899
+  },
+  {
+   "type": "swap",
+   "txHash": "0x77d8042d028f3cf5e4d35b17f2703e6f128f41463cef032b524194038a2d39d8",
+   "blockNumber": 16700605,
+   "position": 2,
+   "trader": "0xf480fAb87c07EC2dDd68A83eC0319BB466B1Afa2",
+   "tradeDetails": {
+    "amountIn": 4112,
+    "nameIn": "USDT",
+    "amountOut": 4112,
+    "nameOut": "DAI",
+    "feeUSD": 1.645,
+    "valueUSD": 4112
+   },
+   "unixtime": 1677271055
+  },
+  {
+   "type": "swap",
+   "txHash": "0xfafdc7edfc707d0abf4fe4257f57f2a31186d7f16da9b807b73f063571c70335",
+   "blockNumber": 16702902,
+   "position": 1,
+   "trader": "0x346C802df3404BEC2f265603db28B815321251Ee",
+   "tradeDetails": {
+    "amountIn": 2130,
+    "nameIn": "sUSD",
+    "amountOut": 2133,
+    "nameOut": "USDC",
+    "feeUSD": 0.852,
+    "valueUSD": 2130
+   },
+   "unixtime": 1677298919
+  },
+  {
+   "type": "deposit",
+   "txHash": "0x47cacf0c717b786a5ffd31a38f449c173b381f4f1cc8189458d2387ff8bdf444",
+   "blockNumber": 16702988,
+   "position": 67,
+   "trader": "0xFc87BBc0f5a4A7386f3eb8D97f18f5983082436F",
+   "tradeDetails": [
+    {
+     "amountIn": 125000,
+     "nameIn": "USDC",
+     "valueUSD": 124999.999999
+    }
+   ],
+   "unixtime": 1677299963
+  },
+  {
+   "type": "swap",
+   "txHash": "0x2a96381702a9f4f73b7cecf0e1f47d23b19e2e6c71496b8e979129a3d358a739",
+   "blockNumber": 16703140,
+   "position": 108,
+   "trader": "0x346C802df3404BEC2f265603db28B815321251Ee",
+   "tradeDetails": {
+    "amountIn": 2044,
+    "nameIn": "sUSD",
+    "amountOut": 2046,
+    "nameOut": "USDC",
+    "feeUSD": 0.817,
+    "valueUSD": 2044
+   },
+   "unixtime": 1677301799
+  },
+  {
+   "type": "swap",
+   "txHash": "0x6a9aaf8e5d544ca28309b0f2c29defdfe11206faf953610186fa16f8b4c22ea3",
+   "blockNumber": 16703276,
+   "position": 5,
+   "trader": "0x78376289D3d525739A915f7d00373Bc7B3ABEa2D",
+   "tradeDetails": {
+    "amountIn": 58990,
+    "nameIn": "USDT",
+    "amountOut": 58992,
+    "nameOut": "USDC",
+    "feeUSD": 23.6,
+    "valueUSD": 58990
+   },
+   "unixtime": 1677303455
+  },
+  {
+   "type": "swap",
+   "txHash": "0xcb71b2c2192aa9ad37d7b6166df49b3df8dc630b47592cb82efd1cbdbc8cb00c",
+   "blockNumber": 16703739,
+   "position": 38,
+   "trader": "0x46D35Cb6Bab2a106DAE7B201be149bD4ed534348",
+   "tradeDetails": {
+    "amountIn": 1461,
+    "nameIn": "sUSD",
+    "amountOut": 1463,
+    "nameOut": "USDC",
+    "feeUSD": 0.584,
+    "valueUSD": 1461
+   },
+   "unixtime": 1677309095
+  },
+  {
+   "type": "swap",
+   "txHash": "0x3968ca97d4424a633f8d69853943719bb82428452afa5ff4993caa83cb0b21e0",
+   "blockNumber": 16703903,
+   "position": 83,
+   "trader": "0x657975E1EDd5593977695426Ab393203451BC8D6",
+   "tradeDetails": {
+    "amountIn": 8201,
+    "nameIn": "sUSD",
+    "amountOut": 8211,
+    "nameOut": "DAI",
+    "feeUSD": 3.28,
+    "valueUSD": 8201
+   },
+   "unixtime": 1677311087
   }
  ]
 }
