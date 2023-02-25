@@ -367,6 +367,18 @@ function finalizeCollection(process) {
   fs.writeFileSync("./JSON/CollectorState.json", JSON.stringify(collectionState));
 }
 
+function getFeeParam(poolAddress) {
+  let curveJSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
+  return curveJSON[poolAddress]["fee"];
+}
+
+function getHolderFee(dollarAmount, poolAddress) {
+  let fee = getFeeParam(poolAddress);
+  let holderFee = (dollarAmount / 100) * 0.01 * (fee / 1e6);
+  holderFee = Number(holderFee.toFixed(2));
+  return holderFee;
+}
+
 export {
   saveTxEntry,
   findLastProcessedEvent,
@@ -377,4 +389,5 @@ export {
   findLatestCapturedBlockInRawEventLog,
   getTokenBalancesInsidePool,
   finalizeCollection,
+  getHolderFee,
 };
