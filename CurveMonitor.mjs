@@ -11,18 +11,15 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const tempTxHashStorage = [];
+let tempMevStorage = [];
 
 import {
-  getCurrentTime,
   getUnixtime,
   getABI,
   getCurvePools,
   isNativeEthAddress,
   isNullAddress,
   isCurveRegistryExchange,
-  is3CrvToken,
-  isCrvRenWSBTC,
-  isCrvFrax,
   is3PoolDepositZap,
   isZapFor3poolMetapools,
   isSwap,
@@ -35,18 +32,17 @@ import {
   getTokenName,
   buildPoolName,
   getCleanedTokenAmount,
+  wait,
 } from "./Utils/GenericUtils.mjs";
 
 import {
   setProvider,
   getContract,
-  web3Call,
   getTx,
   getCurrentBlockNumber,
   getBlock,
   getBlockUnixtime,
   getTokenTransfers,
-  errHandler,
   isCupsErr,
   checkForTokenExchange,
   checkForTokenExchangeUnderlying,
@@ -57,9 +53,7 @@ import { saveTxEntry, findLastProcessedEvent, collection, getStartBlock, getHold
 import {
   getDeltaMevBot,
   tokenExchangeCaseMultiple,
-  tokenExchangeCase3Pool,
-  tokenExchangeCase3BtcMetapool,
-  tokenExchangeCaseFraxbp,
+  tokenExchangeCaseUnderlying,
   tokenExchangeCaseSingle,
   victimTxCaseExchangeUnderlying,
   victimTxCaseTokenExchangeUnderlying,
@@ -69,7 +63,7 @@ import {
 } from "./Utils/TransactionLogicUtils.mjs";
 
 // utils for price-data
-import { priceCollectionMain, savePriceEntry, convertToUSD } from "./Utils/PriceUtils.mjs";
+import { priceCollectionMain, savePriceEntry, bootPriceJSON, convertToUSD } from "./Utils/PriceUtils.mjs";
 
 // utils for pool-balances
 import { fetchBalancesOnce, balancesCollectionMain } from "./Utils/BalancesUtils.mjs";
@@ -101,35 +95,31 @@ const options = {
 };
 console.clear();
 
-// can be either set1 or set2, one set consists of 5 alchemy api keys. We need one set for the telegram bot and another set for the curve monitor
-// set 1 = telegram bot
-// set 2 = curve monitor
-const keySet = 2;
-
 let wsKEY1;
 let wsKEY2;
 let wsKEY3;
 let wsKEY4;
 let wsKEY5;
 
-if (keySet === 1) {
-  wsKEY1 = setProvider(process.env.wsKEY1);
-  wsKEY2 = setProvider(process.env.wsKEY2);
-  wsKEY3 = setProvider(process.env.wsKEY3);
-  wsKEY4 = setProvider(process.env.wsKEY4);
-  wsKEY5 = setProvider(process.env.wsKEY5);
-}
-if (keySet === 2) {
-  wsKEY1 = setProvider(process.env.wsKEY6);
-  wsKEY2 = setProvider(process.env.wsKEY7);
-  wsKEY3 = setProvider(process.env.wsKEY8);
-  wsKEY4 = setProvider(process.env.wsKEY9);
-  wsKEY5 = setProvider(process.env.wsKEY10);
+function initWeb3Sockets(type) {
+  if (type === "telegramBot") {
+    wsKEY1 = setProvider(process.env.wsKEY1);
+    wsKEY2 = setProvider(process.env.wsKEY2);
+    wsKEY3 = setProvider(process.env.wsKEY3);
+    wsKEY4 = setProvider(process.env.wsKEY4);
+    wsKEY5 = setProvider(process.env.wsKEY5);
+  }
+  if (type === "dashboard") {
+    wsKEY1 = setProvider(process.env.wsKEY6);
+    wsKEY2 = setProvider(process.env.wsKEY7);
+    wsKEY3 = setProvider(process.env.wsKEY8);
+    wsKEY4 = setProvider(process.env.wsKEY9);
+    wsKEY5 = setProvider(process.env.wsKEY10);
+  }
 }
 
 const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.web3, options));
 
-const ADDRESS_THREEPOOL = "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7";
 const ADDRESS_sUSD_V2_SWAP = "0xA5407eAE9Ba41422680e2e00537571bcC53efBfD";
 const ADDRESS_ETH = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
@@ -152,10 +142,24 @@ async function buildMessageFromBuffer(i) {
   const E = mevTxBuffer[i].extraData;
   const BLOCK_NUMBER = mevTxBuffer[i].data.blockNumber;
   if (isSwap(mevTxBuffer[i].type)) {
-    return await buildSwapMessage(BLOCK_NUMBER, E.soldAmount, E.boughtAmount, E.tokenSoldName, E.tokenBoughtName, E.poolAddress, E.txHash, E.buyer, E.position, E.poolName);
+    return await buildSwapMessage(
+      BLOCK_NUMBER,
+      E.soldAddress,
+      E.soldAmount,
+      E.boughtAddress,
+      E.boughtAmount,
+      E.tokenSoldName,
+      E.tokenBoughtName,
+      E.poolAddress,
+      E.txHash,
+      E.buyer,
+      E.to,
+      E.position,
+      E.poolName
+    );
   }
   if (isRemoval(mevTxBuffer[i].type)) {
-    return await buildRemovalMessage(BLOCK_NUMBER, E.coinAmount, E.tokenRemovedName, E.poolAddress, E.txHash, E.agentAddress, E.position);
+    return await buildRemovalMessage(BLOCK_NUMBER, E.coinAmount, E.tokenRemovedName, E.poolAddress, E.txHash, E.agentAddress, E.position, E.removedAddress);
   }
   if (isDeposit(mevTxBuffer[i].type)) {
     return await buildDepositMessage(BLOCK_NUMBER, E.coinArray, E.poolAddress, E.txHash, E.agentAddress, E.position);
@@ -182,20 +186,24 @@ async function cleanMevTxBuffer(BRAND_NEW_BLOCK) {
 }
 
 async function subscribeToNewBlocks() {
-  web3.eth.subscribe("newBlockHeaders", async function (error, result) {
-    if (error) {
-      console.error(error);
-    } else {
-      const BRAND_NEW_BLOCK = result.number;
-      // cleaning every 2nd block
-      if (BRAND_NEW_BLOCK % 2 === 0) {
-        await cleanMevTxBuffer(BRAND_NEW_BLOCK);
+  try {
+    web3.eth.subscribe("newBlockHeaders", async function (error, result) {
+      if (error) {
+        console.error("err in subscribeToNewBlocks", error);
+      } else {
+        const BRAND_NEW_BLOCK = result.number;
+        // cleaning every 2nd block
+        if (BRAND_NEW_BLOCK % 2 === 0) {
+          await cleanMevTxBuffer(BRAND_NEW_BLOCK);
+        }
       }
-    }
-  });
+    });
+  } catch (err) {
+    console.log("err in subscribeToNewBlocks", err.message);
+  }
 }
 
-const mevTxBuffer = [];
+let mevTxBuffer = [];
 async function mevBuffer(blockNumber, position, txHash, type, extraData, isSwapUnderlying, data) {
   // first we need to solve multiple blocks getting jammed together:
   if (mevTxBuffer.length !== 0) {
@@ -228,32 +236,93 @@ async function mevBuffer(blockNumber, position, txHash, type, extraData, isSwapU
     data,
   });
 
-  const NUM_UNIQUE_TX_HASHES = countUniqueTxHashes(mevTxBuffer);
+  if (mevTxBuffer.length === 4) {
+    let poolOccurrences = countPoolOccurrences(mevTxBuffer);
+    mevTxBuffer = filterTransactionsByTopRankedPool(mevTxBuffer, poolOccurrences);
+  }
 
-  if (NUM_UNIQUE_TX_HASHES === 3) {
+  let numUniqueTxHashes = countUniqueTxHashes(mevTxBuffer);
+
+  if (numUniqueTxHashes === 3) {
+    await wait(4000); // giving time to catch tx4, in case there is one
     // fully scouted sandwich
     mevTxBuffer.sort(function (a, b) {
       return a.position - b.position;
     });
+
+    try {
+      let x = mevTxBuffer[0].extraData.buyer;
+      if (!x) return;
+    } catch (error) {
+      return;
+    }
+    try {
+      let x = mevTxBuffer[1].extraData.buyer;
+      if (!x) return;
+    } catch (error) {
+      return;
+    }
 
     const BUYER_0 = mevTxBuffer[0].extraData.buyer;
     const BUYER_2 = mevTxBuffer[2].extraData.buyer;
 
     if (BUYER_0 !== BUYER_2) return;
 
-    await processFullSandwich(mevTxBuffer);
+    const POOL_0 = mevTxBuffer[0].data.address;
+    const POOL_1 = mevTxBuffer[1].data.address;
+    const POOL_2 = mevTxBuffer[2].data.address;
+
+    if (POOL_0 === POOL_1 && POOL_1 === POOL_2) {
+      await processFullSandwich(mevTxBuffer);
+    } else {
+      mevTxBuffer = [mevTxBuffer[0], mevTxBuffer[2]];
+      numUniqueTxHashes = 2;
+    }
   }
+}
+
+function filterTransactionsByTopRankedPool(mevTxBuffer, poolOccurrences) {
+  const topRankedPoolName = poolOccurrences[0].poolName;
+  const filteredTxBuffer = mevTxBuffer.filter((tx) => tx.extraData.poolName === topRankedPoolName);
+
+  return filteredTxBuffer;
+}
+
+function countPoolOccurrences(mevTxBuffer) {
+  const poolNameOccurrences = {};
+
+  for (let i = 0; i < mevTxBuffer.length; i++) {
+    const poolName = mevTxBuffer[i].extraData.poolName;
+
+    if (!poolNameOccurrences[poolName]) {
+      poolNameOccurrences[poolName] = 1;
+    } else {
+      poolNameOccurrences[poolName]++;
+    }
+  }
+
+  const poolOccurrencesArray = [];
+
+  for (const [poolName, numberOfOccurances] of Object.entries(poolNameOccurrences)) {
+    poolOccurrencesArray.push({
+      poolName: poolName,
+      numberOfOccurances: numberOfOccurances,
+    });
+  }
+
+  return poolOccurrencesArray;
 }
 
 async function processFullSandwich(mevTxBuffer) {
   console.log("\nprocessFullSandwich");
 
-  let deltaVictim;
-  let coinNameBot;
-  let peacefulAmountOut;
-  let name;
-  let messagePosition1;
-  let messageVictim;
+  if (mevTxBuffer.some((tx) => tempMevStorage.includes(tx.txHash))) return; // exact sandwich had been processed already
+
+  for (var i = 0; i < mevTxBuffer.length; i++) {
+    tempMevStorage.push(mevTxBuffer[i].txHash);
+  }
+
+  let deltaVictim, coinNameBot, peacefulAmountOut, name, messagePosition1, messageVictim;
 
   let victimData = mevTxBuffer[1];
 
@@ -304,8 +373,6 @@ async function processFullSandwich(mevTxBuffer) {
     });
   }
 
-  console.log("\nvictimData", victimData, "\n");
-
   if (isCurveRegistryExchange(victimData.data.returnValues["0"])) {
     peacefulAmountOut = await victimTxCaseExchangeUnderlying(victimData);
   } else if (isTokenExchangeUnderlying(victimData.isSwapUnderlying)) {
@@ -318,7 +385,7 @@ async function processFullSandwich(mevTxBuffer) {
     let res = await victimTxCaseRemoval(victimData);
     deltaVictim = res[0];
     name = res[1];
-  } else if (!victimData.isSwapUnderlying) {
+  } else {
     peacefulAmountOut = await victimTxCaseSwap(victimData);
   }
 
@@ -346,28 +413,43 @@ async function processFullSandwich(mevTxBuffer) {
     }
   }
 
-  if (writeToFile) {
-    const UNIXTIME = await getBlockUnixtime(messagePosition0[1].blockNumber);
-    const MEV_ENTRY = {
-      type: "sandwich",
-      blockNumber: messagePosition0[1].blockNumber,
-      unixtime: UNIXTIME,
-      profit: parseFloat(DELTA_MEV_BOT.replaceAll(",", "")),
-      profitUnit: coinNameBot,
-      loss: parseFloat(deltaVictim.replaceAll(",", "")),
-      lossUnit: name,
-      tx: [messagePosition0[1], messageVictim[1], messagePosition1[1]],
-    };
-    const POOL_ADDRESS = messagePosition0[0];
-    emitter.emit("Update Table-MEV" + POOL_ADDRESS, MEV_ENTRY);
-    saveTxEntry(POOL_ADDRESS, MEV_ENTRY);
-  }
+  const UNIXTIME = await getBlockUnixtime(messagePosition0[1].blockNumber);
+  const MEV_ENTRY = {
+    type: "sandwich",
+    blockNumber: messagePosition0[1].blockNumber,
+    unixtime: UNIXTIME,
+    profit: parseFloat(DELTA_MEV_BOT.replace(/,/g, "")),
+    profitUnit: coinNameBot,
+    loss: parseFloat(deltaVictim.replace(/,/g, "")),
+    lossUnit: name,
+    tx: [messagePosition0[1], messageVictim[1], messagePosition1[1]],
+  };
+
+  const POOL_ADDRESS = messagePosition0[0];
+  emitter.emit("Update Table-MEV" + POOL_ADDRESS, MEV_ENTRY);
+
+  if (writeToFile) saveTxEntry(POOL_ADDRESS, MEV_ENTRY);
 
   mevTxBuffer.length = 0;
+  tempMevStorage.length = 0;
 }
 
 let prevTxHash;
-async function buildSwapMessage(blockNumber, soldAmount, boughtAmount, tokenSoldName, tokenBoughtName, poolAddress, txHash, buyer, position, poolName) {
+async function buildSwapMessage(
+  blockNumber,
+  soldAddress,
+  soldAmount,
+  boughtAddress,
+  boughtAmount,
+  tokenSoldName,
+  tokenBoughtName,
+  poolAddress,
+  txHash,
+  buyer,
+  to,
+  position,
+  poolName
+) {
   if (txHash === prevTxHash) return;
   prevTxHash = txHash;
 
@@ -388,32 +470,32 @@ async function buildSwapMessage(blockNumber, soldAmount, boughtAmount, tokenSold
   soldAmount = formatForPrint(soldAmount);
   boughtAmount = formatForPrint(boughtAmount);
 
-  console.log("sold", soldAmount, tokenSoldName, "bought", boughtAmount, tokenBoughtName);
+  console.log("sold", soldAmount, tokenSoldName, "bought", boughtAmount, tokenBoughtName, "(" + dollarAmount + "$)");
+
+  const UNIXTIME = await getBlockUnixtime(blockNumber);
+  const ENTRY = {
+    type: "swap",
+    txHash: txHash,
+    blockNumber: blockNumber,
+    position: position,
+    trader: buyer,
+    tradeDetails: {
+      amountIn: parseFloat(soldAmount.replace(/,/g, "")),
+      nameIn: tokenSoldName,
+      amountOut: parseFloat(boughtAmount.replace(/,/g, "")),
+      nameOut: tokenBoughtName,
+      feeUSD: parseFloat(holderFee.replace(/,/g, "")),
+      valueUSD: parseFloat(dollarAmount.replace(/,/g, "")),
+    },
+    unixtime: UNIXTIME,
+  };
 
   if (writeToFile) {
-    const UNIXTIME = await getBlockUnixtime(blockNumber);
-    const ENTRY = {
-      type: "swap",
-      txHash: txHash,
-      blockNumber: blockNumber,
-      position: position,
-      trader: buyer,
-      tradeDetails: {
-        amountIn: parseFloat(soldAmount.replaceAll(",", "")),
-        nameIn: tokenSoldName,
-        amountOut: parseFloat(boughtAmount.replaceAll(",", "")),
-        nameOut: tokenBoughtName,
-        feeUSD: parseFloat(holderFee.replaceAll(",", "")),
-        valueUSD: parseFloat(dollarAmount.replaceAll(",", "")),
-      },
-      unixtime: UNIXTIME,
-    };
-
     saveTxEntry(poolAddress, ENTRY);
 
     const PRICE_ENTRY = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
     const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
-    const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replaceAll(",", "")) };
+    const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replace(/,/g, "")) };
     const BALANCES = Object.values(BALANCES_ENTRY)[0];
 
     let tvlEntry = [];
@@ -422,9 +504,9 @@ async function buildSwapMessage(blockNumber, soldAmount, boughtAmount, tokenSold
       tvlEntry = { [UNIXTIME]: TVL };
     }
 
-    await updateBondingCurvesForPool(poolAddress);
-
     if (!isCollecting) {
+      await updateBondingCurvesForPool(poolAddress);
+
       const UPDATE = {
         all: ENTRY,
         unixtime: UNIXTIME,
@@ -436,43 +518,44 @@ async function buildSwapMessage(blockNumber, soldAmount, boughtAmount, tokenSold
 
       emitter.emit("General Pool Update" + poolAddress, UPDATE);
     }
-    return [poolAddress, ENTRY];
   }
+  return [poolAddress, ENTRY];
 }
 
-async function buildRemovalMessage(blockNumber, coinAmount, tokenRemovedName, poolAddress, txHash, agentAddress, position) {
+async function buildRemovalMessage(blockNumber, coinAmount, tokenRemovedName, poolAddress, txHash, agentAddress, position, removedAddress) {
   let dollarAmount = await convertToUSD(tokenRemovedName, coinAmount);
+
   if (isNaN(dollarAmount)) return "abort";
   dollarAmount = formatForPrint(dollarAmount);
 
   coinAmount = formatForPrint(coinAmount);
   let poolName = await buildPoolName(poolAddress);
 
-  console.log("removed", coinAmount, tokenRemovedName, "from", poolName);
+  console.log("removed", coinAmount, tokenRemovedName, "from", poolName, "(" + dollarAmount + "$)");
 
   const stakedTokenArray = [];
   stakedTokenArray.push({
-    amountOut: parseFloat(coinAmount.replaceAll(",", "")),
+    amountOut: parseFloat(coinAmount.replace(/,/g, "")),
     nameOut: tokenRemovedName,
-    valueUSD: parseFloat(dollarAmount.replaceAll(",", "")),
+    valueUSD: parseFloat(dollarAmount.replace(/,/g, "")),
   });
 
-  if (writeToFile) {
-    const UNIXTIME = await getBlockUnixtime(blockNumber);
-    const ENTRY = {
-      type: "remove",
-      txHash: txHash,
-      blockNumber: blockNumber,
-      position: position,
-      trader: agentAddress,
-      tradeDetails: stakedTokenArray,
-      unixtime: UNIXTIME,
-    };
+  const UNIXTIME = await getBlockUnixtime(blockNumber);
+  const ENTRY = {
+    type: "remove",
+    txHash: txHash,
+    blockNumber: blockNumber,
+    position: position,
+    trader: agentAddress,
+    tradeDetails: stakedTokenArray,
+    unixtime: UNIXTIME,
+  };
 
+  if (writeToFile) {
     saveTxEntry(poolAddress, ENTRY);
     const PRICE_ENTRY = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
     const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
-    const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replaceAll(",", "")) };
+    const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replace(/,/g, "")) };
     const BALANCES = Object.values(BALANCES_ENTRY)[0];
 
     let tvlEntry = [];
@@ -481,9 +564,9 @@ async function buildRemovalMessage(blockNumber, coinAmount, tokenRemovedName, po
       tvlEntry = { [UNIXTIME]: TVL };
     }
 
-    await updateBondingCurvesForPool(poolAddress);
-
     if (!isCollecting) {
+      await updateBondingCurvesForPool(poolAddress);
+
       const UPDATE = {
         all: ENTRY,
         unixtime: UNIXTIME,
@@ -495,11 +578,11 @@ async function buildRemovalMessage(blockNumber, coinAmount, tokenRemovedName, po
 
       emitter.emit("General Pool Update" + poolAddress, UPDATE);
     }
-    return [poolAddress, ENTRY];
   }
+  return [poolAddress, ENTRY];
 }
 
-async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, agentAddress, position) {
+async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, agentAddress, position, to, buyer) {
   const DEPOSITED_TOKEN_ARRAY = [];
   let dollarAmountTotal = 0;
   let tokenDepositedName;
@@ -510,6 +593,7 @@ async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, 
     if (Number(coinAmount) === 0) continue;
 
     let dollarAmount = await convertToUSD(tokenDepositedName, coinAmount);
+
     if (!dollarAmount) {
       dollarAmount = coinAmount;
       console.log("no dollar value known for", tokenDepositedName, "(undefined)");
@@ -521,18 +605,18 @@ async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, 
     coinAmount = formatForPrint(coinAmount);
 
     DEPOSITED_TOKEN_ARRAY.push({
-      amountIn: parseFloat(coinAmount.replaceAll(",", "")),
+      amountIn: parseFloat(coinAmount.replace(/,/g, "")),
       nameIn: tokenDepositedName,
       valueUSD: Number(dollarAmount),
     });
   }
 
+  let dollarAmount = formatForPrint(dollarAmountTotal);
+
   if (isNaN(dollarAmountTotal)) {
     console.log("no dollar value known for", tokenDepositedName, "(NaN)", dollarAmountTotal);
     return "abort";
   }
-
-  let dollarAmount = formatForPrint(dollarAmountTotal);
   let poolName = await buildPoolName(poolAddress);
 
   // removed, too much text for 1.5$ fee on a 5M$ deposit
@@ -540,18 +624,18 @@ async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, 
 
   console.log("deposited", dollarAmount + "$ into", poolName);
 
-  if (writeToFile) {
-    const UNIXTIME = await getBlockUnixtime(blockNumber);
-    const ENTRY = {
-      type: "deposit",
-      txHash: txHash,
-      blockNumber: blockNumber,
-      position: position,
-      trader: agentAddress,
-      tradeDetails: DEPOSITED_TOKEN_ARRAY,
-      unixtime: UNIXTIME,
-    };
+  const UNIXTIME = await getBlockUnixtime(blockNumber);
+  const ENTRY = {
+    type: "deposit",
+    txHash: txHash,
+    blockNumber: blockNumber,
+    position: position,
+    trader: agentAddress,
+    tradeDetails: DEPOSITED_TOKEN_ARRAY,
+    unixtime: UNIXTIME,
+  };
 
+  if (writeToFile) {
     saveTxEntry(poolAddress, ENTRY);
     const PRICE_ENTRY = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
     const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
@@ -564,9 +648,9 @@ async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, 
       tvlEntry = { [UNIXTIME]: TVL };
     }
 
-    await updateBondingCurvesForPool(poolAddress);
-
     if (!isCollecting) {
+      await updateBondingCurvesForPool(poolAddress);
+
       const UPDATE = {
         all: ENTRY,
         unixtime: UNIXTIME,
@@ -578,8 +662,8 @@ async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, 
 
       emitter.emit("General Pool Update" + poolAddress, UPDATE);
     }
-    return [poolAddress, ENTRY];
   }
+  return [poolAddress, ENTRY];
 }
 
 const ABI_TOKEN_EXCHANGE = await getABI("ABI_TOKEN_EXCHANGE");
@@ -603,88 +687,109 @@ async function activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddres
 
     // RemoveLiquidity
     const CONTRACT_REMOVE_LIQUIDITY = new wsKEY1.eth.Contract(ABI_REMOVE_LIQUIDITY, POOL_ADDRESS);
-    CONTRACT_REMOVE_LIQUIDITY.events
-      .RemoveLiquidity()
-      .on("data", async (data) => {
-        console.log(getCurrentTime(), "event at CONTRACT_REMOVE_LIQUIDITY");
-        await processRemoveLiquidity(data, POOL_ADDRESS);
-      })
-      .on("error", (error) => {
-        console.error("Error in RemoveLiquidity event: ", error);
-      });
+    try {
+      CONTRACT_REMOVE_LIQUIDITY.events
+        .RemoveLiquidity()
+        .on("data", async (data) => {
+          await processRemoveLiquidity(data, POOL_ADDRESS);
+        })
+        .on("error", (error) => {
+          console.error("Error in RemoveLiquidity event: ", error);
+        });
+    } catch (err) {
+      console.log("err in fetching events for RemoveLiquidity", err.message);
+    }
 
     // RemoveLiquidityOne
     const CONTRACT_REMOVE_LIQUIDITY_ONE = new wsKEY2.eth.Contract(ABI_REMOVE_LIQUIDITY_ONE, POOL_ADDRESS);
-    CONTRACT_REMOVE_LIQUIDITY_ONE.events
-      .RemoveLiquidityOne()
-      .on("data", async (data) => {
-        console.log(getCurrentTime(), "event at CONTRACT_REMOVE_LIQUIDITY_ONE");
-        await processRemoveLiquidityOne(data, POOL_ADDRESS);
-      })
-      .on("error", (error) => {
-        console.error("Error in RemoveLiquidityOne event: ", error);
-      });
+    try {
+      CONTRACT_REMOVE_LIQUIDITY_ONE.events
+        .RemoveLiquidityOne()
+        .on("data", async (data) => {
+          await processRemoveLiquidityOne(data, POOL_ADDRESS);
+        })
+        .on("error", (error) => {
+          console.error("Error in RemoveLiquidityOne event: ", error);
+        });
+    } catch (err) {
+      console.log("err in fetching events for RemoveLiquidityOne", err.message);
+    }
 
     // RemoveLiquidityImbalance
     const CONTRACT_REMOVE_LIQUIDITY_IMBALANCE = new wsKEY3.eth.Contract(ABI_REMOVE_LIQUIDITY_IMBALANCE, POOL_ADDRESS);
-    CONTRACT_REMOVE_LIQUIDITY_IMBALANCE.events
-      .RemoveLiquidityImbalance()
-      .on("data", async (data) => {
-        console.log(getCurrentTime(), "event at CONTRACT_REMOVE_LIQUIDITY_IMBALANCE");
-        await processRemoveLiquidityImbalance(data, POOL_ADDRESS);
-      })
-      .on("error", (error) => {
-        console.error("Error in RemoveLiquidityImbalance event: ", error);
-      });
+    try {
+      CONTRACT_REMOVE_LIQUIDITY_IMBALANCE.events
+        .RemoveLiquidityImbalance()
+        .on("data", async (data) => {
+          await processRemoveLiquidityImbalance(data, POOL_ADDRESS);
+        })
+        .on("error", (error) => {
+          console.error("Error in RemoveLiquidityImbalance event: ", error);
+        });
+    } catch (err) {
+      console.log("err in fetching events for RemoveLiquidityImbalance", err.message);
+    }
 
     // AddLiquidity
     const CONTRACT_ADD_LIQUIDITY = new wsKEY4.eth.Contract(ABI_ADD_LIQUIDITY, POOL_ADDRESS);
-    CONTRACT_ADD_LIQUIDITY.events
-      .AddLiquidity()
-      .on("data", async (data) => {
-        console.log(getCurrentTime(), "event at CONTRACT_ADD_LIQUIDITY");
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        await processAddLiquidity(data, POOL_ADDRESS);
-      })
-      .on("error", (error) => {
-        console.error("Error in AddLiquidity event: ", error);
-      });
+    try {
+      CONTRACT_ADD_LIQUIDITY.events
+        .AddLiquidity()
+        .on("data", async (data) => {
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          await processAddLiquidity(data, POOL_ADDRESS);
+        })
+        .on("error", (error) => {
+          console.error("Error in AddLiquidity event: ", error);
+        });
+    } catch (err) {
+      console.log("err in fetching events for AddLiquidity", err.message);
+    }
 
     // TokenExchange
     const CONTRACT_TOKEN_EXCHANGE = new wsKEY5.eth.Contract(ABI_TOKEN_EXCHANGE, POOL_ADDRESS);
-    CONTRACT_TOKEN_EXCHANGE.events
-      .TokenExchange()
-      .on("data", async (data) => {
-        console.log(getCurrentTime(), "event at CONTRACT_TOKEN_EXCHANGE");
-        await processTokenExchange(data, POOL_ADDRESS);
-      })
-      .on("error", (error) => {
-        console.error("Error in TokenExchange event: ", error);
-      });
+    try {
+      CONTRACT_TOKEN_EXCHANGE.events
+        .TokenExchange()
+        .on("data", async (data) => {
+          await processTokenExchange(data, POOL_ADDRESS);
+        })
+        .on("error", (error) => {
+          console.error("Error in TokenExchange event: ", error);
+        });
+    } catch (err) {
+      console.log("err in fetching events for TokenExchange", err.message);
+    }
 
     // TokenExchange2
     const CONTRACT_TOKEN_EXCHANGE_2 = new wsKEY1.eth.Contract(ABI_TOKEN_EXCHANGE_2, POOL_ADDRESS);
-    CONTRACT_TOKEN_EXCHANGE_2.events
-      .TokenExchange()
-      .on("data", async (data) => {
-        console.log(getCurrentTime(), "event at CONTRACT_TOKEN_EXCHANGE_2");
-        await processTokenExchange(data, POOL_ADDRESS);
-      })
-      .on("error", (error) => {
-        console.error("Error in TokenExchange2 event: ", error);
-      });
+    try {
+      CONTRACT_TOKEN_EXCHANGE_2.events
+        .TokenExchange()
+        .on("data", async (data) => {
+          await processTokenExchange(data, POOL_ADDRESS);
+        })
+        .on("error", (error) => {
+          console.error("Error in TokenExchange2 event: ", error);
+        });
+    } catch (err) {
+      console.log("err in fetching events for TokenExchange2", err.message);
+    }
 
     // TokenExchangeUnderlying
     const CONTRACT_TOKEN_EXCHANGE_UNDERLYING = new wsKEY2.eth.Contract(ABI_EXCHANGE_UNDERLYING, POOL_ADDRESS);
-    CONTRACT_TOKEN_EXCHANGE_UNDERLYING.events
-      .TokenExchangeUnderlying()
-      .on("data", async (data) => {
-        console.log(getCurrentTime(), "event at CONTRACT_TOKEN_EXCHANGE_UNDERLYING");
-        await processTokenExchange(data, POOL_ADDRESS, "TokenExchangeUnderlying");
-      })
-      .on("error", (error) => {
-        console.error("Error in TokenExchangeUnderlying event: ", error);
-      });
+    try {
+      CONTRACT_TOKEN_EXCHANGE_UNDERLYING.events
+        .TokenExchangeUnderlying()
+        .on("data", async (data) => {
+          await processTokenExchange(data, POOL_ADDRESS, "TokenExchangeUnderlying");
+        })
+        .on("error", (error) => {
+          console.error("Error in TokenExchangeUnderlying event: ", error);
+        });
+    } catch (err) {
+      console.log("err in fetching events for TokenExchangeUnderlying", err.message);
+    }
   }
 }
 
@@ -707,8 +812,9 @@ async function getTokenAddressFromStake(poolAddress, blockNumber, coinAmount) {
   let tokenAddress;
   while (true) {
     tokenAddress = await getTokenAddress(poolAddress, id);
-    if (isNativeEthAddress(tokenAddress)) ethSpotter = 1;
+    if (!tokenAddress) break;
     if (isNullAddress(tokenAddress)) break;
+    if (isNativeEthAddress(tokenAddress)) ethSpotter = 1;
     const TRANSFER_AMOUNTS = await getTokenTransfers(tokenAddress, blockNumber);
     for (const TRANSFER_AMOUNT of TRANSFER_AMOUNTS) {
       if (TRANSFER_AMOUNT === coinAmount) {
@@ -717,14 +823,16 @@ async function getTokenAddressFromStake(poolAddress, blockNumber, coinAmount) {
     }
     id += 1;
   }
-  if (isNullAddress(tokenAddress) && ethSpotter === 1) {
+  if ((isNullAddress(tokenAddress) || !tokenAddress) && ethSpotter === 1) {
     return ADDRESS_ETH;
+  } else {
+    return "0 transfers";
   }
 }
 
 // RemoveLiquidity
 async function processRemoveLiquidity(data, poolAddress) {
-  console.log("\npool", poolAddress, " | txHash", data.transactionHash, " | RemoveLiquidity");
+  console.log("\npool", poolAddress, " | block", data.blockNumber.toString(), " | txHash", data.transactionHash, " | RemoveLiquidity");
 }
 
 // RemoveLiquidityOne
@@ -733,24 +841,19 @@ async function processRemoveLiquidityOne(data, poolAddress) {
   const BLOCK_NUMBER = data.blockNumber;
   const PROVIDER = data.returnValues.provider;
   let type;
-  console.log("\npool", poolAddress, " | txHash", TX_HASH, " | RemoveLiquidityOn");
+  console.log("\npool", poolAddress, " | block", data.blockNumber.toString(), " | txHash", TX_HASH, " | RemoveLiquidityOne");
   if (data.event && data.event === "TokenExchange") return;
   if (CURVE_POOLS.includes(PROVIDER)) {
     const DATA = await checkForTokenExchangeUnderlying(PROVIDER, BLOCK_NUMBER, TX_HASH);
     await processTokenExchange(DATA, PROVIDER, "TokenExchangeUnderlying");
     return;
   }
-  if (is3PoolDepositZap(PROVIDER)) {
-    // Curve Finance: 3Pool Deposit Zap
-    console.log("aborting");
-    return;
-  }
-  console.log("proceeding");
 
-  let coinAmount = data.returnValues.coin_amount;
-  const REMOVED_ADDRESS = await getTokenAddressFromStake(poolAddress, BLOCK_NUMBER, coinAmount);
-  coinAmount = await getCleanedTokenAmount(REMOVED_ADDRESS, coinAmount);
-  const TOKEN_REMOVED_NAME = await getTokenName(REMOVED_ADDRESS);
+  let coinAmount = Number(data.returnValues.coin_amount);
+  const TOKEN_REMOVED_ADDRESS = await getTokenAddressFromStake(poolAddress, BLOCK_NUMBER, coinAmount);
+  if (TOKEN_REMOVED_ADDRESS === "0 transfers") return;
+  coinAmount = await getCleanedTokenAmount(TOKEN_REMOVED_ADDRESS, coinAmount);
+  const TOKEN_REMOVED_NAME = await getTokenName(TOKEN_REMOVED_ADDRESS);
   const TX = await getTx(TX_HASH);
 
   // might be exchange_multiple
@@ -792,8 +895,23 @@ async function processRemoveLiquidityOne(data, poolAddress) {
         boughtAmount = await getCleanedTokenAmount(BOUGHT_ADDRESS, boughtAmount);
 
         if (POSITION > 7) {
-          await buildSwapMessage(BLOCK_NUMBER, soldAmount, boughtAmount, TOKEN_SOLD_NAME, TOKEN_BOUGHT_NAME, _POOL_ADDRESS, TX_HASH, BUYER, POSITION, POOL_NAME);
+          await buildSwapMessage(
+            BLOCK_NUMBER,
+            SOLD_ADDRESS,
+            soldAmount,
+            BOUGHT_ADDRESS,
+            boughtAmount,
+            TOKEN_SOLD_NAME,
+            TOKEN_BOUGHT_NAME,
+            _POOL_ADDRESS,
+            TX_HASH,
+            BUYER,
+            TO,
+            POSITION,
+            POOL_NAME
+          );
         } else {
+          console.log("blockPosition", POSITION, TX_HASH);
           const extraData = {
             soldAmount: soldAmount,
             boughtAmount: boughtAmount,
@@ -818,31 +936,6 @@ async function processRemoveLiquidityOne(data, poolAddress) {
     }
   }
 
-  try {
-    const ABI = [
-      {
-        stateMutability: "view",
-        type: "function",
-        name: "pool",
-        inputs: [],
-        outputs: [{ name: "", type: "address" }],
-      },
-    ];
-    const CONTRACT = await getContract(ABI, data.returnValues.provider);
-    let shouldContinue = true;
-    for (let i = 0; i < 12 && shouldContinue; i++) {
-      try {
-        poolAddress = await web3Call(CONTRACT, "pool", []);
-        shouldContinue = false;
-      } catch (error) {
-        if (error.message.startsWith("Returned values aren't valid")) continue;
-        await errHandler(error);
-      }
-    }
-  } catch (err) {
-    console.log("no pool function found");
-  }
-
   const AGENT_ADDRESS = TX.from;
   const TO = TX.to;
   const POSITION = TX.transactionIndex;
@@ -852,12 +945,13 @@ async function processRemoveLiquidityOne(data, poolAddress) {
       TX_HASH,
       time: getUnixtime(),
     });
-    await buildRemovalMessage(BLOCK_NUMBER, coinAmount, TOKEN_REMOVED_NAME, poolAddress, TX_HASH, AGENT_ADDRESS, POSITION);
+    await buildRemovalMessage(BLOCK_NUMBER, coinAmount, TOKEN_REMOVED_NAME, poolAddress, TX_HASH, AGENT_ADDRESS, POSITION, TOKEN_REMOVED_ADDRESS);
   } else {
+    console.log("blockPosition", POSITION, TX_HASH);
     const extraData = {
       coinAmount: coinAmount,
       tokenRemovedName: TOKEN_REMOVED_NAME,
-      removedAddress: REMOVED_ADDRESS,
+      removedAddress: TOKEN_REMOVED_ADDRESS,
       poolAddress: poolAddress,
       txHash: TX_HASH,
       agentAddress: AGENT_ADDRESS,
@@ -870,7 +964,7 @@ async function processRemoveLiquidityOne(data, poolAddress) {
 
 // RemoveLiquidityImbalance
 async function processRemoveLiquidityImbalance(data, poolAddress) {
-  console.log("\npool", poolAddress, " | txHash", data.transactionHash, " | RemoveLiquidityImbalance");
+  console.log("\npool", poolAddress, " | block", data.blockNumber.toString(), " | txHash", data.transactionHash, " | RemoveLiquidityImbalance");
 
   const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
 
@@ -889,24 +983,25 @@ async function processRemoveLiquidityImbalance(data, poolAddress) {
   }
 
   i = data.returnValues.token_amounts.indexOf(coinAmount);
-  const REMOVED_ADDRESS = CURVE_JSON[poolAddress].coins[i];
+  const TOKEN_REMOVED_ADDRESS = CURVE_JSON[poolAddress].coins[i];
   const TOKEN_REMOVED_NAME = CURVE_JSON[poolAddress].coin_names[i];
   const AGENT_ADDRESS = TX.from;
   const TO = TX.to;
 
-  coinAmount = await getCleanedTokenAmount(REMOVED_ADDRESS, coinAmount);
+  coinAmount = await getCleanedTokenAmount(TOKEN_REMOVED_ADDRESS, coinAmount);
 
   if (POSITION > 7) {
     tempTxHashStorage.push({
       TX_HASH,
       time: getUnixtime(),
     });
-    await buildRemovalMessage(BLOCK_NUMBER, coinAmount, TOKEN_REMOVED_NAME, poolAddress, TX_HASH, AGENT_ADDRESS, POSITION);
+    await buildRemovalMessage(BLOCK_NUMBER, coinAmount, TOKEN_REMOVED_NAME, poolAddress, TX_HASH, AGENT_ADDRESS, POSITION, TOKEN_REMOVED_ADDRESS);
   } else {
+    console.log("blockPosition", POSITION, TX_HASH);
     const extraData = {
       coinAmount: coinAmount,
       tokenRemovedName: TOKEN_REMOVED_NAME,
-      removedAddress: REMOVED_ADDRESS,
+      removedAddress: TOKEN_REMOVED_ADDRESS,
       poolAddress: poolAddress,
       txHash: TX_HASH,
       agentAddress: AGENT_ADDRESS,
@@ -934,7 +1029,6 @@ async function processAddLiquidity(data, poolAddress) {
 
   if (isCurveRegistryExchange(TO)) {
     decodedTx = ABI_DECODER.decodeMethod(TX.input);
-    console.log(decodedTx.params[4]);
     if (decodedTx) {
       if (decodedTx.name === "exchange_multiple") {
         if (!isNullAddress(decodedTx.params[4].value[0])) {
@@ -964,7 +1058,7 @@ async function processAddLiquidity(data, poolAddress) {
   for (let i = 0; i < tempTxHashStorage.length; i++) {
     if (data.transactionHash === tempTxHashStorage[i].txHash) return;
   }
-  console.log("\npool", poolAddress, " | txHash", TX_HASH, " | AddLiquidity");
+  console.log("\npool", poolAddress, " | block", data.blockNumber.toString(), " | txHash", TX_HASH, " | AddLiquidity");
 
   const COIN_ARRAY = [];
 
@@ -1069,6 +1163,7 @@ async function processAddLiquidity(data, poolAddress) {
     });
     buildDepositMessage(BLOCK_NUMBER, COIN_ARRAY, poolAddress, TX_HASH, AGENT_ADDRESS, POSITION);
   } else {
+    console.log("blockPosition", POSITION, TX_HASH);
     const extraData = {
       coinArray: COIN_ARRAY,
       originalPoolAddress: ORIGINAL_POOL_ADDRESS,
@@ -1086,8 +1181,12 @@ async function processAddLiquidity(data, poolAddress) {
 // TokenExchange
 async function processTokenExchange(data, poolAddress, type) {
   const TX_HASH = data.transactionHash;
-  if (isTokenExchangeUnderlying(data.event)) type = "TokenExchangeUnderlying";
-  console.log("\npool", poolAddress, " | txHash", TX_HASH, " | TokenExchange");
+  if (isTokenExchangeUnderlying(data.event)) {
+    type = "TokenExchangeUnderlying";
+  } else {
+    type = "TokenExchange";
+  }
+  console.log("\npool", poolAddress, " | block", data.blockNumber.toString(), " | txHash", TX_HASH, " |", type);
 
   const TX = await getTx(TX_HASH);
   const TO = TX.to;
@@ -1095,7 +1194,6 @@ async function processTokenExchange(data, poolAddress, type) {
   const POSITION = TX.transactionIndex;
   const BUYER = TX.from;
   const DECODED_TX = ABI_DECODER.decodeMethod(TX.input);
-  const TOKEN_1_ADDRESS = await getTokenAddress(poolAddress, 1);
 
   let exchangeMultipleCheck;
   if (DECODED_TX) {
@@ -1115,12 +1213,8 @@ async function processTokenExchange(data, poolAddress, type) {
   if (exchangeMultipleCheck === "exchange_multiple" && !zoom) {
     poolName = "Pool";
     res = await tokenExchangeCaseMultiple(BLOCK_NUMBER, DECODED_TX);
-  } else if (isTokenExchangeUnderlying(type) && is3CrvToken(TOKEN_1_ADDRESS)) {
-    res = await tokenExchangeCase3Pool(BLOCK_NUMBER, TX, TO, SOLD_ID, TOKENS_SOLD, BOUGHT_ID, TOKENS_BOUGHT, poolAddress);
-  } else if (isTokenExchangeUnderlying(type) && SOLD_ID !== 0 && isCrvRenWSBTC(TOKEN_1_ADDRESS)) {
-    res = await tokenExchangeCase3BtcMetapool(BLOCK_NUMBER, SOLD_ID, TOKENS_SOLD, BOUGHT_ID, TOKENS_BOUGHT, poolAddress);
-  } else if (isTokenExchangeUnderlying(type) && SOLD_ID !== 0 && isCrvFrax(TOKEN_1_ADDRESS)) {
-    res = await tokenExchangeCaseFraxbp(BLOCK_NUMBER, SOLD_ID, TOKENS_SOLD, BOUGHT_ID, TOKENS_BOUGHT, poolAddress);
+  } else if (isTokenExchangeUnderlying(type)) {
+    res = await tokenExchangeCaseUnderlying(BLOCK_NUMBER, TX, TO, SOLD_ID, TOKENS_SOLD, BOUGHT_ID, TOKENS_BOUGHT, poolAddress);
   } else {
     res = await tokenExchangeCaseSingle(SOLD_ID, TOKENS_SOLD, BOUGHT_ID, TOKENS_BOUGHT, poolAddress);
   }
@@ -1132,8 +1226,9 @@ async function processTokenExchange(data, poolAddress, type) {
       TX_HASH,
       time: getUnixtime(),
     });
-    await buildSwapMessage(BLOCK_NUMBER, soldAmount, boughtAmount, tokenSoldName, tokenBoughtName, poolAddress, TX_HASH, BUYER, POSITION, poolName);
+    await buildSwapMessage(BLOCK_NUMBER, soldAddress, soldAmount, boughtAddress, boughtAmount, tokenSoldName, tokenBoughtName, poolAddress, TX_HASH, BUYER, TO, POSITION, poolName);
   } else {
+    console.log("blockPosition", POSITION, TX_HASH);
     const extraData = {
       soldAmount: soldAmount,
       boughtAmount: boughtAmount,
@@ -1234,6 +1329,7 @@ async function collectionMain() {
 }
 
 async function CurveMonitor() {
+  bootPriceJSON();
   // using socket.io, this function will iterate over all pools and create and open a custom sockets per pool, for the frontend to connect to.
   if (MODE === "local") {
     await httpSocketSetup(Server, emitter, whiteListedPoolAddress);
@@ -1241,6 +1337,9 @@ async function CurveMonitor() {
   if (MODE === "https") {
     await httpsSocketSetup(Server, emitter, whiteListedPoolAddress);
   }
+
+  isCollecting = true;
+  writeToFile = true;
 
   let latestBlock = 0;
   let latestBlockAfterProcessing = 10;
@@ -1269,10 +1368,10 @@ async function CurveMonitor() {
   await subscribeToNewBlocks(); // should be active by default, unless during some tests
 }
 
-let isCollecting = true;
+let isCollecting;
 
 // toggle to write the trades to the json
-let writeToFile = true;
+let writeToFile;
 
 // for mvp, only listens to new events on a single poolAddress
 let singlePoolModus = true;
@@ -1284,7 +1383,10 @@ let whiteListedPoolAddress = ADDRESS_sUSD_V2_SWAP;
 let zoom = true;
 
 // const MODE = "local";
-const MODE = "https"
+const MODE = "https";
 console.log(MODE + "-mode");
+
+// choosing key-sets
+initWeb3Sockets("dashboard");
 
 await CurveMonitor();
