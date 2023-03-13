@@ -138,9 +138,7 @@ async function collection() {
     const ABI = await getABI(POOL_ADDRESS);
 
     let fromBlock = findLatestCapturedBlockInRawEventLog(POOL_ADDRESS, EVENT_NAMES);
-    if (fromBlock === 0) {
-      fromBlock = await getStartBlock();
-    }
+    if (fromBlock === 0) fromBlock = await getStartBlock();
     fromBlock += 1;
     let toBlock = await getCurrentBlockNumber();
     const MASTER_TO_BLOCK = toBlock;
@@ -150,7 +148,7 @@ async function collection() {
       // ABI does not contain the word <eventName>
       if (!JSON.stringify(ABI).includes(eventName)) continue;
 
-      const CONTRACT = await getContract(ABI, POOL_ADDRESS);
+      const CONTRACT = getContract(ABI, POOL_ADDRESS);
       const MASTER_BLOCK_RANGE = MASTER_TO_BLOCK - fromBlock;
       await fetchEvents(collectedData, CONTRACT, eventName, EVENT_NAMES, MASTER_BLOCK_RANGE, MASTER_TO_BLOCK, POOL_ADDRESS, fromBlock, toBlock, i);
     }
@@ -166,7 +164,7 @@ async function fetchEvents(collectedData, CONTRACT, eventName, eventNames, maste
 
   let shouldContinue = true;
   let retries = 0;
-  while (shouldContinue && retries < 12) {
+  while (shouldContinue && retries < 12 && fromBlock < toBlock) {
     await CONTRACT.getPastEvents(eventName, { fromBlock, toBlock }, async function (error, events) {
       if (error) {
         if (error.message.includes("Log response size exceeded")) {
@@ -368,8 +366,13 @@ function finalizeCollection(process) {
 }
 
 function getFeeParam(poolAddress) {
-  let curveJSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
-  return curveJSON[poolAddress]["fee"];
+  try {
+    let curveJSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
+    return curveJSON[poolAddress]["fee"];
+  } catch (error) {
+    console.log("could not find fee for poolAddress", poolAddress);
+    return "4000000"; //best guess
+  }
 }
 
 function getHolderFee(dollarAmount, poolAddress) {
