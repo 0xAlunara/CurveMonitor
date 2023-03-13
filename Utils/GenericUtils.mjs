@@ -25,6 +25,7 @@ function getPoolVersion(poolAddress) {
 }
 
 function formatForPrint(someNumber) {
+  if (typeof someNumber === "string" && someNumber.includes(",")) return someNumber;
   someNumber = Math.abs(someNumber);
   if (someNumber > 100) {
     someNumber = Number(Number(someNumber).toFixed(0)).toLocaleString();
@@ -41,14 +42,16 @@ function getCurrentTime() {
   let hours = DATE.getHours();
   let minutes = DATE.getMinutes();
   let seconds = DATE.getSeconds();
-  let milliseconds = DATE.getMilliseconds();
 
   hours = hours < 10 ? "0" + hours : hours;
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
-  milliseconds = milliseconds < 100 ? "0" + milliseconds : milliseconds;
 
-  return `${hours}:${minutes}:${seconds}:${milliseconds}`;
+  return `${hours}:${minutes}:${seconds}`;
+}
+
+async function wait(ms) {
+  await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function getUnixtime() {
@@ -81,34 +84,42 @@ async function getABI(poolAddress) {
 }
 
 function isNativeEthAddress(address) {
+  if (!address) return false;
   return address.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 }
 
 function isNullAddress(address) {
+  if (!address) return false;
   return address.toLowerCase() === "0x0000000000000000000000000000000000000000";
 }
 
 function isCurveRegistryExchange(address) {
+  if (!address) return false;
   return address.toLowerCase() === "0x55b916ce078ea594c10a874ba67ecc3d62e29822";
 }
 
 function is3CrvToken(address) {
+  if (!address) return false;
   return address.toLowerCase() === "0x6c3f90f043a72fa612cbac8115ee7e52bde6e490";
 }
 
 function isCrvRenWSBTC(address) {
+  if (!address) return false;
   return address.toLowerCase() === "0x075b1bb99792c9e1041ba13afef80c91a1e70fb3";
 }
 
 function isCrvFrax(address) {
+  if (!address) return false;
   return address.toLowerCase() === "0x3175df0976dfa876431c2e9ee6bc45b65d3473cc";
 }
 
 function is3PoolDepositZap(address) {
+  if (!address) return false;
   return address.toLowerCase() === "0xa79828df1850e8a3a3064576f380d90aecdd3359";
 }
 
 function isZapFor3poolMetapools(address) {
+  if (!address) return false;
   return address.toLowerCase() === "0x97adc08fa1d849d2c48c5dcc1dab568b169b0267";
 }
 
@@ -163,9 +174,13 @@ async function getTokenDecimals(tokenAddress) {
   tokenAddress = tokenAddress.toLowerCase();
   const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   for (const [key, value] of Object.entries(CURVE_JSON)) {
-    const INDEX = value.coins.map((str) => str.toLowerCase()).indexOf(tokenAddress);
-    if (INDEX !== -1) {
-      return value.decimals[INDEX];
+    let index = value.coins.map((str) => str.toLowerCase()).indexOf(tokenAddress);
+    if (index !== -1) {
+      return value.decimals[index];
+    }
+    index = value.coins.map((str) => str.toLowerCase()).indexOf(tokenAddress);
+    if (index !== -1) {
+      return value.underlying_decimals[index];
     }
   }
   return null;
@@ -182,6 +197,11 @@ async function getBasePool(poolAddress) {
   return CURVE_JSON[poolAddress].base_pool;
 }
 
+async function getBasePoolCoins(poolAddress) {
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
+  return CURVE_JSON[poolAddress].underlying_coins;
+}
+
 function countUniqueTxHashes(arr) {
   const TX_HASHES = arr.map((obj) => obj.txHash);
   const UNIQUE_TX_HASHES = new Set(TX_HASHES);
@@ -196,9 +216,13 @@ async function getTokenName(tokenAddress) {
   tokenAddress = tokenAddress.toLowerCase();
   const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
   for (const [key, value] of Object.entries(CURVE_JSON)) {
-    const INDEX = value.coins.map((str) => str.toLowerCase()).indexOf(tokenAddress.toLowerCase());
-    if (INDEX !== -1) {
-      return value.coin_names[INDEX];
+    let index = value.coins.map((str) => str.toLowerCase()).indexOf(tokenAddress.toLowerCase());
+    if (index !== -1) {
+      return value.coin_names[index];
+    }
+    index = value.coins.map((str) => str.toLowerCase()).indexOf(tokenAddress.toLowerCase());
+    if (index !== -1) {
+      return value.coins_underlying_names[index];
     }
   }
   return null;
@@ -212,8 +236,8 @@ async function buildPoolName(poolAddress) {
   let id = 0;
   while (true) {
     const TOKEN_ADDRESS = await getTokenAddress(poolAddress, id);
-    if (isNullAddress(TOKEN_ADDRESS)) break;
     if (!TOKEN_ADDRESS) break;
+    if (isNullAddress(TOKEN_ADDRESS)) break;
     const TOKEN_NAME = await getTokenName(TOKEN_ADDRESS);
     id += 1;
     poolName += TOKEN_NAME + "/";
@@ -259,8 +283,10 @@ export {
   getTokenDecimals,
   getLpToken,
   getBasePool,
+  getBasePoolCoins,
   countUniqueTxHashes,
   getTokenName,
   buildPoolName,
   getCleanedTokenAmount,
+  wait,
 };
