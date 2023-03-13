@@ -182,8 +182,9 @@ async function priceCollectionAllCombinations(poolAddress) {
 }
 
 async function savePriceEntry(poolAddress, blockNumber, unixtime) {
-  bootPriceJSON();
   const PRICE_JSON = JSON.parse(fs.readFileSync("./JSON/Prices.json"));
+  const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
+  const CONTRACT = await getContract(await getABI(poolAddress), poolAddress);
   let res = [];
   for (const COMBINATION of PRICE_JSON[poolAddress]) {
     const HAS_UNIXTIME = COMBINATION.data.some((item) => {
@@ -191,8 +192,6 @@ async function savePriceEntry(poolAddress, blockNumber, unixtime) {
     });
     if (HAS_UNIXTIME) continue;
 
-    const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
-    const CONTRACT = await getContract(await getABI(poolAddress), poolAddress);
     const PRICE_OF = COMBINATION.priceOf;
     const PRICE_IN = COMBINATION.priceIn;
     const NAME_COMBO = [PRICE_OF, PRICE_IN];
@@ -346,7 +345,7 @@ async function convertToUSD(name, amount) {
   if (typeof conversionRate === "function") {
     conversionRate = await conversionRate();
   }
-  return conversionRate ? amount * conversionRate : "unknown dollar amount";
+  return conversionRate ? amount * conversionRate : undefined;
 }
 
 async function get3CrvPrice() {
