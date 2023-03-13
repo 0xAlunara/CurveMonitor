@@ -38,7 +38,7 @@ async function web3Call(CONTRACT, method, params, blockNumber = { block: "latest
       return result;
     } catch (error) {
       if (!isCupsErr(error)) {
-        console.log(error.message, "| Contract:", CONTRACT._address, "| method:", method, "| params:", params, "| blockNumber:", blockNumber);
+        console.log(error, "| Contract:", CONTRACT._address, "| method:", method, "| params:", params, "| blockNumber:", blockNumber);
         shouldContinue = false;
       } else {
         await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * (400 - 200 + 1) + 200)));
@@ -63,7 +63,7 @@ async function getCurrentBlockNumber() {
       if (isCupsErr(error)) {
         await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * (400 - 200 + 1) + 200)));
       } else {
-        console.log("Error in getCurrentBlockNumber", blockNumber, error);
+        console.log("Error in getCurrentBlockNumber", blockNumber, error.message);
         shouldContinue = false;
       }
     }
@@ -75,7 +75,13 @@ async function getCurrentBlockNumber() {
   return blockNumber;
 }
 
+let calledGetBlocks = [];
 async function getBlock(blockNumber) {
+  const cachedBlock = calledGetBlocks.find((entry) => entry.blockNumber.number === blockNumber);
+  if (calledGetBlocks.find((entry) => entry.blockNumber.number === blockNumber)) {
+    return cachedBlock.blockNumber;
+  }
+
   let shouldContinue = true;
   let retries = 0;
   let maxRetries = 12;
@@ -87,7 +93,7 @@ async function getBlock(blockNumber) {
       if (isCupsErr(error)) {
         await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * (400 - 200 + 1) + 200)));
       } else {
-        console.log("Error in getBlock", blockNumber, error);
+        console.log("Error in getBlock", blockNumber, error.message);
         shouldContinue = false;
       }
     }
@@ -96,6 +102,7 @@ async function getBlock(blockNumber) {
       await delay();
     }
   }
+  calledGetBlocks = [{ blockNumber: block }];
   return block;
 }
 
@@ -115,26 +122,21 @@ function isCupsErr(err) {
   return err.message.includes("compute units per second capacity");
 }
 
-async function getTx(txHash) {
-  let shouldContinue = true;
-  let retries = 0;
-  while (shouldContinue && retries < 12) {
-    try {
-      const tx = await web3HTTP.eth.getTransaction(txHash);
-      if (tx) {
-        return tx;
-      }
-    } catch (error) {
-      if (!isCupsErr(error)) {
-        console.log("err in getTx", txHash, error);
-        shouldContinue = false;
+async function getTx(txHash, retries = 3, delay = 1000) {
+  try {
+    const tx = await web3HTTP.eth.getTransaction(txHash);
+    return tx;
+  } catch (error) {
+    if (error.message.includes("compute units per second")) {
+      if (retries > 0) {
+        console.log(`Retrying after ${delay} ms...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        return getTx(txHash, retries - 1, delay);
       } else {
-        await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * (400 - 200 + 1) + 200)));
+        throw new Error("Exceeded max retries for API call");
       }
-    }
-    retries++;
-    if (shouldContinue) {
-      await delay();
+    } else {
+      throw error;
     }
   }
 }
@@ -157,7 +159,6 @@ async function getLpTokenTranferAmount(LPTokenAddress, blockNumber, shouldAmount
 }
 
 async function getTokenTransfers(tokenAddress, block) {
-  console.log("tokenAddress, block", tokenAddress, block);
   let ABI_TRANSFER_EVENT = await getABI("ABI_TRANSFER_EVENT");
   let TransferAmounts = [];
   let shouldContinue = true;
@@ -185,17 +186,25 @@ async function getTokenTransfers(tokenAddress, block) {
   return TransferAmounts;
 }
 
+function processNumber(input) {
+  if (typeof input !== "number") return input;
+  const str = input.toExponential();
+  const [base, exponent] = str.split("e+").map(Number);
+  const numZeros = exponent - (base.toString().length - base.toString().indexOf(".") - 1);
+  return base.toString().replace(".", "") + "0".repeat(numZeros);
+}
+
 // used to calc mev effects
 async function getDyUnderlying(poolAddress, blockNumber, i, j, dx) {
   const CONTRACT = await getContract(await getABI("ABI_GET_DY_UNDERLYING"), poolAddress);
-  return await web3Call(CONTRACT, "get_dy_underlying", [i, j, dx], blockNumber);
+  return await web3Call(CONTRACT, "get_dy_underlying", [i, j, processNumber(dx)], blockNumber);
 }
 
 // used to calc mev effects
 async function getDy(poolAddress, blockNumber, i, j, dx) {
   let abi = await getABI("ABI_GET_DY1");
   if (getPoolVersion(poolAddress) === "V2") abi = await getABI("ABI_GET_DY2");
-  return await web3Call(await getContract(abi, poolAddress), "get_dy", [i, j, dx], blockNumber);
+  return await web3Call(await getContract(abi, poolAddress), "get_dy", [i, j, processNumber(dx)], blockNumber);
 }
 
 // returns the mint amount for a pool at a given block and with given deposit amounts
@@ -213,23 +222,33 @@ async function getAddLiquidityAmounts(CONTRACT, block) {
   let maxRetries = 12;
   let retries = 0;
   while (shouldContinue && retries < maxRetries) {
-    await CONTRACT.getPastEvents("AddLiquidity", { fromBlock: block, toBlock: block }, async function (error, events) {
-      if (error) {
-        console.log("err at getAddLiquidityAmounts", error.message);
-        await errHandler(error);
-      } else {
-        for (const EVENT of events) {
-          const tokenAmounts = EVENT.returnValues.token_amounts;
-          const validAmounts = tokenAmounts.map(Number).filter((x) => x > 0);
-          AddLiquidityAmounts = AddLiquidityAmounts.concat(validAmounts);
-          shouldContinue = false;
+    try {
+      await CONTRACT.getPastEvents("AddLiquidity", { fromBlock: block, toBlock: block }, async function (error, events) {
+        if (error) {
+          console.log("Error in getAddLiquidityAmounts", block, error.message);
+        } else {
+          for (const EVENT of events) {
+            const tokenAmounts = EVENT.returnValues.token_amounts;
+            const validAmounts = tokenAmounts.map(Number).filter((x) => x > 0);
+            AddLiquidityAmounts = AddLiquidityAmounts.concat(validAmounts);
+            shouldContinue = false;
+            return AddLiquidityAmounts;
+          }
         }
+      });
+    } catch (error) {
+      if (!isCupsErr(error)) {
+        console.log("Error(2) in getAddLiquidityAmounts", blockNumber, error.message);
+        shouldContinue = false;
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * (400 - 200 + 1) + 200)));
       }
-    });
+    }
     retries++;
-    await delay();
+    if (shouldContinue) {
+      await delay();
+    }
   }
-  return AddLiquidityAmounts;
 }
 
 // when there was an AddLiquidity-Event, we call this function
@@ -262,6 +281,7 @@ async function checkForTokenExchange(poolAddress, block, txHash) {
 }
 
 async function checkForTokenExchangeUnderlying(poolAddress, block, txHash) {
+  console.log("checkForTokenExchangeUnderlying");
   const CONTACT = await getContract(await getABI("ABI_TOKEN_EXCHANGE_UNDERLYING"), poolAddress);
   let data = "empty";
   let shouldContinue = true;
