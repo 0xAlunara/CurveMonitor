@@ -13,6 +13,20 @@ function setLlamaRPC(abi, address) {
   return new web3HttpLlamarpc.eth.Contract(abi, address);
 }
 
+const options = {
+  // Enable auto reconnection
+  reconnect: {
+    auto: true,
+    delay: 89, // ms
+    maxAttempts: 50,
+    onTimeout: false,
+  },
+};
+const web3HTTP = new Web3(new Web3.providers.HttpProvider(process.env.web3HTTP, options));
+function setAlchemy(abi, address) {
+  return new web3HTTP.eth.Contract(abi, address);
+}
+
 const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
 
 function roundNumber(num) {
@@ -94,7 +108,8 @@ async function fetchBalancesForPool(POOL_ADDRESS) {
 
   const ADDRESS_METAREGISTRY = "0xF98B45FA17DE75FB1aD0e7aFD971b0ca00e379fC";
   const ABI_METAREGISTRY = await getABI(ADDRESS_METAREGISTRY);
-  const METAREGISTRY = setLlamaRPC(ABI_METAREGISTRY, ADDRESS_METAREGISTRY);
+  // const METAREGISTRY = setLlamaRPC(ABI_METAREGISTRY, ADDRESS_METAREGISTRY);
+  const METAREGISTRY = setAlchemy(ABI_METAREGISTRY, ADDRESS_METAREGISTRY);
 
   const LAST_STORED_BLOCK_NUMBER = findLastStoredBlocknumberInBalances(POOL_ADDRESS);
 
