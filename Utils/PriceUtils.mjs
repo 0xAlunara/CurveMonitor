@@ -12,6 +12,20 @@ const MAX_RETRIES = 12;
 
 const web3HttpLlamarpc = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com/rpc/" + process.env.web3_llamarpc));
 
+const options = {
+  // Enable auto reconnection
+  reconnect: {
+    auto: true,
+    delay: 89, // ms
+    maxAttempts: 50,
+    onTimeout: false,
+  },
+};
+const web3HTTP = new Web3(new Web3.providers.HttpProvider(process.env.web3HTTP, options));
+function setAlchemy(abi, address) {
+  return new web3HTTP.eth.Contract(abi, address);
+}
+
 function setLlamaRPC(abi, address) {
   return new web3HttpLlamarpc.eth.Contract(abi, address);
 }
@@ -76,7 +90,8 @@ function findLastStoredBlocknumberForCombination(poolAddress, combination, price
 // input is the json with the processed tx-log, where the blockNumbers are used as relevant blocks to fetch the prices for
 // stores the result as a json in a file
 async function priceCollectionOneCombination(poolAddress, combination, dataALL, PRICE_JSON, CURVE_JSON) {
-  const CONTRACT = setLlamaRPC(await getABI(poolAddress), poolAddress);
+  //const CONTRACT = setLlamaRPC(await getABI(poolAddress), poolAddress);
+  const CONTRACT = setAlchemy(await getABI(poolAddress), poolAddress);
   const PRICE_OF = combination.priceOf;
   const PRICE_IN = combination.priceIn;
 
@@ -125,7 +140,7 @@ async function priceCollectionOneCombination(poolAddress, combination, dataALL, 
       }
     });
 
-    if (!hasEntryForUnixTime(combination, unixtime)) return 0;
+    if (hasEntryForUnixTime(combination, unixtime)) continue;
 
     let dy;
     if (combination.type === "original") {
@@ -169,9 +184,9 @@ async function priceCollectionAllCombinations(poolAddress) {
   // JSON with the combinations of pool token
   const PRICE_JSON = JSON.parse(fs.readFileSync("./JSON/Prices.json"));
 
-  const CHECK = [];
-
   const CURVE_JSON = JSON.parse(fs.readFileSync("./JSON/CurvePoolData.json"));
+
+  const CHECK = [];
 
   // eg sUSD in DAI, USDT in sUSD, ...
   for (const combination of PRICE_JSON[poolAddress]) {
