@@ -66,7 +66,7 @@ import {
 import { priceCollectionMain, savePriceEntry, bootPriceJSON, convertToUSD } from "./Utils/PriceUtils.mjs";
 
 // utils for pool-balances
-import { fetchBalancesOnce, balancesCollectionMain } from "./Utils/BalancesUtils.mjs";
+import { fetchBalancesOnce, bootBalancesJSON, balancesCollectionMain } from "./Utils/BalancesUtils.mjs";
 
 // utils to create messages for the socket
 import { httpSocketSetup, httpsSocketSetup } from "./Utils/SocketUtils.mjs";
@@ -1330,6 +1330,7 @@ async function collectionMain() {
 
 async function CurveMonitor() {
   bootPriceJSON();
+  bootBalancesJSON();
   // using socket.io, this function will iterate over all pools and create and open a custom sockets per pool, for the frontend to connect to.
   if (MODE === "local") {
     await httpSocketSetup(Server, emitter, whiteListedPoolAddress);
@@ -1337,6 +1338,9 @@ async function CurveMonitor() {
   if (MODE === "https") {
     await httpsSocketSetup(Server, emitter, whiteListedPoolAddress);
   }
+
+  await priceCollectionMain(whiteListedPoolAddress);
+  await balancesCollectionMain(whiteListedPoolAddress);
 
   isCollecting = true;
   writeToFile = true;
