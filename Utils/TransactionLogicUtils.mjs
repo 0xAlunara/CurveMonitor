@@ -18,7 +18,6 @@ import fs from "fs";
 import { web3Call, getContract, getAddLiquidityAmounts, getLpTokenTranferAmount, getTokenTransfers, getDyUnderlying, getDy, calcTokenAmount } from "./Web3CallUtils.mjs";
 
 import ABI_DECODER from "abi-decoder";
-import { copyFileSync } from "fs";
 ABI_DECODER.addABI(await getABI("ABI_REGISTRY_EXCHANGE"));
 ABI_DECODER.addABI(await getABI("ABI_METAPOOL"));
 ABI_DECODER.addABI(await getABI("ABI_THREEPOOL_ZAP"));
@@ -100,6 +99,8 @@ async function tokenExchangeCaseUnderlying(BLOCK_NUMBER, TX, TO, SOLD_ID, TOKENS
     addedLiquidityAmounts = await getAddLiquidityAmounts(CONTRACT, BLOCK_NUMBER);
   }
 
+  console.log("SOLD_ID", SOLD_ID, "TOKENS_SOLD", TOKENS_SOLD, "BOUGHT_ID", BOUGHT_ID, "TOKENS_BOUGHT", TOKENS_BOUGHT);
+
   if (SOLD_ID == 0) {
     soldAddress = await getTokenAddress(poolAddress, 0);
     soldAmount = TOKENS_SOLD;
@@ -117,7 +118,7 @@ async function tokenExchangeCaseUnderlying(BLOCK_NUMBER, TX, TO, SOLD_ID, TOKENS
         const CLOSEST_DEPOSIT = getClosestTransferAmount(addedLiquidityAmounts, TOKENS_SOLD / 10 ** (18 - SOLD_DECIMALS));
         soldAmount = CLOSEST_DEPOSIT / 10 ** decimals;
       } else {
-        soldAmount = TOKENS_SOLD / 10 ** decimals;
+        soldAmount = TOKENS_SOLD / 10 ** 18; // has to be 18, even if the token has 6 decimals
       }
     }
     tokenSoldName = await getTokenName(soldAddress);
