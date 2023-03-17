@@ -137,7 +137,7 @@ async function fetchBalancesForPool(POOL_ADDRESS) {
     if (counter % 10 === 0) {
       BALANCES_JSON[POOL_ADDRESS] = data;
       fs.writeFileSync("./JSON/Balances.json", JSON.stringify(BALANCES_JSON, null, 2));
-      console.log(counter + "/" + blockNumbers.length, unixtime, BALANCES, POOL_ADDRESS);
+      console.log(counter + "/" + blockNumbers.length, BALANCES);
     }
     counter += 1;
   }
@@ -207,6 +207,9 @@ async function balancesCollectionMain(poolAddress) {
     if (CHECK === 0) break;
   }
   console.log("collection of balances complete for pool", poolAddress);
+
+  // sending out signal once done
+  return true;
 }
 
 // used to forward balances-array to the client
