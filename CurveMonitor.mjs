@@ -48,7 +48,9 @@ import {
   checkForTokenExchangeUnderlying,
 } from "./Utils/Web3CallUtils.mjs";
 
-import { saveTxEntry, findLastProcessedEvent, collection, getStartBlock, getHolderFee } from "./Utils/StorageUtils.mjs";
+import { saveTxEntry, findLastProcessedEvent, getStartBlock, getHolderFee } from "./Utils/StorageUtils.mjs";
+
+import { collectRawLogs, addAndWriteEventToRawLog } from "./Utils/FetchRawLogs.mjs";
 
 import {
   getDeltaMevBot,
@@ -250,6 +252,7 @@ async function mevBuffer(blockNumber, position, txHash, type, extraData, isSwapU
       return a.position - b.position;
     });
 
+    //debugging
     try {
       let x = mevTxBuffer[0].extraData.buyer;
       if (!x) return;
@@ -493,30 +496,35 @@ async function buildSwapMessage(
   if (writeToFile) {
     saveTxEntry(poolAddress, ENTRY);
 
-    const PRICE_ENTRY = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
-    const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
-    const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replace(/,/g, "")) };
-    const BALANCES = Object.values(BALANCES_ENTRY)[0];
+    let priceEntry;
 
-    let tvlEntry = [];
-    if (BALANCES_ENTRY.length !== 0) {
-      const TVL = BALANCES.reduce((a, b) => a + b, 0);
-      tvlEntry = { [UNIXTIME]: TVL };
-    }
+    if (collectionCompleteForPrices) priceEntry = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
 
-    if (!isCollecting) {
-      await updateBondingCurvesForPool(poolAddress);
+    if (collectionCompleteForPrices && collectionCompleteForBalances) {
+      const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
+      const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replace(/,/g, "")) };
+      const BALANCES = Object.values(BALANCES_ENTRY)[0];
 
-      const UPDATE = {
-        all: ENTRY,
-        unixtime: UNIXTIME,
-        price: PRICE_ENTRY,
-        balances: BALANCES_ENTRY,
-        volume: VOLUME_ENTRY,
-        tvl: tvlEntry,
-      };
+      let tvlEntry = [];
+      if (BALANCES_ENTRY.length !== 0) {
+        const TVL = BALANCES.reduce((a, b) => a + b, 0);
+        tvlEntry = { [UNIXTIME]: TVL };
+      }
 
-      emitter.emit("General Pool Update" + poolAddress, UPDATE);
+      if (!isCollecting) {
+        await updateBondingCurvesForPool(poolAddress);
+
+        const UPDATE = {
+          all: ENTRY,
+          unixtime: UNIXTIME,
+          price: priceEntry,
+          balances: BALANCES_ENTRY,
+          volume: VOLUME_ENTRY,
+          tvl: tvlEntry,
+        };
+
+        emitter.emit("General Pool Update" + poolAddress, UPDATE);
+      }
     }
   }
   return [poolAddress, ENTRY];
@@ -553,30 +561,35 @@ async function buildRemovalMessage(blockNumber, coinAmount, tokenRemovedName, po
 
   if (writeToFile) {
     saveTxEntry(poolAddress, ENTRY);
-    const PRICE_ENTRY = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
-    const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
-    const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replace(/,/g, "")) };
-    const BALANCES = Object.values(BALANCES_ENTRY)[0];
 
-    let tvlEntry = [];
-    if (BALANCES_ENTRY.length !== 0) {
-      const TVL = BALANCES.reduce((a, b) => a + b, 0);
-      tvlEntry = { [UNIXTIME]: TVL };
-    }
+    let priceEntry;
+    if (collectionCompleteForPrices) priceEntry = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
 
-    if (!isCollecting) {
-      await updateBondingCurvesForPool(poolAddress);
+    if (collectionCompleteForPrices && collectionCompleteForBalances) {
+      const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
+      const VOLUME_ENTRY = { [UNIXTIME]: parseFloat(dollarAmount.replace(/,/g, "")) };
+      const BALANCES = Object.values(BALANCES_ENTRY)[0];
 
-      const UPDATE = {
-        all: ENTRY,
-        unixtime: UNIXTIME,
-        price: PRICE_ENTRY,
-        balances: BALANCES_ENTRY,
-        volume: VOLUME_ENTRY,
-        tvl: tvlEntry,
-      };
+      let tvlEntry = [];
+      if (BALANCES_ENTRY.length !== 0) {
+        const TVL = BALANCES.reduce((a, b) => a + b, 0);
+        tvlEntry = { [UNIXTIME]: TVL };
+      }
 
-      emitter.emit("General Pool Update" + poolAddress, UPDATE);
+      if (!isCollecting) {
+        await updateBondingCurvesForPool(poolAddress);
+
+        const UPDATE = {
+          all: ENTRY,
+          unixtime: UNIXTIME,
+          price: priceEntry,
+          balances: BALANCES_ENTRY,
+          volume: VOLUME_ENTRY,
+          tvl: tvlEntry,
+        };
+
+        emitter.emit("General Pool Update" + poolAddress, UPDATE);
+      }
     }
   }
   return [poolAddress, ENTRY];
@@ -637,30 +650,35 @@ async function buildDepositMessage(blockNumber, coinArray, poolAddress, txHash, 
 
   if (writeToFile) {
     saveTxEntry(poolAddress, ENTRY);
-    const PRICE_ENTRY = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
-    const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
-    const VOLUME_ENTRY = { [UNIXTIME]: dollarAmountTotal };
-    const BALANCES = Object.values(BALANCES_ENTRY)[0];
 
-    let tvlEntry = [];
-    if (BALANCES_ENTRY.length !== 0) {
-      const TVL = BALANCES.reduce((a, b) => a + b, 0);
-      tvlEntry = { [UNIXTIME]: TVL };
-    }
+    let priceEntry;
+    if (collectionCompleteForPrices) priceEntry = await savePriceEntry(poolAddress, blockNumber, UNIXTIME);
 
-    if (!isCollecting) {
-      await updateBondingCurvesForPool(poolAddress);
+    if (collectionCompleteForPrices && collectionCompleteForBalances) {
+      const BALANCES_ENTRY = await fetchBalancesOnce(poolAddress, blockNumber);
+      const VOLUME_ENTRY = { [UNIXTIME]: dollarAmountTotal };
+      const BALANCES = Object.values(BALANCES_ENTRY)[0];
 
-      const UPDATE = {
-        all: ENTRY,
-        unixtime: UNIXTIME,
-        price: PRICE_ENTRY,
-        balances: BALANCES_ENTRY,
-        volume: VOLUME_ENTRY,
-        tvl: tvlEntry,
-      };
+      let tvlEntry = [];
+      if (BALANCES_ENTRY.length !== 0) {
+        const TVL = BALANCES.reduce((a, b) => a + b, 0);
+        tvlEntry = { [UNIXTIME]: TVL };
+      }
 
-      emitter.emit("General Pool Update" + poolAddress, UPDATE);
+      if (!isCollecting) {
+        await updateBondingCurvesForPool(poolAddress);
+
+        const UPDATE = {
+          all: ENTRY,
+          unixtime: UNIXTIME,
+          price: priceEntry,
+          balances: BALANCES_ENTRY,
+          volume: VOLUME_ENTRY,
+          tvl: tvlEntry,
+        };
+
+        emitter.emit("General Pool Update" + poolAddress, UPDATE);
+      }
     }
   }
   return [poolAddress, ENTRY];
@@ -691,7 +709,8 @@ async function activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddres
       CONTRACT_REMOVE_LIQUIDITY.events
         .RemoveLiquidity()
         .on("data", async (data) => {
-          await processRemoveLiquidity(data, POOL_ADDRESS);
+          addAndWriteEventToRawLog(POOL_ADDRESS, "RemoveLiquidity", data);
+          if (collectionCompleteForProcessedLogs) await processRemoveLiquidity(data, POOL_ADDRESS);
         })
         .on("error", (error) => {
           console.error("Error in RemoveLiquidity event: ", error);
@@ -706,7 +725,8 @@ async function activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddres
       CONTRACT_REMOVE_LIQUIDITY_ONE.events
         .RemoveLiquidityOne()
         .on("data", async (data) => {
-          await processRemoveLiquidityOne(data, POOL_ADDRESS);
+          addAndWriteEventToRawLog(POOL_ADDRESS, "RemoveLiquidityOne", data);
+          if (collectionCompleteForProcessedLogs) await processRemoveLiquidityOne(data, POOL_ADDRESS);
         })
         .on("error", (error) => {
           console.error("Error in RemoveLiquidityOne event: ", error);
@@ -721,7 +741,8 @@ async function activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddres
       CONTRACT_REMOVE_LIQUIDITY_IMBALANCE.events
         .RemoveLiquidityImbalance()
         .on("data", async (data) => {
-          await processRemoveLiquidityImbalance(data, POOL_ADDRESS);
+          addAndWriteEventToRawLog(POOL_ADDRESS, "RemoveLiquidityImbalance", data);
+          if (collectionCompleteForProcessedLogs) await processRemoveLiquidityImbalance(data, POOL_ADDRESS);
         })
         .on("error", (error) => {
           console.error("Error in RemoveLiquidityImbalance event: ", error);
@@ -737,7 +758,8 @@ async function activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddres
         .AddLiquidity()
         .on("data", async (data) => {
           await new Promise((resolve) => setTimeout(resolve, 5000));
-          await processAddLiquidity(data, POOL_ADDRESS);
+          addAndWriteEventToRawLog(POOL_ADDRESS, "AddLiquidity", data);
+          if (collectionCompleteForProcessedLogs) await processAddLiquidity(data, POOL_ADDRESS);
         })
         .on("error", (error) => {
           console.error("Error in AddLiquidity event: ", error);
@@ -752,7 +774,8 @@ async function activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddres
       CONTRACT_TOKEN_EXCHANGE.events
         .TokenExchange()
         .on("data", async (data) => {
-          await processTokenExchange(data, POOL_ADDRESS);
+          addAndWriteEventToRawLog(POOL_ADDRESS, "TokenExchange", data);
+          if (collectionCompleteForProcessedLogs) await processTokenExchange(data, POOL_ADDRESS);
         })
         .on("error", (error) => {
           console.error("Error in TokenExchange event: ", error);
@@ -767,7 +790,8 @@ async function activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddres
       CONTRACT_TOKEN_EXCHANGE_2.events
         .TokenExchange()
         .on("data", async (data) => {
-          await processTokenExchange(data, POOL_ADDRESS);
+          addAndWriteEventToRawLog(POOL_ADDRESS, "TokenExchange", data);
+          if (collectionCompleteForProcessedLogs) await processTokenExchange(data, POOL_ADDRESS);
         })
         .on("error", (error) => {
           console.error("Error in TokenExchange2 event: ", error);
@@ -782,7 +806,8 @@ async function activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddres
       CONTRACT_TOKEN_EXCHANGE_UNDERLYING.events
         .TokenExchangeUnderlying()
         .on("data", async (data) => {
-          await processTokenExchange(data, POOL_ADDRESS, "TokenExchangeUnderlying");
+          addAndWriteEventToRawLog(POOL_ADDRESS, "TokenExchangeUnderlying", data);
+          if (collectionCompleteForProcessedLogs) await processTokenExchange(data, POOL_ADDRESS, "TokenExchangeUnderlying");
         })
         .on("error", (error) => {
           console.error("Error in TokenExchangeUnderlying event: ", error);
@@ -1041,8 +1066,7 @@ async function processAddLiquidity(data, poolAddress) {
   if (CURVE_POOLS.includes(PROVIDER)) {
     const TEMP_DATA = await checkForTokenExchangeUnderlying(PROVIDER, BLOCK_NUMBER, TX_HASH);
     if (TEMP_DATA !== "empty") {
-      data = TEMP_DATA;
-      await processTokenExchange(data, PROVIDER);
+      await processTokenExchange(TEMP_DATA, PROVIDER);
       return;
     }
   }
@@ -1273,65 +1297,54 @@ async function searchFromLogsInRange(firstBlock, range) {
   const UNPROCESSED_EVENT_LOGS = JSON.parse(fs.readFileSync("./JSON/UnprocessedEventLogs.json"));
   const EVENT_NAMES = ["RemoveLiquidity", "RemoveLiquidityOne", "RemoveLiquidityImbalance", "AddLiquidity", "TokenExchange", "TokenExchangeUnderlying"];
 
-  let lastPercentage = 0;
-  let i = 0;
-
+  let lastStep = -1;
   for (let blockNumber = firstBlock; blockNumber < firstBlock + range; blockNumber++) {
-    await cleanMevTxBuffer(blockNumber);
-    const PERCENTAGE = Number(((i / range) * 100).toFixed(0));
-
-    if (PERCENTAGE !== lastPercentage) {
-      //console.log("processing",PERCENTAGE, "%");
-      lastPercentage = PERCENTAGE;
+    let percentage = Number((((blockNumber - firstBlock) / range) * 100).toFixed(0));
+    const step = Math.round(percentage / 10) * 10;
+    if (step > 0 && step <= 100 && step !== lastStep) {
+      console.log(`parsed ${step}% blocks`);
+      if (step == 100) console.log("");
+      lastStep = step;
     }
 
+    await cleanMevTxBuffer(blockNumber);
     await searchEventsInBlock(blockNumber, UNPROCESSED_EVENT_LOGS, EVENT_NAMES);
-    i += 1;
   }
 }
 
-async function collectionCycle(nextBlockToProceedProcessing, range) {
-  await collection();
-
-  //  this loop is used to give the raw log collection enough time to be processed and saved.
-  while (true) {
-    const IS_COLLECTING = JSON.parse(fs.readFileSync("./JSON/CollectorState.json"));
-    if (!IS_COLLECTING.collectingRawLog) break;
-    await new Promise((resolve) => setTimeout(resolve, 10));
-  }
-
-  await searchFromLogsInRange(nextBlockToProceedProcessing, range);
-}
-
-/**
- * goal: up to date json with sorted and processed transaction-lists
- * 1: removes entries older than x days (31 for mvp) from the file which stores the raw, unprocessed events (UnprocessedEventLogs.json)
- * 2: adds raw log entries to the file
- * 3: processes the newly added events and stores the processed data in ProcessedTxLogAll.json & ProcessedTxLogMEV.json
- * 4: repeats the cycle until it is truely up do date
- */
-async function collectionMain() {
+async function processRawEventLog() {
   let oldRange = 10;
 
-  let nextBlockToProceedProcessing;
+  let lastProcessedBlock;
   try {
-    nextBlockToProceedProcessing = await findLastProcessedEvent(whiteListedPoolAddress);
+    lastProcessedBlock = await findLastProcessedEvent(whiteListedPoolAddress);
   } catch (err) {
-    nextBlockToProceedProcessing = await getStartBlock();
+    lastProcessedBlock = await getStartBlock();
   }
+
   const LATEST_BLOCK = await getCurrentBlockNumber();
-  const NEW_RANGE = LATEST_BLOCK - nextBlockToProceedProcessing;
+  const NEW_RANGE = LATEST_BLOCK - lastProcessedBlock;
 
   while (NEW_RANGE !== oldRange) {
     oldRange = NEW_RANGE;
-    await collectionCycle(nextBlockToProceedProcessing, NEW_RANGE);
+    await searchFromLogsInRange(lastProcessedBlock, NEW_RANGE);
   }
+
+  // sends signal once done
+  return true;
 }
+
+let collectionCompleteForRawLogs = false;
+let collectionCompleteForProcessedLogs = false;
+let collectionCompleteForPrices = false;
+let collectionCompleteForBalances = false;
 
 async function CurveMonitor() {
   bootPriceJSON();
   bootBalancesJSON();
-  // using socket.io, this function will iterate over all pools and create and open a custom sockets per pool, for the frontend to connect to.
+
+  writeToFile = true;
+
   if (MODE === "local") {
     await httpSocketSetup(Server, emitter, whiteListedPoolAddress);
   }
@@ -1339,46 +1352,41 @@ async function CurveMonitor() {
     await httpsSocketSetup(Server, emitter, whiteListedPoolAddress);
   }
 
-  await priceCollectionMain(whiteListedPoolAddress);
-  await balancesCollectionMain(whiteListedPoolAddress);
+  /**
+   * step1: collecting raw logs
+   */
+  collectionCompleteForRawLogs = await collectRawLogs(); // returns true once done
 
-  isCollecting = true;
-  writeToFile = true;
-
-  let latestBlock = 0;
-  let latestBlockAfterProcessing = 10;
-
-  const MAX_TRIES = 12;
-  let tryCount = 0;
-
-  while (latestBlockAfterProcessing > latestBlock + 5 && tryCount < MAX_TRIES) {
-    latestBlock = await getCurrentBlockNumber();
-    await collectionMain();
-    await priceCollectionMain(whiteListedPoolAddress);
-    await balancesCollectionMain(whiteListedPoolAddress);
-    latestBlockAfterProcessing = await getCurrentBlockNumber();
-    tryCount++;
+  /**
+   * step2: parsing logs
+   */
+  while (!collectionCompleteForRawLogs) {
+    await wait(100);
   }
+  await activateRealTimeMonitoring(true, whiteListedPoolAddress);
+  collectionCompleteForProcessedLogs = await processRawEventLog();
 
-  console.log("all events fetched and processed");
+  /**
+   * step3: fetching prices
+   */
+  while (!collectionCompleteForProcessedLogs) {
+    await wait(100);
+  }
+  collectionCompleteForPrices = await priceCollectionMain(whiteListedPoolAddress);
 
-  await updateBondingCurvesForPool(whiteListedPoolAddress);
-
-  // sending out the data
-  emitter.emit("all events fetched and processed" + whiteListedPoolAddress);
-  isCollecting = false;
-
-  await activateRealTimeMonitoring(singlePoolModus, whiteListedPoolAddress);
-  await subscribeToNewBlocks(); // should be active by default, unless during some tests
+  /**
+   * step4: fetching balances
+   */
+  while (!collectionCompleteForPrices) {
+    await wait(100);
+  }
+  collectionCompleteForBalances = await balancesCollectionMain(whiteListedPoolAddress);
 }
 
 let isCollecting;
 
 // toggle to write the trades to the json
 let writeToFile;
-
-// for mvp, only listens to new events on a single poolAddress
-let singlePoolModus = true;
 
 // sUSD pool for mvp
 let whiteListedPoolAddress = ADDRESS_sUSD_V2_SWAP;
