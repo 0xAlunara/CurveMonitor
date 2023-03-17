@@ -149,7 +149,9 @@ async function priceCollectionOneCombination(poolAddress, combination, dataALL, 
       if (dy == null) {
         console.log("dy = null COIN_ID_PRICE_OF", COIN_ID_PRICE_OF, "COIN_ID_PRICE_IN", COIN_ID_PRICE_IN, "dx", dx, "BLOCK_NUMBER", BLOCK_NUMBER);
       } else {
-        DATA.push({ [unixtime]: dy });
+        if (typeof dy === "number" && !isNaN(dy) && dy !== null && dy !== undefined) {
+          DATA.push({ [unixtime]: dy });
+        }
       }
     }
 
@@ -157,7 +159,9 @@ async function priceCollectionOneCombination(poolAddress, combination, dataALL, 
       dy = priceArrayOriginal.find((item) => Object.keys(item)[0] == unixtime)[unixtime];
       if (dy) {
         dy = 1 / dy;
-        DATA.push({ [unixtime]: dy });
+        if (typeof dy === "number" && !isNaN(dy) && dy !== null && dy !== undefined) {
+          DATA.push({ [unixtime]: dy });
+        }
       }
     }
 
@@ -176,8 +180,6 @@ async function priceCollectionOneCombination(poolAddress, combination, dataALL, 
 }
 
 async function priceCollectionAllCombinations(poolAddress) {
-  bootPriceJSON();
-
   // the stored JSON with the processed tx-log
   const DATA_ALL = JSON.parse(fs.readFileSync("./JSON/ProcessedTxLogAll.json"));
 
@@ -249,12 +251,12 @@ async function savePriceEntry(poolAddress, blockNumber, unixtime) {
         }
       }
       dy = dy / 10 ** CURVE_JSON[poolAddress].decimals[COIN_ID_PRICE_IN];
-      if (dy == null) {
-        console.log("dy = null COIN_ID_PRICE_OF", COIN_ID_PRICE_OF, "COIN_ID_PRICE_IN", COIN_ID_PRICE_IN, "dx", dx, "BLOCK_NUMBER", blockNumber);
-      } else {
+      if (typeof dy === "number" && !isNaN(dy) && dy !== null && dy !== undefined) {
         const ENTRY = { [unixtime]: dy };
         DATA.push(ENTRY);
         res.push({ [NAME_COMBO]: ENTRY });
+      } else {
+        console.log("dy missing, COIN_ID_PRICE_OF", COIN_ID_PRICE_OF, "COIN_ID_PRICE_IN", COIN_ID_PRICE_IN, "dx", dx, "BLOCK_NUMBER", blockNumber);
       }
     }
 
@@ -265,13 +267,13 @@ async function savePriceEntry(poolAddress, blockNumber, unixtime) {
       } catch (err) {
         console.log("dy not found for price of", COMBINATION.priceOf, "in", COMBINATION.priceIn, "at unixtime", unixtime);
       }
-      if (dy == null || !dy) {
-        console.log("dy = null COIN_ID_PRICE_OF", COIN_ID_PRICE_OF, "COIN_ID_PRICE_IN", COIN_ID_PRICE_IN, "dx", dx, "BLOCK_NUMBER", blockNumber);
-      } else {
+      if (typeof dy === "number" && !isNaN(dy) && dy !== null && dy !== undefined) {
         dy = 1 / dy;
         const ENTRY = { [unixtime]: dy };
         DATA.push(ENTRY);
         res.push({ [NAME_COMBO]: ENTRY });
+      } else {
+        console.log("dy missing, COIN_ID_PRICE_OF", COIN_ID_PRICE_OF, "COIN_ID_PRICE_IN", COIN_ID_PRICE_IN, "dx", dx, "BLOCK_NUMBER", blockNumber);
       }
     }
 
@@ -288,6 +290,7 @@ async function priceCollectionMain(poolAddress) {
     if (check.every((element) => element === 0)) break;
   }
   console.log("collection of prices complete for pool", poolAddress);
+  return true;
 }
 
 // used to forward the correct priceOf priceIn price-array to the client
