@@ -86,7 +86,7 @@ async function findLastProcessedEvent(poolAddress) {
 // 1: removes outdated events
 // 2: adds events in the time range of "lastly screened" and "now".
 // 3: events stored in "UnprocessedEventLogs.json".json.
-async function collection() {
+async function collectRawLogs() {
   // collectionState.IsReadycollectingRawLogs is used to give the raw log collection enough time to be processed and saved.
   // only then proceeds with processing the raw logs
   let collectionState;
@@ -100,21 +100,13 @@ async function collection() {
   collectionState.rawLogsUpToDate = false;
   fs.writeFileSync("./JSON/CollectorState.json", JSON.stringify(collectionState));
 
-  // loading the file with the stored events, or creating it
-  let collectedData;
-  try {
-    collectedData = JSON.parse(fs.readFileSync("./JSON/UnprocessedEventLogs.json"));
-  } catch (err) {
-    console.log("no file found called UnprocessedEventLogs.json");
-  }
-
   const EVENT_NAMES = ["RemoveLiquidity", "RemoveLiquidityOne", "RemoveLiquidityImbalance", "AddLiquidity", "TokenExchange", "TokenExchangeUnderlying"];
 
   await removeOutdatedBlocksRawLog(EVENT_NAMES);
   await removeOutdatedBlocksProcessedLogALL();
   await removeOutdatedBlocksProcessedLogMEV();
 
-  collectedData = JSON.parse(fs.readFileSync("./JSON/UnprocessedEventLogs.json"));
+  let collectedData = JSON.parse(fs.readFileSync("./JSON/UnprocessedEventLogs.json"));
 
   const CURVE_POOLS = getCurvePools();
 
@@ -156,7 +148,6 @@ async function collection() {
 }
 
 // writes events to the log-file.
-// search params: pool, eventName, blockRange
 async function fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents) {
   const RESULTS = collectedData[poolAddress][eventName];
 
@@ -165,48 +156,62 @@ async function fetchEvents(collectedData, CONTRACT, eventName, eventNames, maste
   let shouldContinue = true;
   let retries = 0;
   while (shouldContinue && retries < 12 && fromBlock < toBlock) {
-    await CONTRACT.getPastEvents(eventName, { fromBlock, toBlock }, async function (error, events) {
-      if (error) {
-        if (error.message.includes("Log response size exceeded")) {
-          let blockRange = toBlock - fromBlock;
-          blockRange = Number((blockRange / 10).toFixed(0));
-          toBlock = fromBlock + blockRange;
-          await fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents);
-        } else if (error.message.includes("One of the blocks specified in filter (fromBlock, toBlock or blockHash) cannot be found")) {
-          await new Promise((resolve) => setTimeout(resolve, 3000));
-          shouldContinue = false;
-          await fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents);
-        } else {
-          console.log("\nerror in getPastEvents", error.message, "\nfromBlock", fromBlock, "toBlock", toBlock);
-        }
-      } else {
-        shouldContinue = false;
-        if (events.length === 0) {
-          // => no events left
-          fs.writeFileSync("./JSON/UnprocessedEventLogs.json", JSON.stringify(collectedData, null, 1));
-          if (eventName === eventNames[eventNames.length - 1]) {
-            finalizeCollection("IsReadyCollectingRawLogs");
+    try {
+      await CONTRACT.getPastEvents(eventName, { fromBlock, toBlock }, async function (error, events) {
+        if (error) {
+          console.log(1);
+          if (error.message.includes("Log response size exceeded")) {
+            console.log(2);
+            let blockRange = toBlock - fromBlock;
+            blockRange = Number((blockRange / 10).toFixed(0));
+            toBlock = fromBlock + blockRange;
+            await fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents);
+          } else if (error.message.includes("One of the blocks specified in filter (fromBlock, toBlock or blockHash) cannot be found")) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            shouldContinue = false;
+            await fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents);
+          } else {
+            console.log("\nerror in getPastEvents", error.message, "\nfromBlock", fromBlock, "toBlock", toBlock);
           }
-          return;
         }
+        if (events) {
+          console.log(3);
+          shouldContinue = false;
+          if (events.length === 0) {
+            fs.writeFileSync("./JSON/UnprocessedEventLogs.json", JSON.stringify(collectedData, null, 1));
+            if (eventName === eventNames[eventNames.length - 1]) {
+              finalizeCollection("IsReadyCollectingRawLogs");
+            }
+            return;
+          }
 
-        // adding all the events to the results-array
-        for (const DATA of events) {
-          RESULTS.push(DATA);
+          // adding all the events to the results-array
+          for (const DATA of events) {
+            RESULTS.push(DATA);
+          }
+          foundEvents += events.length;
+          fs.writeFileSync("./JSON/UnprocessedEventLogs.json", JSON.stringify(collectedData, null, 1));
+
+          // preparing params for next round
+          const LAST_STORED_BLOCK = RESULTS[RESULTS.length - 1].blockNumber;
+          fromBlock = LAST_STORED_BLOCK + 1;
+          toBlock = masterToBlock;
+
+          // starting a next scan-cycle to slowly catch up to the present blocks
+          await fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents);
         }
-        foundEvents += events.length;
-
-        // preparing params for next round
-        const LAST_STORED_BLOCK = RESULTS[RESULTS.length - 1].blockNumber;
-        fromBlock = LAST_STORED_BLOCK + 1;
-        toBlock = masterToBlock;
-
-        // starting a next scan-cycle to slowly catch up to the present blocks
-        await fetchEvents(collectedData, CONTRACT, eventName, eventNames, masterBlockRange, masterToBlock, poolAddress, fromBlock, toBlock, i, foundEvents);
+      });
+    } catch (err) {
+      if (!err.message.includes("compute units per second capacity")) {
+        shouldContinue = false;
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * (400 - 200 + 1) + 200)));
       }
-    });
+    }
     retries++;
-    await new Promise((resolve) => setTimeout(resolve, 280));
+    if (shouldContinue) {
+      await new Promise((resolve) => setTimeout(resolve, 280));
+    }
   }
 }
 
@@ -385,7 +390,7 @@ function getHolderFee(dollarAmount, poolAddress) {
 export {
   saveTxEntry,
   findLastProcessedEvent,
-  collection,
+  collectRawLogs,
   fetchEvents,
   getStartBlock,
   removeOutdatedBlocksRawLog,
