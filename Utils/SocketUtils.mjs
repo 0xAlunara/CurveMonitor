@@ -209,7 +209,6 @@ function sendPriceData(timeFrame, socket, poolAddress, priceCombination) {
   if (timeFrame === "month") durationInMinutes = 45; // prints 1000 points / 45 minutes
 
   trimmedData = compressPriceChart(trimmedData, durationInMinutes);
-  console.log("trimmedData", trimmedData);
   socket.emit("price_chart_combination", priceCombination);
   socket.emit("price_chart", trimmedData);
 }
