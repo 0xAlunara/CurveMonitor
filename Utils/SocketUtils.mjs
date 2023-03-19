@@ -316,7 +316,8 @@ function compressPriceChart(priceChart, durationInMinutes) {
       } else {
         avgPrice = previousAvgPrice;
       }
-      chunkedData.push({ [currentIntervalStart + HALF_INTERVAL_IN_SECONDS]: avgPrice });
+      let roundedUnixtime = Math.round(currentIntervalStart + HALF_INTERVAL_IN_SECONDS);
+      chunkedData.push({ [roundedUnixtime]: avgPrice });
 
       // Start the next interval
       currentIntervalStart += DURATION_IN_SECONDS;
@@ -329,9 +330,11 @@ function compressPriceChart(priceChart, durationInMinutes) {
   // Process the last interval
   if (currentIntervalPrices.length > 0) {
     let avgPrice = currentIntervalPrices.reduce((a, b) => a + b, 0) / currentIntervalPrices.length;
-    chunkedData.push({ [currentIntervalStart + HALF_INTERVAL_IN_SECONDS]: avgPrice });
+    let roundedUnixtime = Math.round(currentIntervalStart + HALF_INTERVAL_IN_SECONDS);
+    chunkedData.push({ [roundedUnixtime]: avgPrice });
   } else if (previousAvgPrice !== null) {
-    chunkedData.push({ [currentIntervalStart + HALF_INTERVAL_IN_SECONDS]: previousAvgPrice });
+    let roundedUnixtime = Math.round(currentIntervalStart + HALF_INTERVAL_IN_SECONDS);
+    chunkedData.push({ [roundedUnixtime]: previousAvgPrice });
   }
 
   return chunkedData;
