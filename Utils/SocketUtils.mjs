@@ -201,7 +201,6 @@ function sendPriceData(timeFrame, socket, poolAddress, priceCombination) {
   const DATA = readPriceArray(poolAddress, PRICE_OF, PRICE_IN);
 
   let trimmedData = DATA.filter((item) => Object.keys(item)[0] >= STARTING_POINT);
-  console.log(trimmedData);
 
   let durationInMinutes;
   if (timeFrame === "day") durationInMinutes = 45 / 30; // prints 1000 points / 1.5 minutes
