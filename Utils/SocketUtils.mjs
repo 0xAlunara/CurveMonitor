@@ -201,6 +201,7 @@ function sendPriceData(timeFrame, socket, poolAddress, priceCombination) {
   const DATA = readPriceArray(poolAddress, PRICE_OF, PRICE_IN);
 
   let trimmedData = DATA.filter((item) => Object.keys(item)[0] >= STARTING_POINT);
+  console.log(trimmedData);
 
   let durationInMinutes;
   if (timeFrame === "day") durationInMinutes = 45 / 30; // prints 1000 points / 1.5 minutes
@@ -208,6 +209,7 @@ function sendPriceData(timeFrame, socket, poolAddress, priceCombination) {
   if (timeFrame === "month") durationInMinutes = 45; // prints 1000 points / 45 minutes
 
   trimmedData = compressPriceChart(trimmedData, durationInMinutes);
+  console.log("trimmedData", trimmedData);
   socket.emit("price_chart_combination", priceCombination);
   socket.emit("price_chart", trimmedData);
 }
@@ -292,46 +294,49 @@ function getStartingPoint(timeFrame) {
 }
 
 function compressPriceChart(priceChart, durationInMinutes) {
-  const DURATION_IN_MINUTES = durationInMinutes * 60;
-  const HALF_DURATION_IN_SECONDS = DURATION_IN_MINUTES / 2;
+  const DURATION_IN_SECONDS = durationInMinutes * 60;
+  const HALF_INTERVAL_IN_SECONDS = DURATION_IN_SECONDS / 2;
 
-  const FIRST_TIMESTAMP = parseInt(Object.keys(priceChart[0])[0]) - HALF_DURATION_IN_SECONDS;
-  const LAST_TIMESTAMP = parseInt(Object.keys(priceChart[priceChart.length - 1])[0]) - HALF_DURATION_IN_SECONDS;
+  let chunkedData = [];
+  let currentIntervalStart = null;
+  let currentIntervalPrices = [];
+  let previousAvgPrice = null;
 
-  const GROUPED_PRICES = new Map();
+  for (let i = 0; i < priceChart.length; i++) {
+    let unixtime = parseInt(Object.keys(priceChart[i])[0]);
+    let price = Object.values(priceChart[i])[0];
 
-  priceChart.forEach((priceEntry) => {
-    const TIMESTAMP = parseInt(Object.keys(priceEntry)[0]);
-    const PRICE = priceEntry[TIMESTAMP];
-    const ROUNDED_TIMESTAMP = TIMESTAMP - (TIMESTAMP % DURATION_IN_MINUTES) + HALF_DURATION_IN_SECONDS;
-
-    if (!GROUPED_PRICES.has(ROUNDED_TIMESTAMP)) {
-      GROUPED_PRICES.set(ROUNDED_TIMESTAMP, { sum: 0, count: 0 });
+    if (currentIntervalStart === null) {
+      currentIntervalStart = unixtime - (unixtime % DURATION_IN_SECONDS);
     }
 
-    const CURRENT = GROUPED_PRICES.get(ROUNDED_TIMESTAMP);
-    CURRENT.sum += PRICE;
-    CURRENT.count += 1;
-  });
+    while (unixtime >= currentIntervalStart + DURATION_IN_SECONDS) {
+      let avgPrice;
+      if (currentIntervalPrices.length > 0) {
+        avgPrice = currentIntervalPrices.reduce((a, b) => a + b, 0) / currentIntervalPrices.length;
+        previousAvgPrice = avgPrice;
+      } else {
+        avgPrice = previousAvgPrice;
+      }
+      chunkedData.push({ [currentIntervalStart + HALF_INTERVAL_IN_SECONDS]: avgPrice });
 
-  const COMPRESSED_PRICE_CHART = [];
-
-  const FIRST_GROUPED_TIMESTAMP = parseInt([...GROUPED_PRICES.keys()][0]);
-  let previousAveragePrice = GROUPED_PRICES.get(FIRST_GROUPED_TIMESTAMP).sum / GROUPED_PRICES.get(FIRST_GROUPED_TIMESTAMP).count;
-
-  for (let currentTimestamp = FIRST_TIMESTAMP; currentTimestamp <= LAST_TIMESTAMP; currentTimestamp += DURATION_IN_MINUTES) {
-    const CENTER_TIMESTAMP = currentTimestamp + HALF_DURATION_IN_SECONDS;
-
-    if (GROUPED_PRICES.has(CENTER_TIMESTAMP)) {
-      const AVERAGE_PRICE = GROUPED_PRICES.get(CENTER_TIMESTAMP).sum / GROUPED_PRICES.get(CENTER_TIMESTAMP).count;
-      COMPRESSED_PRICE_CHART.push({ [CENTER_TIMESTAMP]: AVERAGE_PRICE });
-      previousAveragePrice = AVERAGE_PRICE;
-    } else {
-      COMPRESSED_PRICE_CHART.push({ [CENTER_TIMESTAMP]: previousAveragePrice });
+      // Start the next interval
+      currentIntervalStart += DURATION_IN_SECONDS;
+      currentIntervalPrices = [];
     }
+
+    currentIntervalPrices.push(price);
   }
 
-  return COMPRESSED_PRICE_CHART;
+  // Process the last interval
+  if (currentIntervalPrices.length > 0) {
+    let avgPrice = currentIntervalPrices.reduce((a, b) => a + b, 0) / currentIntervalPrices.length;
+    chunkedData.push({ [currentIntervalStart + HALF_INTERVAL_IN_SECONDS]: avgPrice });
+  } else if (previousAvgPrice !== null) {
+    chunkedData.push({ [currentIntervalStart + HALF_INTERVAL_IN_SECONDS]: previousAvgPrice });
+  }
+
+  return chunkedData;
 }
 
 function compressVolumeChart(volumeData, durationInMinutes) {
