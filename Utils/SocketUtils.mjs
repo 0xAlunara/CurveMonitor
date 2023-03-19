@@ -172,7 +172,7 @@ function sendData(timeFrame, socket, poolAddress, priceCombination) {
   sendTVLData(timeFrame, socket, poolAddress);
 }
 
-// sends the inital data for the table-view (tx history for a given pool)
+// Table
 function sendTableData(socket, poolAddress) {
   const CURRENT_TIME = new Date().getTime() / 1000;
   const DAYS = 31;
@@ -184,15 +184,15 @@ function sendTableData(socket, poolAddress) {
   let trimmedDataALL = DATA_ALL[poolAddress].filter((entry) => entry.unixtime >= STARTING_POINT);
   let trimmedDataMEV = DATA_MEV[poolAddress].filter((entry) => entry.unixtime >= STARTING_POINT);
 
-  const NUMBER_OF_MAX_ENTRIES = 1000;
+  const NUMBER_OF_MAX_ENTRIES = 250;
   if (trimmedDataALL.length > NUMBER_OF_MAX_ENTRIES) trimmedDataALL = trimmedDataALL.slice(-NUMBER_OF_MAX_ENTRIES);
-  if (trimmedDataMEV.length > NUMBER_OF_MAX_ENTRIES) trimmedDataMEV = trimmedDataMEV.slice(-trimmedDataMEV);
+  if (trimmedDataMEV.length > NUMBER_OF_MAX_ENTRIES) trimmedDataMEV = trimmedDataMEV.slice(-NUMBER_OF_MAX_ENTRIES);
 
   socket.emit("table_all", trimmedDataALL);
   socket.emit("table_mev", trimmedDataMEV);
 }
 
-// trimmes down the message for the frontend to ship only data of last 24h, week, or month
+// Price
 function sendPriceData(timeFrame, socket, poolAddress, priceCombination) {
   const STARTING_POINT = getStartingPoint(timeFrame);
 
@@ -201,43 +201,18 @@ function sendPriceData(timeFrame, socket, poolAddress, priceCombination) {
   const DATA = readPriceArray(poolAddress, PRICE_OF, PRICE_IN);
 
   let trimmedData = DATA.filter((item) => Object.keys(item)[0] >= STARTING_POINT);
-  trimmedData = filterData(trimmedData);
+
+  let durationInMinutes;
+  if (timeFrame === "day") durationInMinutes = 45 / 30; // prints 1000 points / 1.5 minutes
+  if (timeFrame === "week") durationInMinutes = 45 / 4; // prints 1000 points / 11 minutes
+  if (timeFrame === "month") durationInMinutes = 45; // prints 1000 points / 45 minutes
+
+  trimmedData = compressPriceChart(trimmedData, durationInMinutes);
   socket.emit("price_chart_combination", priceCombination);
   socket.emit("price_chart", trimmedData);
 }
 
-function getStartingPoint(timeFrame) {
-  const CURRENT_TIME = new Date().getTime() / 1000;
-  let days;
-  if (timeFrame === "day") days = 1;
-  if (timeFrame === "week") days = 7;
-  if (timeFrame === "month") days = 31;
-  return CURRENT_TIME - days * 24 * 60 * 60;
-}
-
-function sendBalanceData(timeFrame, socket, poolAddress) {
-  const STARTING_POINT = getStartingPoint(timeFrame);
-
-  const DATA = readBalancesArray(poolAddress);
-
-  let trimmedData = DATA.filter((item) => Object.keys(item)[0] >= STARTING_POINT);
-  trimmedData = filterData(trimmedData);
-  socket.emit("balances_chart", trimmedData);
-}
-
-function compressVolChart(DATA) {
-  const CHUNK_SIZE = Math.ceil(DATA.length / 1000);
-  const COMPRESSED = [];
-  for (let i = 0; i < DATA.length; i += CHUNK_SIZE) {
-    const CHUNK = DATA.slice(i, i + CHUNK_SIZE);
-    const CENTER_INDEX = Math.floor(CHUNK.length / 2);
-    const CENTER_TIME = Object.keys(CHUNK[CENTER_INDEX])[0];
-    const VOLUME = +CHUNK.reduce((acc, trade) => acc + Object.values(trade)[0], 0).toFixed(0);
-    COMPRESSED.push({ [CENTER_TIME]: VOLUME });
-  }
-  return COMPRESSED;
-}
-
+// Volume
 function sendVolumeData(timeFrame, socket, poolAddress) {
   const STARTING_POINT = getStartingPoint(timeFrame);
 
@@ -252,10 +227,34 @@ function sendVolumeData(timeFrame, socket, poolAddress) {
     if (!vol && vol !== 0) vol = ENTRY.tradeDetails[0].valueUSD;
     data.push({ [ENTRY.unixtime]: vol });
   }
-  data = compressVolChart(data);
+
+  let durationInMinutes;
+  if (timeFrame === "day") durationInMinutes = 45 / 30; // prints 1000 points / 1.5 minutes
+  if (timeFrame === "week") durationInMinutes = 45 / 4; // prints 1000 points / 11 minutes
+  if (timeFrame === "month") durationInMinutes = 45; // prints 1000 points / 45 minutes
+
+  data = compressVolumeChart(data, durationInMinutes);
   socket.emit("volume_chart", data);
 }
 
+function sendBalanceData(timeFrame, socket, poolAddress) {
+  const STARTING_POINT = getStartingPoint(timeFrame);
+
+  const DATA = readBalancesArray(poolAddress);
+
+  let trimmedData = DATA.filter((item) => Object.keys(item)[0] >= STARTING_POINT);
+
+  let durationInMinutes;
+  if (timeFrame === "day") durationInMinutes = 45 / 30; // prints 1000 points / 1.5 minutes
+  if (timeFrame === "week") durationInMinutes = 45 / 4; // prints 1000 points / 11 minutes
+  if (timeFrame === "month") durationInMinutes = 45; // prints 1000 points / 45 minutes
+
+  trimmedData = compressBalancesChart(trimmedData, durationInMinutes);
+
+  socket.emit("balances_chart", trimmedData);
+}
+
+// TVL
 function sendTVLData(timeFrame, socket, poolAddress) {
   const STARTING_POINT = getStartingPoint(timeFrame);
 
@@ -268,7 +267,13 @@ function sendTVLData(timeFrame, socket, poolAddress) {
     return { [KEY]: SUM };
   });
 
-  data = filterData(data);
+  let durationInMinutes;
+  if (timeFrame === "day") durationInMinutes = 45 / 30; // prints 1000 points / 1.5 minutes
+  if (timeFrame === "week") durationInMinutes = 45 / 4; // prints 1000 points / 11 minutes
+  if (timeFrame === "month") durationInMinutes = 45; // prints 1000 points / 45 minutes
+
+  data = compressTVLChart(data, durationInMinutes);
+
   socket.emit("tvl_chart", data);
 }
 
@@ -277,42 +282,179 @@ function sendBondingCurve(socket, poolAddress, priceCombination) {
   socket.emit("bonding_curve", BONDING_CURVE);
 }
 
-// shinks arr-size to 1000 by removing entries close by time-wise. Done to improve loading time on the UI.
-function filterData(data) {
-  const NUM_TO_KEEP = 1000;
-  if (data.length <= NUM_TO_KEEP) {
-    return data;
-  }
-  const distances = [];
-  for (let i = 0; i < data.length; i++) {
-    const CURRENT = Object.keys(data[i])[0];
-    const PREV = i > 0 ? Object.keys(data[i - 1])[0] : null;
-    const NEXT = i < data.length - 1 ? Object.keys(data[i + 1])[0] : null;
-    const PREV_DIST = PREV ? Math.abs(CURRENT - PREV) : Infinity;
-    const NEXT_DIST = NEXT ? Math.abs(NEXT - CURRENT) : Infinity;
-    const MIN_DIST = Math.min(PREV_DIST, NEXT_DIST);
-    distances.push({ INDEX: i, DISTANCE: MIN_DIST });
-  }
-  distances.sort((a, b) => b.DISTANCE - a.DISTANCE);
-  const INDICES_TO_KEEP = new Set();
-  INDICES_TO_KEEP.add(distances[0].INDEX);
-  let i = 1;
-  while (INDICES_TO_KEEP.size < NUM_TO_KEEP && i < distances.length) {
-    const CURRENT_INDEX = distances[i].INDEX;
-    const PREV_INDEX = CURRENT_INDEX > 0 ? distances[i - 1].INDEX : null;
-    const NEXT_INDEX = CURRENT_INDEX < data.length - 1 ? distances[i + 1].INDEX : null;
-    const PREV_DIST = PREV_INDEX ? Math.abs(CURRENT_INDEX - PREV_INDEX) : Infinity;
-    const NEXT_DIST = NEXT_INDEX ? Math.abs(NEXT_INDEX - CURRENT_INDEX) : Infinity;
-    if (PREV_DIST >= NEXT_DIST) {
-      INDICES_TO_KEEP.add(CURRENT_INDEX);
+function getStartingPoint(timeFrame) {
+  const CURRENT_TIME = new Date().getTime() / 1000;
+  let days;
+  if (timeFrame === "day") days = 1;
+  if (timeFrame === "week") days = 7;
+  if (timeFrame === "month") days = 31;
+  return CURRENT_TIME - days * 24 * 60 * 60;
+}
+
+function compressPriceChart(priceChart, durationInMinutes) {
+  const DURATION_IN_MINUTES = durationInMinutes * 60;
+  const HALF_DURATION_IN_SECONDS = DURATION_IN_MINUTES / 2;
+
+  const FIRST_TIMESTAMP = parseInt(Object.keys(priceChart[0])[0]) - HALF_DURATION_IN_SECONDS;
+  const LAST_TIMESTAMP = parseInt(Object.keys(priceChart[priceChart.length - 1])[0]) - HALF_DURATION_IN_SECONDS;
+
+  const GROUPED_PRICES = new Map();
+
+  priceChart.forEach((priceEntry) => {
+    const TIMESTAMP = parseInt(Object.keys(priceEntry)[0]);
+    const PRICE = priceEntry[TIMESTAMP];
+    const ROUNDED_TIMESTAMP = TIMESTAMP - (TIMESTAMP % DURATION_IN_MINUTES) + HALF_DURATION_IN_SECONDS;
+
+    if (!GROUPED_PRICES.has(ROUNDED_TIMESTAMP)) {
+      GROUPED_PRICES.set(ROUNDED_TIMESTAMP, { sum: 0, count: 0 });
     }
-    i++;
-  }
-  const FILTERED_DATA = [];
-  INDICES_TO_KEEP.forEach((index) => {
-    FILTERED_DATA.push(data[index]);
+
+    const CURRENT = GROUPED_PRICES.get(ROUNDED_TIMESTAMP);
+    CURRENT.sum += PRICE;
+    CURRENT.count += 1;
   });
-  return FILTERED_DATA;
+
+  const COMPRESSED_PRICE_CHART = [];
+
+  const FIRST_GROUPED_TIMESTAMP = parseInt([...GROUPED_PRICES.keys()][0]);
+  let previousAveragePrice = GROUPED_PRICES.get(FIRST_GROUPED_TIMESTAMP).sum / GROUPED_PRICES.get(FIRST_GROUPED_TIMESTAMP).count;
+
+  for (let currentTimestamp = FIRST_TIMESTAMP; currentTimestamp <= LAST_TIMESTAMP; currentTimestamp += DURATION_IN_MINUTES) {
+    const CENTER_TIMESTAMP = currentTimestamp + HALF_DURATION_IN_SECONDS;
+
+    if (GROUPED_PRICES.has(CENTER_TIMESTAMP)) {
+      const AVERAGE_PRICE = GROUPED_PRICES.get(CENTER_TIMESTAMP).sum / GROUPED_PRICES.get(CENTER_TIMESTAMP).count;
+      COMPRESSED_PRICE_CHART.push({ [CENTER_TIMESTAMP]: AVERAGE_PRICE });
+      previousAveragePrice = AVERAGE_PRICE;
+    } else {
+      COMPRESSED_PRICE_CHART.push({ [CENTER_TIMESTAMP]: previousAveragePrice });
+    }
+  }
+
+  return COMPRESSED_PRICE_CHART;
+}
+
+function compressVolumeChart(volumeData, durationInMinutes) {
+  const DURATION_IN_SECONDS = durationInMinutes * 60;
+  const HALF_DURATION_IN_SECONDS = DURATION_IN_SECONDS / 2;
+
+  const FIRST_TIMESTAMP_RAW = parseInt(Object.keys(volumeData[0])[0]) - HALF_DURATION_IN_SECONDS;
+  const FIRST_TIMESTAMP = FIRST_TIMESTAMP_RAW - (FIRST_TIMESTAMP_RAW % DURATION_IN_SECONDS);
+  const LAST_TIMESTAMP = parseInt(Object.keys(volumeData[volumeData.length - 1])[0]) - HALF_DURATION_IN_SECONDS;
+
+  const GROUPED_VOLUMES = new Map();
+
+  volumeData.forEach((volumeEntry) => {
+    const TIMESTAMP = parseInt(Object.keys(volumeEntry)[0]);
+    const VOLUME = volumeEntry[TIMESTAMP];
+    const ROUNDED_TIMESTAMP = TIMESTAMP - (TIMESTAMP % DURATION_IN_SECONDS) + HALF_DURATION_IN_SECONDS;
+
+    if (!GROUPED_VOLUMES.has(ROUNDED_TIMESTAMP)) {
+      GROUPED_VOLUMES.set(ROUNDED_TIMESTAMP, 0);
+    }
+
+    GROUPED_VOLUMES.set(ROUNDED_TIMESTAMP, GROUPED_VOLUMES.get(ROUNDED_TIMESTAMP) + VOLUME);
+  });
+
+  const COMPRESSED_VOLUME_DATA = [];
+
+  for (let currentTimestamp = FIRST_TIMESTAMP; currentTimestamp <= LAST_TIMESTAMP + DURATION_IN_SECONDS; currentTimestamp += DURATION_IN_SECONDS) {
+    const CENTER_TIMESTAMP = currentTimestamp + HALF_DURATION_IN_SECONDS;
+
+    if (GROUPED_VOLUMES.has(CENTER_TIMESTAMP)) {
+      const TOTAL_VOLUME = GROUPED_VOLUMES.get(CENTER_TIMESTAMP);
+      COMPRESSED_VOLUME_DATA.push({ [CENTER_TIMESTAMP]: TOTAL_VOLUME });
+    } else {
+      const TIMESTAMP_BEFORE = CENTER_TIMESTAMP - DURATION_IN_SECONDS;
+      const TIMESTAMP_AFTER = CENTER_TIMESTAMP + DURATION_IN_SECONDS;
+
+      if (GROUPED_VOLUMES.has(TIMESTAMP_BEFORE) || GROUPED_VOLUMES.has(TIMESTAMP_AFTER)) {
+        COMPRESSED_VOLUME_DATA.push({ [CENTER_TIMESTAMP]: 0 });
+      }
+    }
+  }
+
+  return COMPRESSED_VOLUME_DATA;
+}
+
+function compressTVLChart(data, durationInMinutes) {
+  const CLUSTERED_DATA = {};
+  const DURATION_IN_SECONDS = durationInMinutes * 60;
+
+  data.forEach((dataPoint) => {
+    const UNIXTIME = Object.keys(dataPoint)[0];
+    const TVL = dataPoint[UNIXTIME];
+
+    // Calculate the "chunk" by dividing the UNIXTIME by the duration and rounding down
+    const CHUNK = Math.floor(UNIXTIME / DURATION_IN_SECONDS) * DURATION_IN_SECONDS;
+
+    // If the chunk doesn't exist, initialize it
+    if (!CLUSTERED_DATA[CHUNK]) {
+      CLUSTERED_DATA[CHUNK] = {
+        sum: 0,
+        count: 0,
+        average: 0,
+      };
+    }
+
+    // Add the current TVL to the chunk's sum and increment the count
+    CLUSTERED_DATA[CHUNK].sum += TVL;
+    CLUSTERED_DATA[CHUNK].count++;
+
+    // Calculate the new average for the chunk
+    CLUSTERED_DATA[CHUNK].average = CLUSTERED_DATA[CHUNK].sum / CLUSTERED_DATA[CHUNK].count;
+  });
+
+  // Convert the object to an array and round the average TVL value
+  const RESULT = Object.entries(CLUSTERED_DATA).map(([unixTime, { average }]) => {
+    return { [unixTime]: Math.round(average) };
+  });
+
+  return RESULT;
+}
+
+function compressBalancesChart(trimmedData, durationInMinutes) {
+  const DURATION_IN_SECONDS = durationInMinutes * 60;
+  const HALF_DURATION_IN_SECONDS = DURATION_IN_SECONDS / 2;
+  const CLUSTERED_DATA = [];
+  let currentCluster = {};
+  let currentUnixTime;
+
+  for (const entry of trimmedData) {
+    const UNIXTIME = parseInt(Object.keys(entry)[0]);
+    const BALANCES = entry[UNIXTIME];
+
+    if (!currentUnixTime) {
+      currentUnixTime = UNIXTIME;
+      currentCluster[UNIXTIME + HALF_DURATION_IN_SECONDS] = { count: 1, sums: BALANCES.slice() };
+    } else if (UNIXTIME - currentUnixTime < DURATION_IN_SECONDS) {
+      currentCluster[currentUnixTime + HALF_DURATION_IN_SECONDS].count++;
+      BALANCES.forEach((balance, index) => {
+        currentCluster[currentUnixTime + HALF_DURATION_IN_SECONDS].sums[index] += balance;
+      });
+    } else {
+      const AVERAGES = currentCluster[currentUnixTime + HALF_DURATION_IN_SECONDS].sums.map((sum) =>
+        Math.round(sum / currentCluster[currentUnixTime + HALF_DURATION_IN_SECONDS].count)
+      );
+      CLUSTERED_DATA.push({ [currentUnixTime + HALF_DURATION_IN_SECONDS]: AVERAGES });
+
+      // Update currentUnixTime to the next interval
+      currentUnixTime += DURATION_IN_SECONDS;
+
+      // If the current entry is not in the new interval, move forward until it is
+      while (UNIXTIME - currentUnixTime >= DURATION_IN_SECONDS) {
+        currentUnixTime += DURATION_IN_SECONDS;
+      }
+
+      currentCluster[currentUnixTime + HALF_DURATION_IN_SECONDS] = { count: 1, sums: BALANCES.slice() };
+    }
+  }
+
+  // Process the last cluster
+  const AVERAGES = currentCluster[currentUnixTime + HALF_DURATION_IN_SECONDS].sums.map((sum) => Math.round(sum / currentCluster[currentUnixTime + HALF_DURATION_IN_SECONDS].count));
+  CLUSTERED_DATA.push({ [currentUnixTime + HALF_DURATION_IN_SECONDS]: AVERAGES });
+
+  return CLUSTERED_DATA;
 }
 
 export { httpSocketSetup, httpsSocketSetup };
