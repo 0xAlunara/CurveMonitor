@@ -27,9 +27,9 @@ async function httpSocketSetup(Server, emitter, whiteListedPoolAddress) {
 
 async function httpsSocketSetup(Server, emitter, whiteListedPoolAddress) {
   const httpsServer = https.createServer({
-    key: fs.readFileSync("/home/transactions/certs/privkey1.pem"),
-    cert: fs.readFileSync("/home/transactions/certs/cert1.pem"),
-    ca: fs.readFileSync("/home/transactions/certs/fullchain1.pem"),
+    key: fs.readFileSync("/run/secrets/privkey1.pem"),
+    cert: fs.readFileSync("/run/secrets/cert1.pem"),
+    ca: fs.readFileSync("/run/secrets/fullchain1.pem"),
   });
 
   const io = new Server(httpsServer, {

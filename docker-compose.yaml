@@ -1,0 +1,29 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 60
+    environment:
+      - WATCHTOWER_CLEANUP=true
+
+  curvemon:
+    image: llamaairforce/curvemon:main
+    container_name: curvemon
+    ports:
+      - "2053:2053"
+    env_file: .env
+    secrets:
+      - privkey1.pem
+      - cert1.pem
+      - fullchain1.pem
+    restart:
+      always
+
+secrets:
+  privkey1.pem:
+    file: ./secrets/privkey1.pem
+  cert1.pem:
+    file: ./secrets/cert1.pem
+  fullchain1.pem:
+    file: ./secrets/fullchain1.pem
